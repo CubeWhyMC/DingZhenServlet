@@ -27,7 +27,7 @@ public class AuthController {
     @RequestMapping(value = "/auth.php", method = {RequestMethod.GET, RequestMethod.POST})
     public String auth() throws Exception {
         if (username == null || password == null) {
-            return generateRandomString(STRING_LENGTH);
+            return "09b41cfb22d89f45cd950f5dbd4ac4a7az";
         }
         try (Response response = httpClient.newCall(new Request.Builder()
                 .post(RequestBody.create("email=" + username + "&password=" + password + "&hwid=FUMANTHE&v=v3&t=true", MediaType.parse("application/x-www-form-urlencoded")))
