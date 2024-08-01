@@ -7,12 +7,13 @@ import org.springframework.web.socket.*;
 public class AuthHandler implements WebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-
+        session.sendMessage(new TextMessage("ok"));
     }
 
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
         session.sendMessage(new TextMessage("ok"));
+        session.sendMessage(new PongMessage());
     }
 
     @Override
