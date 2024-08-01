@@ -5,6 +5,7 @@ import jakarta.annotation.Resource;
 import okhttp3.*;
 import okhttp3.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
@@ -14,20 +15,20 @@ import java.util.Objects;
 
 @RestController
 public class AuthController {
+    @Resource
+    RedisTemplate<String, Long> redisTemplate;
+
     @Autowired
     OkHttpClient httpClient;
 
     String username = System.getProperty("username");
     String password = System.getProperty("password");
 
-    private static final String ALLOWED_CHARACTERS = "abcdefghijklmnopqrstuvwxyz0123456789";
-    private static final int STRING_LENGTH = 33;
-
 
     @RequestMapping(value = "/auth.php", method = {RequestMethod.GET, RequestMethod.POST})
     public String auth() throws Exception {
-        if (username == null || password == null) {
-            return "09b41cfb22d89f45cd950f5dbd4ac4a7az";
+        if (Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.COLD_DOWN), 0L) > System.currentTimeMillis()) {
+            return "主播别急,还没轮到你";
         }
         try (Response response = httpClient.newCall(new Request.Builder()
                 .post(RequestBody.create("email=" + username + "&password=" + password + "&hwid=FUMANTHE&v=v3&t=true", MediaType.parse("application/x-www-form-urlencoded")))
@@ -35,6 +36,7 @@ public class AuthController {
                 .header("User-Agent", "Agent_114514")
                 .build()).execute()) {
             if (response.body() != null) {
+                redisTemplate.opsForValue().set(Const.COLD_DOWN, System.currentTimeMillis() + 600000);
                 return response.body().string();
             }
         }
@@ -46,17 +48,4 @@ public class AuthController {
 //        // https://www.vape.gg/auth.php
 //
 //    }
-
-
-    public static String generateRandomString(int length) {
-        SecureRandom random = new SecureRandom();
-        StringBuilder sb = new StringBuilder(length);
-
-        for (int i = 0; i < length; i++) {
-            int index = random.nextInt(ALLOWED_CHARACTERS.length());
-            sb.append(ALLOWED_CHARACTERS.charAt(index));
-        }
-
-        return sb.toString();
-    }
 }
