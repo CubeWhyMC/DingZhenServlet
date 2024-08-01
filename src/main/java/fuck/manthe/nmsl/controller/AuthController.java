@@ -24,9 +24,14 @@ public class AuthController {
     String username = System.getProperty("username");
     String password = System.getProperty("password");
 
+    String secretUsername = System.getProperty("secretUsername");
+
 
     @RequestMapping(value = "/auth.php", method = {RequestMethod.GET, RequestMethod.POST})
-    public String auth() throws Exception {
+    public String auth(@RequestParam(value = "email") String email) throws Exception {
+        if (secretUsername == null || !secretUsername.equals(email)) {
+            return "Unauthorized";
+        }
         if (Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.COLD_DOWN), 0L) > System.currentTimeMillis()) {
             return "主播别急,还没轮到你";
         }
