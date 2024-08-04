@@ -1,0 +1,15 @@
+spring:
+  main:
+    web-application-type: reactive
+  application:
+    name: DingZhenServlet
+  cloud:
+    gateway:
+      routes:
+        - id: api_route
+          uri: https://online.vape.gg/api
+          predicates:
+            - Path=/api/**
+          filters:
+            - RewritePath=/api/(?<path>.*), /${path}
+

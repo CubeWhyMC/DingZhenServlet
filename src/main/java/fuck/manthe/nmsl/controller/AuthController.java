@@ -33,7 +33,7 @@ public class AuthController {
             return "Unauthorized";
         }
         if (Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.COLD_DOWN), 0L) > System.currentTimeMillis()) {
-            return "主播别急,还没轮到你";
+            return "Somebody is injecting";
         }
         try (Response response = httpClient.newCall(new Request.Builder()
                 .post(RequestBody.create("email=" + username + "&password=" + password + "&hwid=FUMANTHE&v=v3&t=true", MediaType.parse("application/x-www-form-urlencoded")))
