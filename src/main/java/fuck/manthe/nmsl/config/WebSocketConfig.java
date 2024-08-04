@@ -1,6 +1,6 @@
 package fuck.manthe.nmsl.config;
 
-import fuck.manthe.nmsl.ws.AuthHandler;
+import fuck.manthe.nmsl.ws.AuthProxyHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
@@ -12,11 +12,11 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(authHandler(), "/");
+        registry.addHandler(proxyHandler(), "/");
     }
 
     @Bean
-    AuthHandler authHandler() {
-        return new AuthHandler();
+    AuthProxyHandler proxyHandler() {
+        return new AuthProxyHandler();
     }
 }
