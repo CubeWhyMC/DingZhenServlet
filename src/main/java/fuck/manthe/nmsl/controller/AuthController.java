@@ -29,7 +29,7 @@ public class AuthController {
 
     @RequestMapping(value = "/auth.php", method = {RequestMethod.GET, RequestMethod.POST})
     public String auth(@RequestParam(value = "email") String email) throws Exception {
-        if (secretUsername == null || !secretUsername.equals(email)) {
+        if (secretUsername != null && !secretUsername.equals(email)) {
             return "Unauthorized";
         }
         if (Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.COLD_DOWN), 0L) > System.currentTimeMillis()) {
