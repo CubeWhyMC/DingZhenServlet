@@ -25,7 +25,7 @@ public class AuthController {
     String password = System.getProperty("password");
 
     String secretUsername = System.getProperty("secretUsername");
-
+    String resetPassword = System.getProperty("resetPassword");
 
     @RequestMapping(value = "/auth.php", method = {RequestMethod.GET, RequestMethod.POST})
     public String auth(@RequestParam(value = "email") String email) throws Exception {
@@ -46,6 +46,15 @@ public class AuthController {
             }
         }
         return "1"; // cert expired
+    }
+
+    @RequestMapping("reset")
+    public String reset(@RequestParam String pwd) {
+        if (!Objects.equals(pwd, resetPassword)) {
+            return "Wrong password";
+        }
+        redisTemplate.delete(Const.COLD_DOWN);
+        return "Reset CD.";
     }
 
 //    @Scheduled(cron = "0 0 0 1/1 * ? ")
