@@ -1,6 +1,15 @@
 spring:
   application:
     name: DingZhenServlet
+  datasource:
+    url: jdbc:h2:file:./dingzhen.db
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+#  h2:
+#    console:
+#      enabled: true
+
   cloud:
     gateway:
       mvc:
@@ -11,4 +20,6 @@ spring:
               - Path=/api/**
             filters:
               - RewritePath=/api/(?<path>.*), /${path}
-
+  jpa:
+    hibernate:
+      ddl-auto: update

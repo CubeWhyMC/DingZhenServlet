@@ -20,21 +20,20 @@ repositories {
 
 dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
-
+    implementation("com.alibaba.fastjson2:fastjson2:2.0.37")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
     implementation("org.springframework.boot:spring-boot-starter-websocket")
     implementation("org.projectlombok:lombok")
+    annotationProcessor("org.projectlombok:lombok")
     implementation("org.springframework.cloud:spring-cloud-starter-gateway-mvc")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
-//    implementation("com.mybatis-flex:mybatis-flex-spring-boot-starter:1.9.2")
     testImplementation("org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    annotationProcessor("com.mybatis-flex:mybatis-flex-processor:1.9.2")
-    implementation("com.mybatis-flex:mybatis-flex-codegen:1.8.3")
-//    testImplementation("io.projectreactor:reactor-test")
-    runtimeOnly("com.mysql:mysql-connector-j")
+    testImplementation("io.projectreactor:reactor-test")
+    runtimeOnly("com.h2database:h2")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 dependencyManagement {
