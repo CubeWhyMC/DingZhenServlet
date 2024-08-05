@@ -1,5 +1,6 @@
 package fuck.manthe.nmsl.controller;
 
+import fuck.manthe.nmsl.service.impl.CrackedUserServiceImpl;
 import fuck.manthe.nmsl.utils.Const;
 import jakarta.annotation.Resource;
 import okhttp3.*;
@@ -17,6 +18,8 @@ import java.util.Objects;
 public class AuthController {
     @Resource
     RedisTemplate<String, Long> redisTemplate;
+    @Resource
+    CrackedUserServiceImpl crackedUserService;
 
     @Autowired
     OkHttpClient httpClient;
@@ -24,12 +27,11 @@ public class AuthController {
     String username = System.getProperty("username");
     String password = System.getProperty("password");
 
-    String secretUsername = System.getProperty("secretUsername");
     String resetPassword = System.getProperty("resetPassword");
 
     @RequestMapping(value = "/auth.php", method = {RequestMethod.GET, RequestMethod.POST})
-    public String auth(@RequestParam(value = "email") String email) throws Exception {
-        if (secretUsername != null && !secretUsername.equals(email)) {
+    public String auth(@RequestParam(value = "email") String email, @RequestParam(value = "password") String password) throws Exception {
+        if (!crackedUserService.isValid(email, password)) {
             return "Unauthorized";
         }
         if (Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.COLD_DOWN), 0L) > System.currentTimeMillis()) {

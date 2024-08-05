@@ -1,15 +1,21 @@
 package fuck.manthe.nmsl.entity;
 
-import com.mybatisflex.annotation.Id;
-import com.mybatisflex.annotation.KeyType;
-import com.mybatisflex.annotation.Table;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@Table("db_cracked")
+@AllArgsConstructor
+@Entity
+@NoArgsConstructor
 public class CrackedUser {
-    @Id(keyType = KeyType.Auto)
-    private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String username;
     private String password; // Vape.gg要求明文存储.
