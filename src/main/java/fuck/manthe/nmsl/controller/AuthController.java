@@ -1,5 +1,6 @@
 package fuck.manthe.nmsl.controller;
 
+import fuck.manthe.nmsl.entity.ColdDown;
 import fuck.manthe.nmsl.entity.CrackedUser;
 import fuck.manthe.nmsl.service.impl.CrackedUserServiceImpl;
 import fuck.manthe.nmsl.utils.Const;
@@ -67,12 +68,6 @@ public class AuthController {
         return "1"; // cert expired
     }
 
-    @GetMapping("colddown")
-    public String coldDown(Model model) {
-        model.addAttribute("nextInject", redisTemplate.opsForValue().get(Const.COLD_DOWN));
-        return "colddown";
-    }
-
     private Map<String, String> decodeParam(String encodedString) {
         String decodedString = URLDecoder.decode(encodedString, StandardCharsets.UTF_8);
         Map<String, String> map = new HashMap<>();
@@ -84,6 +79,12 @@ public class AuthController {
             }
         }
         return map;
+    }
+
+    @GetMapping("colddown/json")
+    public ColdDown coldDownJson() {
+        Long next = redisTemplate.opsForValue().get(Const.COLD_DOWN);
+        return new ColdDown(next);
     }
 
     @GetMapping("reset")
