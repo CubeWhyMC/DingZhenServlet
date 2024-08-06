@@ -34,7 +34,7 @@ public class AuthController {
         log.warn("Admin password: {}", adminPassword);
     }
 
-    @RequestMapping(value = "/auth.php", method = {RequestMethod.GET, RequestMethod.POST})
+    @PostMapping(value = "/auth.php")
     public String auth(@RequestParam(value = "email") String email, @RequestParam(value = "password") String password) throws Exception {
         log.info("User {} login (PWD HASH {})", email, password.hashCode());
         if (!crackedUserService.isValid(email, password)) {
