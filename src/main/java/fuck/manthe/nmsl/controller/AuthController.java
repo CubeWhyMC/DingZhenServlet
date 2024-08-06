@@ -25,8 +25,8 @@ public class AuthController {
     @Autowired
     OkHttpClient httpClient;
 
-    String username = System.getProperty("username");
-    String password = System.getProperty("password");
+    String sharedUsername = System.getProperty("username");
+    String sharedPassword = System.getProperty("password");
 
     String adminPassword = System.getProperty("adminPassword", UUID.randomUUID().toString());
 
@@ -34,8 +34,8 @@ public class AuthController {
         log.warn("Admin password: {}", adminPassword);
     }
 
-    @PostMapping(value = "/auth.php")
-    public String auth(@RequestParam(value = "email") String email, @RequestParam(value = "password") String password) throws Exception {
+    @PostMapping("/auth.php")
+    public String auth(@RequestParam("email") String email, @RequestParam("password") String password) throws Exception {
         log.info("User {} login (PWD HASH {})", email, password.hashCode());
         if (!crackedUserService.isValid(email, password)) {
             return "Unauthorized";
@@ -45,7 +45,7 @@ public class AuthController {
         }
         log.info("User {} tried to inject!", email);
         try (Response response = httpClient.newCall(new Request.Builder()
-                .post(RequestBody.create("email=" + username + "&password=" + password + "&hwid=FUMANTHE&v=v3&t=true", MediaType.parse("application/x-www-form-urlencoded")))
+                .post(RequestBody.create("email=" + sharedUsername + "&password=" + this.sharedPassword + "&hwid=FUMANTHE&v=v3&t=true", MediaType.parse("application/x-www-form-urlencoded")))
                 .url("https://www.vape.gg/auth.php")
                 .header("User-Agent", "Agent_114514")
                 .build()).execute()) {
