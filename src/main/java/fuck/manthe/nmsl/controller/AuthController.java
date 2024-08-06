@@ -4,6 +4,7 @@ import fuck.manthe.nmsl.entity.CrackedUser;
 import fuck.manthe.nmsl.service.impl.CrackedUserServiceImpl;
 import fuck.manthe.nmsl.utils.Const;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.*;
 import okhttp3.RequestBody;
@@ -11,6 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -35,7 +41,11 @@ public class AuthController {
     }
 
     @PostMapping("/auth.php")
-    public String auth(@RequestParam("email") String email, @RequestParam("password") String password) throws Exception {
+    public String auth(HttpServletRequest request) throws Exception {
+        String bodyParam = new String(request.getInputStream().readAllBytes());
+        Map<String, String> map = decodeParam(bodyParam);
+        String email = map.get("email");
+        String password = map.get("password");
         log.info("User {} login (PWD HASH {})", email, password.hashCode());
         if (!crackedUserService.isValid(email, password)) {
             return "Unauthorized";
@@ -56,6 +66,19 @@ public class AuthController {
         }
         log.error("Vape authorize was expired. (wrong password)");
         return "1"; // cert expired
+    }
+
+    private Map<String, String> decodeParam(String encodedString) throws UnsupportedEncodingException {
+        String decodedString = URLDecoder.decode(encodedString, StandardCharsets.UTF_8);
+        Map<String, String> map = new HashMap<>();
+        String[] pairs = decodedString.split("&");
+        for (String pair : pairs) {
+            String[] keyValue = pair.split("=");
+            if (keyValue.length == 2) {
+                map.put(keyValue[0], keyValue[1]);
+            }
+        }
+        return map;
     }
 
     @GetMapping("reset")
