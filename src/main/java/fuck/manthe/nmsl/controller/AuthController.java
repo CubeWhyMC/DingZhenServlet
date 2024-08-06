@@ -60,7 +60,9 @@ public class AuthController {
                 .header("User-Agent", "Agent_114514")
                 .build()).execute()) {
             if (response.body() != null) {
-                redisTemplate.opsForValue().set(Const.COLD_DOWN, System.currentTimeMillis() + 600000);
+                if (response.isSuccessful()) {
+                    redisTemplate.opsForValue().set(Const.COLD_DOWN, System.currentTimeMillis() + 600000);
+                }
                 return response.body().string();
             }
         }
