@@ -1,4 +1,6 @@
 ![cdbf6c81800a19d8bc3e6ba78aad958ba61ea8d3e843](https://github.com/user-attachments/assets/c9cef282-cdc3-49b3-b730-84c8090bfac3)
+
+[English](https://github.com/CubeWhyMC/DingZhenServlet/blob/master/readme-en.md)
 # DingZhen Servlet
 ***还记得丁真吗？我们想让你也能拥有一个像丁真一样神奇的瑞克五代！这个瑞克五代不仅能帮你省心省力，还能让你体验到各种新鲜有趣的功能。就好像拥有了一个万能的遥控器，想看什么就看什么，想玩什么就玩什么！***
 > 提示: 吸烟有害健康.
