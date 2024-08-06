@@ -10,6 +10,7 @@ import okhttp3.*;
 import okhttp3.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
@@ -54,11 +55,7 @@ public class AuthController {
             return "Somebody is injecting";
         }
         log.info("User {} tried to inject!", email);
-        try (Response response = httpClient.newCall(new Request.Builder()
-                .post(RequestBody.create("email=" + sharedUsername + "&password=" + this.sharedPassword + "&hwid=FUMANTHE&v=v3&t=true", MediaType.parse("application/x-www-form-urlencoded")))
-                .url("https://www.vape.gg/auth.php")
-                .header("User-Agent", "Agent_114514")
-                .build()).execute()) {
+        try (Response response = httpClient.newCall(new Request.Builder().post(RequestBody.create("email=" + sharedUsername + "&password=" + this.sharedPassword + "&hwid=FUMANTHE&v=v3&t=true", MediaType.parse("application/x-www-form-urlencoded"))).url("https://www.vape.gg/auth.php").header("User-Agent", "Agent_114514").build()).execute()) {
             if (response.body() != null) {
                 if (response.isSuccessful()) {
                     redisTemplate.opsForValue().set(Const.COLD_DOWN, System.currentTimeMillis() + 600000);
@@ -71,7 +68,8 @@ public class AuthController {
     }
 
     @GetMapping("colddown")
-    public String coldDown() {
+    public String coldDown(Model model) {
+        model.addAttribute("nextInject", redisTemplate.opsForValue().get(Const.COLD_DOWN));
         return "colddown";
     }
 
@@ -102,10 +100,7 @@ public class AuthController {
         if (!Objects.equals(adminPassword, admin)) {
             return "Wrong admin password";
         }
-        if (crackedUserService.addUser(CrackedUser.builder()
-                .password(password)
-                .username(username)
-                .build())) {
+        if (crackedUserService.addUser(CrackedUser.builder().password(password).username(username).build())) {
             return "Success";
         }
         return "Failed";
