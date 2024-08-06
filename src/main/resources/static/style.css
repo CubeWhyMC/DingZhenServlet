@@ -46,7 +46,7 @@ p {
     opacity: 0;
     animation: fadeIn 0.8s ease-out 0.9s forwards, pulse 2s infinite;
 }
-.github-link {
+.github-link .next-inject {
     display: inline-block;
     margin-top: 20px;
     padding: 10px 20px;
