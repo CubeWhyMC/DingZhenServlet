@@ -46,7 +46,7 @@ p {
     opacity: 0;
     animation: fadeIn 0.8s ease-out 0.9s forwards, pulse 2s infinite;
 }
-.github-link .next-inject {
+.github-link {
     display: inline-block;
     margin-top: 20px;
     padding: 10px 20px;
@@ -59,10 +59,31 @@ p {
     opacity: 0;
     animation: fadeIn 0.8s ease-out 1.1s forwards;
 }
+
 .github-link:hover {
     background-color: #094577;
     transform: translateY(-3px);
 }
+
+.next-inject {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #24292e;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    opacity: 0;
+    animation: fadeIn 0.8s ease-out 1.1s forwards;
+}
+
+.next-inject:hover {
+    background-color: #094577;
+    transform: translateY(-3px);
+}
+
 @keyframes fadeInUp {
     from {
         opacity: 0;
