@@ -28,3 +28,9 @@
 
 - 抓包工具 httpdebugger, wireshark
 - IDE Intellij IDEA
+
+## 免责声明
+
+顶针租号玩是练手项目, 不要过分解读
+
+原理就是共享🐀, 不是真正意义上的破解.
