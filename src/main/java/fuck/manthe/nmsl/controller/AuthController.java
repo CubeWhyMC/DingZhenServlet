@@ -70,7 +70,12 @@ public class AuthController {
         return "1"; // cert expired
     }
 
-    private Map<String, String> decodeParam(String encodedString) throws UnsupportedEncodingException {
+    @GetMapping("colddown")
+    public String coldDown() {
+        return "colddown";
+    }
+
+    private Map<String, String> decodeParam(String encodedString) {
         String decodedString = URLDecoder.decode(encodedString, StandardCharsets.UTF_8);
         Map<String, String> map = new HashMap<>();
         String[] pairs = decodedString.split("&");

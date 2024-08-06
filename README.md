@@ -16,8 +16,9 @@
 
 请务必把设备码改到`FUMANTHE`, 否则你的账户将面临封禁 (不是玩笑)
 
-同时你还需要提供vapegg_session的cookie (可以在开发者工具中找到), 这个cookie应该有时效性,
-但是我们还没有找到绕过reCaptcha的方法.
+[//]: # (同时你还需要提供vapegg_session的cookie &#40;可以在开发者工具中找到&#41;, 这个cookie应该有时效性,)
+
+[//]: # (但是我们还没有找到绕过reCaptcha的方法.)
 
 ## 关于政治问题
 
