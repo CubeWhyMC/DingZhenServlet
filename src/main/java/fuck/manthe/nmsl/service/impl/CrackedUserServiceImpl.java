@@ -24,12 +24,18 @@ public class CrackedUserServiceImpl implements CrackedUserService {
     }
 
     @Override
-    public void addUser(CrackedUser user) {
+    public boolean addUser(CrackedUser user) {
+        if (userRepository.existsByUsername(user.getUsername())) {
+            return false;
+        }
         userRepository.save(user);
+        return true;
     }
 
     @Override
-    public void removeUser(CrackedUser user) {
-        userRepository.delete(user);
+    public void removeUser(String username) {
+        Optional<CrackedUser> optional = userRepository.findByUsername(username);
+        if (optional.isEmpty()) return;
+        userRepository.delete(optional.get());
     }
 }
