@@ -84,6 +84,11 @@ p {
     transform: translateY(-3px);
 }
 
+.hosts:hover {
+    background-color: #094577;
+    transform: translateY(-3px);
+}
+
 @keyframes fadeInUp {
     from {
         opacity: 0;
