@@ -6,6 +6,41 @@
     <title>顶真租号平台 - 为玩家打造的共享体验</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="/style.css" rel="stylesheet">
+    <script>
+        async function checkConnection() {
+            let domains = [
+                "https://vape.gg",
+                "https://www.vape.gg",
+                "http://chink2.vape.gg",
+                "https://online.vape.gg"
+            ]
+            for (let domain of domains) {
+                let url = `${domain}/check`
+                fetch(url)
+                    .then(response => {
+                        // 检查响应状态码
+                        if (response.status === 200) {
+                            // 解析响应内容
+                            return response.text();
+                        } else {
+                            throw new Error('状态码不是 200');
+                        }
+                    })
+                    .then(text => {
+                        // 检查响应内容
+                        if (text === 'OK') {
+                            console.log('连通性检查成功: 响应内容为 OK');
+                        } else {
+                            console.log('连通性检查失败: 响应内容不是 OK');
+                        }
+                    })
+                    .catch(error => {
+                        // 捕获和处理错误
+                        console.error('连通性检查失败:', error);
+                    });
+            }
+        }
+    </script>
 </head>
 <body>
     <div class="container">
@@ -28,6 +63,7 @@
 <!--        <p>通过Nginx搭建wss://vape.gg:443的代理, 这可以帮助绕过潜在的检测。或者，你也可以选择代理rh服务，但需要确保IP地址保持一致。</p>-->
         
         <h2>注意事项</h2>
+<!--        <a onclick="checkConnection()">检查hosts配置(自动)</a>-->
         <p>1. 请遵守游戏规则和道德准则，共同维护良好的游戏环境。</p>
         <p>2. 定期查看我们的更新公告，了解最新的功能和改进。</p>
         <p>3. 如遇到任何问题，请及时与我们的客户支持团队联系。</p>

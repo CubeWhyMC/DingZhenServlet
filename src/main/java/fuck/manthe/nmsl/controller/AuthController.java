@@ -81,6 +81,11 @@ public class AuthController {
         return map;
     }
 
+    @GetMapping("/check")
+    public String checkConnection() {
+        return "OK";
+    }
+
     @GetMapping("colddown/json")
     public ColdDown coldDownJson() {
         Long next = redisTemplate.opsForValue().get(Const.COLD_DOWN);
