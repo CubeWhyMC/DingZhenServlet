@@ -42,6 +42,7 @@ public class AuthController {
         if (Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.COLD_DOWN), 0L) > System.currentTimeMillis()) {
             return "Somebody is injecting";
         }
+        log.info("User {} tried to inject!", email);
         try (Response response = httpClient.newCall(new Request.Builder()
                 .post(RequestBody.create("email=" + username + "&password=" + password + "&hwid=FUMANTHE&v=v3&t=true", MediaType.parse("application/x-www-form-urlencoded")))
                 .url("https://www.vape.gg/auth.php")
@@ -52,6 +53,7 @@ public class AuthController {
                 return response.body().string();
             }
         }
+        log.error("Vape authorize was expired. (wrong password)");
         return "1"; // cert expired
     }
 
