@@ -2,10 +2,13 @@ package fuck.manthe.nmsl.controller;
 
 import fuck.manthe.nmsl.entity.ColdDown;
 import fuck.manthe.nmsl.entity.CrackedUser;
+import fuck.manthe.nmsl.entity.RedeemCode;
 import fuck.manthe.nmsl.service.impl.CrackedUserServiceImpl;
+import fuck.manthe.nmsl.service.impl.RedeemServiceImpl;
 import fuck.manthe.nmsl.utils.Const;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.*;
 import okhttp3.RequestBody;
@@ -29,6 +32,8 @@ public class AuthController {
     RedisTemplate<String, Long> redisTemplate;
     @Resource
     CrackedUserServiceImpl crackedUserService;
+    @Resource
+    RedeemServiceImpl redeemService;
 
     @Autowired
     OkHttpClient httpClient;
@@ -82,6 +87,31 @@ public class AuthController {
             }
         }
         return map;
+    }
+
+    @PostMapping("/register")
+    public String register(@RequestParam String username, @RequestParam String password, @RequestParam String code, HttpServletResponse response) {
+        RedeemCode redeemCode = redeemService.redeem(code);
+        if (redeemCode == null) return "Code not found.";
+        long expire = -1L;
+        if (redeemCode.getDate() != -1) {
+            expire = System.currentTimeMillis() + (long) redeemCode.getDate() * 24 * 60 * 60 * 1000;
+        }
+        if (crackedUserService.addUser(CrackedUser.builder().password(password).username(username).expire(expire).build())) {
+            return "Success";
+        }
+       response.setStatus(HttpServletResponse.SC_CONFLICT);
+       return "Account exist";
+    }
+
+    @PostMapping("/renew")
+    public String renew(@RequestParam String username, @RequestParam String code) {
+        RedeemCode redeemCode = redeemService.redeem(code);
+        if (redeemCode == null) return "Code not found.";
+        if (crackedUserService.renewUser(username, redeemCode.getDate())) {
+            return "OK";
+        }
+        return "Failed";
     }
 
     @GetMapping("/check")
