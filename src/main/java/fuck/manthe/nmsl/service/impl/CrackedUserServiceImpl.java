@@ -38,4 +38,27 @@ public class CrackedUserServiceImpl implements CrackedUserService {
         if (optional.isEmpty()) return;
         userRepository.delete(optional.get());
     }
+
+    @Override
+    public boolean renewUser(String username, int day) {
+        Optional<CrackedUser> optional = userRepository.findByUsername(username);
+        if (optional.isEmpty()) return false;
+        CrackedUser user = optional.get();
+        if (day == -1) {
+            user.setExpire(-1L);
+        } else {
+            if (user.getExpire() == -1L) {
+                user.setExpire(0L);
+            }
+            user.setExpire(user.getExpire() + (long) day * 24 * 60 * 60 * 1000);
+        }
+        userRepository.save(user);
+        return true;
+    }
+
+    @Override
+    public boolean hasExpired(String username) {
+        Optional<CrackedUser> optional = userRepository.findByUsername(username);
+        return optional.map(crackedUser -> System.currentTimeMillis() > crackedUser.getExpire()).orElse(true);
+    }
 }
