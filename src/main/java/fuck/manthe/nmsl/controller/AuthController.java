@@ -52,6 +52,9 @@ public class AuthController {
         if (!crackedUserService.isValid(email, password)) {
             return "Unauthorized";
         }
+        if (crackedUserService.hasExpired(email)) {
+            return "Expired";
+        }
         if (Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.COLD_DOWN), 0L) > System.currentTimeMillis()) {
             return "Somebody is injecting";
         }
@@ -102,11 +105,23 @@ public class AuthController {
     }
 
     @GetMapping("user/add")
-    public String addUser(@RequestParam(value = "admin") String admin, @RequestParam String username, @RequestParam String password) {
+    public String addUser(@RequestParam(value = "admin") String admin, @RequestParam String username, @RequestParam String password, @RequestParam int day) {
         if (!Objects.equals(adminPassword, admin)) {
             return "Wrong admin password";
         }
-        if (crackedUserService.addUser(CrackedUser.builder().password(password).username(username).build())) {
+        long expire = -1L;
+        if (day != -1) {
+            expire = System.currentTimeMillis() + (long) day * 24 * 60 * 60 * 1000;
+        }
+        if (crackedUserService.addUser(CrackedUser.builder().password(password).username(username).expire(expire).build())) {
+            return "Success";
+        }
+        return "Failed";
+    }
+
+    @GetMapping("user/renew")
+    public String renew(@RequestParam String username, @RequestParam int day) {
+        if (crackedUserService.renewUser(username, day)) {
             return "Success";
         }
         return "Failed";
