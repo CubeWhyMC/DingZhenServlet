@@ -22,4 +22,9 @@ public class RedeemServiceImpl implements RedeemService {
         redeemRepository.deleteByCode(codeString);
         return redeemCode.get();
     }
+
+    @Override
+    public void addCode(RedeemCode code) {
+        redeemRepository.save(code);
+    }
 }
