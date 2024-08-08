@@ -20,10 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @Log4j2
@@ -128,7 +125,7 @@ public class AuthController {
     @GetMapping("reset")
     public String reset(@RequestParam String pwd) {
         if (!Objects.equals(pwd, adminPassword)) {
-            return "Wrong password";
+            throw new IllegalArgumentException("Wrong admin password");
         }
         redisTemplate.delete(Const.COLD_DOWN);
         return "Reset CD.";
@@ -137,7 +134,7 @@ public class AuthController {
     @GetMapping("user/add")
     public String addUser(@RequestParam(value = "admin") String admin, @RequestParam String username, @RequestParam String password, @RequestParam int day) {
         if (!Objects.equals(adminPassword, admin)) {
-            return "Wrong admin password";
+            throw new IllegalArgumentException("Wrong admin password");
         }
         long expire = -1L;
         if (day != -1) {
@@ -147,6 +144,27 @@ public class AuthController {
             return "Success";
         }
         return "Failed";
+    }
+
+    @GetMapping("user/gen")
+    public List<RedeemCode> generateRedeemCode(@RequestParam(value = "admin") String admin, @RequestParam int count, @RequestParam int day) {
+        if (!Objects.equals(adminPassword, admin)) {
+            throw new IllegalArgumentException("Wrong admin password");
+        }
+        List<RedeemCode> result = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            RedeemCode code = generateOne(day);
+            redeemService.addCode(code);
+            result.add(code);
+        }
+        return result;
+    }
+
+    private RedeemCode generateOne(int day) {
+        RedeemCode redeemCode = new RedeemCode();
+        redeemCode.setDate(day);
+        redeemCode.setCode(UUID.randomUUID().toString());
+        return redeemCode;
     }
 
     @GetMapping("user/renew")
