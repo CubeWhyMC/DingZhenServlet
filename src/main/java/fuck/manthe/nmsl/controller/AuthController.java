@@ -64,7 +64,7 @@ public class AuthController {
         try (Response response = httpClient.newCall(new Request.Builder().post(RequestBody.create("email=" + sharedUsername + "&password=" + this.sharedPassword + "&hwid=FUMANTHE&v=v3&t=true", MediaType.parse("application/x-www-form-urlencoded"))).url("https://www.vape.gg/auth.php").header("User-Agent", "Agent_114514").build()).execute()) {
             if (response.body() != null) {
                 if (response.isSuccessful()) {
-                    redisTemplate.opsForValue().set(Const.COLD_DOWN, System.currentTimeMillis() + 600000);
+                    redisTemplate.opsForValue().set(Const.COLD_DOWN, System.currentTimeMillis() + 300000);
                 }
                 return response.body().string();
             }
