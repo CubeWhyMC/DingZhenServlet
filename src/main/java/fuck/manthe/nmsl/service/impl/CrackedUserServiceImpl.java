@@ -59,6 +59,10 @@ public class CrackedUserServiceImpl implements CrackedUserService {
     @Override
     public boolean hasExpired(String username) {
         Optional<CrackedUser> optional = userRepository.findByUsername(username);
-        return optional.map(crackedUser -> System.currentTimeMillis() > crackedUser.getExpire()).orElse(true);
+        if (optional.isEmpty()) return true;
+        if (optional.get().getExpire() == -1L) {
+            return false;
+        } else
+            return System.currentTimeMillis() > optional.get().getExpire();
     }
 }
