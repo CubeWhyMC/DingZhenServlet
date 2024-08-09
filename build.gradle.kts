@@ -19,8 +19,9 @@ repositories {
 }
 
 dependencies {
+    implementation("cn.hutool:hutool-all:5.8.25")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("com.alibaba.fastjson2:fastjson2:2.0.37")
+    implementation("com.alibaba.fastjson2:fastjson2:2.0.51")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")

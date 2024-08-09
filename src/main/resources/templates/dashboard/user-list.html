@@ -7,9 +7,8 @@
         <thead>
             <tr>
                 <th>用户名</th>
-                <th>天数</th>
+                <th>剩余天数</th>
                 <th>失效时间</th>
-                <th>启动次数</th>
                 <th>操作</th>
             </tr>
         </thead>
@@ -20,9 +19,9 @@
 </div>
 
 <script>
-    // 从API获取用户数据
+    const adminPassword = sessionStorage.getItem('adminPassword');
+
     function fetchUserData() {
-        // 这里应该是实际的API端点 users
         fetch('/admin/listUsers', {
             headers: {
                 'X-Admin-Password': adminPassword
@@ -47,9 +46,8 @@
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${user.username}</td>
-                <td>${user.days}</td>
-                <td>${user.expiryDate}</td>
-                <td>${user.startCount}</td>
+                <td>${((user.expire - Date.now()) / (24 * 60 * 60 * 1000)).toFixed(2)}</td>
+                <td>${new Date(user.expire)}</td>
                 <td>
                     <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="addDays('${user.username}')">增加天数</button>
                     <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-red" onclick="deleteUser('${user.username}')">删除</button>
@@ -64,13 +62,13 @@
         mdui.prompt('请输入要增加的天数：', '增加天数',
             function (value) {
                 // 这里应该调用API来更新用户天数
-                fetch(`/admin/renew/${username}`, {
+                fetch(`/admin/renew/${username}?day=${parseInt(value)}`, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
+                        // 'Content-Type': 'application/x-www-form-urlencoded',
                         'X-Admin-Password': sessionStorage.getItem('adminPassword')
                     },
-                    body: `day=${parseInt(value)}`,
+                    // body: ``,
                 })
                 .then(response => response.json())
                 .then(data => {
@@ -120,6 +118,5 @@
         );
     }
 
-    // 页面加载完成后获取并渲染用户列表
-    document.addEventListener('DOMContentLoaded', fetchUserData);
+    fetchUserData()
 </script>
