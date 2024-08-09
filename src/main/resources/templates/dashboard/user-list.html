@@ -52,7 +52,7 @@
                 <td>${expire}</td>
                 <td>${new Date(user.expire)}</td>
                 <td>
-                    <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="addDays('${user.username}')" hidden="${'hidden' ? user.expire === -1 : ''}">增加天数</button>
+                    <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="addDays('${user.username}')" hidden="${user.expire === -1 ? 'hidden' : ''}">增加天数</button>
                     <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-red" onclick="deleteUser('${user.username}')">删除</button>
                 </td>
             `;
