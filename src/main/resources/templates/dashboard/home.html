@@ -1,0 +1,59 @@
+<!-- public/home.html -->
+<div class="mdui-typo">
+    <h1>仪表盘</h1>
+</div>
+
+<div class="mdui-row" style="margin-top: 20px;">
+    <div class="mdui-col-sm-4">
+        <div class="mdui-card mdui-color-blue-900">
+            <div class="mdui-card-primary">
+                <div class="mdui-card-primary-title" style="color: white;">今日启动次数</div>
+                <div class="mdui-card-primary-subtitle" style="color: white;" id="today-starts">加载中...</div>
+            </div>
+        </div>
+    </div>
+    <div class="mdui-col-sm-4">
+        <div class="mdui-card mdui-color-green-900">
+            <div class="mdui-card-primary">
+                <div class="mdui-card-primary-title" style="color: white;">当前用户人数</div>
+                <div class="mdui-card-primary-subtitle" style="color: white;" id="current-users">加载中...</div>
+            </div>
+        </div>
+    </div>
+    <div class="mdui-col-sm-4">
+        <div class="mdui-card mdui-color-orange-900">
+            <div class="mdui-card-primary">
+                <div class="mdui-card-primary-title" style="color: white;">总启动次数</div>
+                <div class="mdui-card-primary-subtitle" style="color: white;" id="total-starts">加载中...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// 从API获取数据并更新页面
+function fetchDashboardData() {
+    // 这里应该是实际的API端点
+    fetch('/admin/analysis', {
+        headers: {
+            'X-Admin-Password': sessionStorage.getItem('adminPassword')
+        }
+    })
+        .then(response => response.json().data)
+        .then(data => {
+            document.getElementById('today-starts').textContent = data.todayLaunch;
+            document.getElementById('current-users').textContent = data.currentUsers;
+            document.getElementById('total-starts').textContent = data.totalLaunch;
+        })
+        .catch(error => {
+            console.error('Error fetching dashboard data:', error);
+            document.getElementById('today-starts').textContent = 'Error (请尝试重新登录)';
+            document.getElementById('current-users').textContent = 'Error';
+            document.getElementById('total-starts').textContent = 'Error';
+        });
+}
+
+// 页面加载完成后获取数据
+document.addEventListener('DOMContentLoaded', fetchDashboardData);
+fetchDashboardData()
+</script>

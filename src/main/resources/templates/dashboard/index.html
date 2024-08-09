@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>后台管理系统</title>
+    <link rel="stylesheet" href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css">
+    <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script>
+</head>
+<body class="mdui-drawer-body-left mdui-appbar-with-toolbar mdui-theme-primary-indigo mdui-theme-accent-pink">
+    <header class="mdui-appbar mdui-appbar-fixed">
+        <div class="mdui-toolbar mdui-color-theme">
+            <span class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" mdui-drawer="{target: '#main-drawer', swipe: true}">
+                <i class="mdui-icon material-icons">menu</i>
+            </span>
+            <a href="javascript:" class="mdui-typo-headline mdui-hidden-xs">后台管理系统</a>
+            <div class="mdui-toolbar-spacer"></div>
+            <a href="javascript:" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>
+            <a href="javascript:" class="mdui-btn mdui-btn-icon" onclick="window.location.reload()"><i class="mdui-icon material-icons">refresh</i></a>
+            <a href="javascript:" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">more_vert</i></a>
+        </div>
+    </header>
+
+    <div class="mdui-drawer" id="main-drawer">
+        <div class="mdui-list" mdui-collapse="{accordion: true}" style="margin-bottom: 76px;">
+            <div class="mdui-collapse-item">
+                <div class="mdui-collapse-item-header mdui-list-item mdui-ripple" onclick="loadContent('home')">
+                    <i class="mdui-list-item-icon mdui-icon material-icons">home</i>
+                    <div class="mdui-list-item-content">首页</div>
+                </div>
+            </div>
+            <div class="mdui-collapse-item">
+                <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+                    <i class="mdui-list-item-icon mdui-icon material-icons">people</i>
+                    <div class="mdui-list-item-content">用户管理</div>
+                    <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+                </div>
+                <div class="mdui-collapse-item-body mdui-list">
+                    <a href="javascript:" class="mdui-list-item mdui-ripple" onclick="loadContent('user-list')">用户列表</a>
+                    <a href="javascript:" class="mdui-list-item mdui-ripple" onclick="loadContent('add-user')">添加用户</a>
+                </div>
+            </div>
+            <div class="mdui-collapse-item">
+                <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+                    <i class="mdui-list-item-icon mdui-icon material-icons">settings</i>
+                    <div class="mdui-list-item-content">系统设置</div>
+                    <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+                </div>
+                <div class="mdui-collapse-item-body mdui-list">
+                    <a href="javascript:" class="mdui-list-item mdui-ripple" onclick="loadContent('basic-settings')">基本设置</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mdui-container" id="content">
+        <!-- 内容将在这里动态加载 -->
+    </div>
+
+    <script>
+        // 初始化MDUI组件
+        mdui.mutation();
+
+        // 加载内容函数
+        // function loadContent(url) {
+        //     fetch(`dashboard/${url}`)
+        //         .then(response => response.text())
+        //         .then(html => {
+        //             document.getElementById('content').innerHTML = html;
+        //             mdui.mutation();  // 重新初始化新加载内容中的MDUI组件
+        //         })
+        //         .catch(error => {
+        //             console.error('Error loading content:', error);
+        //             document.getElementById('content').innerHTML = '<p>Error loading content</p>';
+        //         });
+        // }
+
+        // 页面加载完成后加载首页内容
+        document.addEventListener('DOMContentLoaded', () => loadContent('home'));
+    </script>
+
+    <script>
+        // 检查是否已登录
+        function checkLogin() {
+            const adminPassword = sessionStorage.getItem('adminPassword');
+            fetch('/admin/ping', {
+                method: 'POST',
+                headers: {
+                    // 'Content-Type': 'application/x-www-form-urlencoded'
+                    "X-Admin-Password": adminPassword
+                },
+            })
+                // .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        mdui.alert('登录失效');
+                        window.location.href = '/dashboard/login'
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            if (!adminPassword) {
+                window.location.href = '/dashboard/login';
+            }
+        }
+    
+        // 登出函数
+        function logout() {
+            sessionStorage.removeItem('adminPassword');
+            window.location.href = '/dashboard/login';
+        }
+    
+        // 在页面加载时检查登录状态
+        document.addEventListener('DOMContentLoaded', checkLogin);
+        let regDetectJs = /<script(.|\n)*?>(.|\n|\r\n)*?<\/script>/ig;
+        // 修改 loadContent 函数以包含管理员密码
+        function loadContent(url) {
+            const adminPassword = sessionStorage.getItem('adminPassword');
+            fetch(`dashboard/${url}`, {
+                headers: {
+                    'X-Admin-Password': adminPassword
+                }
+            })
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('content').innerHTML = html;
+                    // 处理js脚本
+                    let jsContained = html.match(regDetectJs);
+                    if (jsContained) {
+                        // 分段取出js正则
+                        let regGetJS = /<script(.|\n)*?>((.|\n|\r\n)*)?<\/script>/im;
+                        // 按顺序分段执行js
+                        const jsNums = jsContained.length;
+                        for (let i = 0; i < jsNums; i++) {
+                            const jsSection = jsContained[i].match(regGetJS);
+                            if (jsSection[2]) {
+                                if (window.execScript) {
+                                    // 给IE的特殊待遇
+                                    window.execScript(jsSection[2]);
+                                } else {
+                                    // 给其他大部分浏览器用的
+                                    window.eval(jsSection[2]);
+                                }
+                            }
+                        }
+                    }
+
+                    mdui.mutation();
+                })
+                .catch(error => {
+                    console.error('Error loading content:', error);
+                    document.getElementById('content').innerHTML = '<p>Error loading content</p>';
+                });
+        }
+    
+        // 添加登出按钮到顶部工具栏
+        const toolbar = document.querySelector('.mdui-toolbar');
+        const logoutButton = document.createElement('a');
+        logoutButton.href = 'javascript:;';
+        logoutButton.className = 'mdui-btn mdui-btn-icon';
+        logoutButton.innerHTML = '<i class="mdui-icon material-icons">exit_to_app</i>';
+        logoutButton.onclick = logout;
+        toolbar.appendChild(logoutButton);
+    </script>
+</body>
+</html>

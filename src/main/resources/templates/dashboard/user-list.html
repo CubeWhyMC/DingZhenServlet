@@ -1,0 +1,125 @@
+<!-- public/user-list.html -->
+<div class="mdui-typo">
+    <h1>用户列表</h1>
+</div>
+<div class="mdui-table-fluid">
+    <table class="mdui-table mdui-table-hoverable">
+        <thead>
+            <tr>
+                <th>用户名</th>
+                <th>天数</th>
+                <th>失效时间</th>
+                <th>启动次数</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody id="user-table-body">
+            <!-- 用户数据将通过 JavaScript 动态插入这里 -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    // 从API获取用户数据
+    function fetchUserData() {
+        // 这里应该是实际的API端点 users
+        fetch('/admin/listUsers', {
+            headers: {
+                'X-Admin-Password': adminPassword
+            }
+        })
+            .then(response => response.json())
+            .then(users => {
+                renderUserList(users);
+            })
+            .catch(error => {
+                console.error('Error fetching user data:', error);
+                document.getElementById('user-table-body').innerHTML = '<tr><td colspan="5">Error loading user data</td></tr>';
+            });
+    }
+
+    // 渲染用户列表
+    function renderUserList(users) {
+        const tableBody = document.getElementById('user-table-body');
+        tableBody.innerHTML = '';
+
+        users.forEach(user => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${user.username}</td>
+                <td>${user.days}</td>
+                <td>${user.expiryDate}</td>
+                <td>${user.startCount}</td>
+                <td>
+                    <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="addDays('${user.username}')">增加天数</button>
+                    <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-red" onclick="deleteUser('${user.username}')">删除</button>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    // 增加天数函数（示例）
+    function addDays(username) {
+        mdui.prompt('请输入要增加的天数：', '增加天数',
+            function (value) {
+                // 这里应该调用API来更新用户天数
+                fetch(`/admin/renew/${username}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-Admin-Password': sessionStorage.getItem('adminPassword')
+                    },
+                    body: `day=${parseInt(value)}`,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    mdui.alert('已为用户 ' + username + ' 增加 ' + value + ' 天');
+                    fetchUserData(); // 重新加载用户列表
+                })
+                .catch(error => {
+                    console.error('Error adding days:', error);
+                    mdui.alert('增加天数失败');
+                });
+            },
+            function (value) {},
+            {
+                type: 'number',
+                confirmText: '确认',
+                cancelText: '取消'
+            }
+        );
+    }
+
+    // 删除用户函数（示例）
+    function deleteUser(username) {
+        mdui.confirm('确定要删除用户 ' + username + ' 吗？', '删除用户',
+            function () {
+                // 这里应该调用API来删除用户
+                fetch(`/admin/removeUser/${username}`, {
+                    method: 'DELETE',
+                    headers:{
+                        'X-Admin-Password': sessionStorage.getItem('adminPassword')
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    mdui.alert('已删除用户 ' + username);
+                    fetchUserData(); // 重新加载用户列表
+                })
+                .catch(error => {
+                    console.error('Error deleting user:', error);
+                    mdui.alert('删除用户失败');
+                });
+            },
+            function () {},
+            {
+                confirmText: '确认',
+                cancelText: '取消'
+            }
+        );
+    }
+
+    // 页面加载完成后获取并渲染用户列表
+    document.addEventListener('DOMContentLoaded', fetchUserData);
+</script>

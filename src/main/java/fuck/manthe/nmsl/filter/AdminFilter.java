@@ -4,6 +4,8 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.context.restart.RestartEndpoint;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +33,7 @@ public class AdminFilter implements Filter {
         String requestURI = httpRequest.getRequestURI();
 
         if (requestURI.startsWith("/admin/")) {
-            String adminParam = httpRequest.getParameter("admin");
+            String adminParam = httpRequest.getHeader("X-Admin-Password");
 
             if (adminPassword.equals(adminParam)) {
                 chain.doFilter(request, response);
