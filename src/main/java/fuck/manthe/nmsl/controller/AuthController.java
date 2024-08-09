@@ -168,7 +168,10 @@ public class AuthController {
     }
 
     @GetMapping("user/renew")
-    public String renew(@RequestParam String username, @RequestParam int day) {
+    public String renew(@RequestParam String admin, @RequestParam String username, @RequestParam int day) {
+        if (!Objects.equals(adminPassword, admin)) {
+            throw new IllegalArgumentException("Wrong admin password");
+        }
         if (crackedUserService.renewUser(username, day)) {
             return "Success";
         }
