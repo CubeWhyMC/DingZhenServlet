@@ -5,15 +5,15 @@
 <div class="mdui-table-fluid">
     <table class="mdui-table mdui-table-hoverable">
         <thead>
-            <tr>
-                <th>用户名</th>
-                <th>剩余天数</th>
-                <th>失效时间</th>
-                <th>操作</th>
-            </tr>
+        <tr>
+            <th>用户名</th>
+            <th>剩余天数</th>
+            <th>失效时间</th>
+            <th>操作</th>
+        </tr>
         </thead>
         <tbody id="user-table-body">
-            <!-- 用户数据将通过 JavaScript 动态插入这里 -->
+        <!-- 用户数据将通过 JavaScript 动态插入这里 -->
         </tbody>
     </table>
 </div>
@@ -61,8 +61,13 @@
     function addDays(username) {
         mdui.prompt('请输入要增加的天数：', '增加天数',
             function (value) {
+                let days = parseInt(value)
+                if (isNaN(days) || days < -1) {
+                    mdui.alert('不是一个有效的天数');
+                    return
+                }
                 // 这里应该调用API来更新用户天数
-                fetch(`/admin/renew/${username}?day=${parseInt(value)}`, {
+                fetch(`/admin/renew/${username}?day=${days}`, {
                     method: 'POST',
                     headers: {
                         // 'Content-Type': 'application/x-www-form-urlencoded',
@@ -70,19 +75,20 @@
                     },
                     // body: ``,
                 })
-                .then(response => response.json())
-                .then(data => {
-                    mdui.alert('已为用户 ' + username + ' 增加 ' + value + ' 天');
-                    fetchUserData(); // 重新加载用户列表
-                })
-                .catch(error => {
-                    console.error('Error adding days:', error);
-                    mdui.alert('增加天数失败');
-                });
+                    .then(response => response.json())
+                    .then(data => {
+                        mdui.alert('已为用户 ' + username + ' 增加 ' + value + ' 天');
+                        fetchUserData(); // 重新加载用户列表
+                    })
+                    .catch(error => {
+                        console.error('Error adding days:', error);
+                        mdui.alert('增加天数失败');
+                    });
             },
-            function (value) {},
+            function (value) {
+            },
             {
-                type: 'number',
+                // type: 'number',
                 confirmText: '确认',
                 cancelText: '取消'
             }
@@ -96,21 +102,22 @@
                 // 这里应该调用API来删除用户
                 fetch(`/admin/removeUser/${username}`, {
                     method: 'DELETE',
-                    headers:{
+                    headers: {
                         'X-Admin-Password': sessionStorage.getItem('adminPassword')
                     },
                 })
-                .then(response => response.json())
-                .then(data => {
-                    mdui.alert('已删除用户 ' + username);
-                    fetchUserData(); // 重新加载用户列表
-                })
-                .catch(error => {
-                    console.error('Error deleting user:', error);
-                    mdui.alert('删除用户失败');
-                });
+                    .then(response => response.json())
+                    .then(data => {
+                        mdui.alert('已删除用户 ' + username);
+                        fetchUserData(); // 重新加载用户列表
+                    })
+                    .catch(error => {
+                        console.error('Error deleting user:', error);
+                        mdui.alert('删除用户失败');
+                    });
             },
-            function () {},
+            function () {
+            },
             {
                 confirmText: '确认',
                 cancelText: '取消'
