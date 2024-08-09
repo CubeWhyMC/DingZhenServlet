@@ -46,7 +46,7 @@ public class AuthController {
         Map<String, String> map = decodeParam(bodyParam);
         String email = map.get("email");
         String password = map.get("password");
-        log.info("User {} login (PWD HASH {})", email, password.hashCode());
+        log.info("User {} login", email);
         if (!crackedUserService.isValid(email, password)) {
             return "Unauthorized";
         }
