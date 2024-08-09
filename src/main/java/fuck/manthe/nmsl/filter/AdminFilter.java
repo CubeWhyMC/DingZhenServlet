@@ -16,6 +16,10 @@ import java.util.UUID;
 public class AdminFilter implements Filter {
     String adminPassword = System.getProperty("adminPassword", UUID.randomUUID().toString());
 
+    {
+        log.warn("Admin password: {}", adminPassword);
+    }
+
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -30,9 +34,10 @@ public class AdminFilter implements Filter {
             String adminParam = httpRequest.getParameter("admin");
 
             if (adminPassword.equals(adminParam)) {
+                log.info("Someone logged into the admin panel.");
                 chain.doFilter(request, response);
             } else {
-                log.warn("");
+                log.warn("Someone tried to log in to the dashboard, but the password was incorrect.");
                 httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid admin parameter");
                 return;
             }
