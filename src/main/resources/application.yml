@@ -23,3 +23,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+management:
+  endpoint:
+    restart:
+      enabled: true

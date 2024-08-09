@@ -1,0 +1,74 @@
+<!-- public/add-user.html -->
+<div class="mdui-typo">
+    <h1>添加用户</h1>
+</div>
+
+<div class="mdui-row">
+    <div class="mdui-col-md-6 mdui-col-offset-md-3">
+        <div class="mdui-card">
+            <div class="mdui-card-content">
+                <div class="mdui-textfield">
+                    <label class="mdui-textfield-label">用户名</label>
+                    <input class="mdui-textfield-input" type="text" id="username"/>
+                </div>
+                <div class="mdui-textfield">
+                    <label class="mdui-textfield-label">密码</label>
+                    <input class="mdui-textfield-input" type="password" id="password"/>
+                </div>
+                <div class="mdui-textfield">
+                    <label class="mdui-textfield-label">天数</label>
+                    <input class="mdui-textfield-input" type="number" id="days"/>
+                </div>
+            </div>
+            <div class="mdui-card-actions">
+                <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="addUser()">添加用户</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function addUser() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const days = document.getElementById('days').value;
+    const adminPassword = sessionStorage.getItem('adminPassword');
+
+    if (!username || !password || !days) {
+        mdui.alert('请填写所有字段');
+        return;
+    }
+
+    const url = new URL('/admin/addUser', window.location.origin);
+    url.searchParams.append('super_password', adminPassword);
+    url.searchParams.append('username', username);
+    url.searchParams.append('password', password);
+    url.searchParams.append('days', days);
+
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'X-Admin-Password': adminPassword
+        }
+    })
+    .then(response => {
+        if (response.status === 200) {
+            return response.json();
+        } else {
+            throw new Error('添加用户失败');
+        }
+    })
+    .then(data => {
+        mdui.alert('用户添加成功', function(){
+            // 清空输入框
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('days').value = '';
+        });
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        mdui.alert('添加用户失败: ' + error.message);
+    });
+}
+</script>

@@ -1,0 +1,63 @@
+<!-- public/basic-settings.html -->
+<div class="mdui-typo">
+    <h1>基本设置</h1>
+</div>
+
+<div class="mdui-row">
+    <div class="mdui-col-md-6 mdui-col-offset-md-3">
+        <div class="mdui-card">
+            <div class="mdui-card-primary">
+                <div class="mdui-card-primary-title">系统操作</div>
+                <div class="mdui-card-primary-subtitle">请谨慎操作</div>
+            </div>
+            <div class="mdui-card-content">
+                <p>点击下方按钮重启系统。请注意，重启过程可能需要几分钟，期间系统将无法访问。</p>
+            </div>
+            <div class="mdui-card-actions">
+                <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="restartSystem()">
+                    重启系统
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function restartSystem() {
+        const adminPassword = sessionStorage.getItem('adminPassword');
+
+        mdui.confirm('确定要重启系统吗？', '重启确认',
+            function () {
+                fetch('/admin/restartServlet', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Admin-Password': adminPassword
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            mdui.alert('系统正在重启，请稍后再试登录。', function () {
+                                // 重启后登出用户
+                                sessionStorage.removeItem('adminPassword');
+                                window.location.href = '/dashboard/login';
+                            });
+                        } else {
+                            mdui.alert('重启失败: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        mdui.alert('重启请求失败，请稍后再试');
+                    });
+            },
+            function () {
+            },
+            {
+                confirmText: '确定重启',
+                cancelText: '取消'
+            }
+        );
+    }
+</script>
