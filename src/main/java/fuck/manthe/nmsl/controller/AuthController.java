@@ -38,11 +38,6 @@ public class AuthController {
     String sharedUsername = System.getProperty("username");
     String sharedPassword = System.getProperty("password");
 
-    String adminPassword = System.getProperty("adminPassword", UUID.randomUUID().toString());
-
-    {
-        log.warn("Admin password: {}", adminPassword);
-    }
 
     @PostMapping("/auth.php")
     public String auth(HttpServletRequest request) throws Exception {

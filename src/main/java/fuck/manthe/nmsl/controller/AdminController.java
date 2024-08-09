@@ -6,6 +6,7 @@ import fuck.manthe.nmsl.service.impl.CrackedUserServiceImpl;
 import fuck.manthe.nmsl.service.impl.RedeemServiceImpl;
 import fuck.manthe.nmsl.utils.Const;
 import jakarta.annotation.Resource;
+import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import java.util.UUID;
 
 @RequestMapping("/admin")
 @RestController
+@Log4j2
 public class AdminController {
     @Resource
     RedisTemplate<String, Long> redisTemplate;
@@ -26,14 +28,15 @@ public class AdminController {
     @Resource
     RedeemServiceImpl redeemService;
 
-    @GetMapping
+    @GetMapping("ping")
     public ResponseEntity<String> ping() {
-        return new ResponseEntity<>("Pong", HttpStatus.OK);
+        return ResponseEntity.ok("Pong");
     }
 
     @PostMapping("addUser")
     public ResponseEntity<String> addUser(@RequestParam String username, @RequestParam String password, @RequestParam int day) {
         long expire = -1L;
+        log.info("User {} has added by an admin", username);
         if (day != -1) {
             expire = System.currentTimeMillis() + (long) day * 24 * 60 * 60 * 1000;
         }
@@ -45,6 +48,7 @@ public class AdminController {
 
     @PostMapping("colddown/reset")
     public ResponseEntity<String> reset() {
+        log.info("Inject cold down was reset.");
         redisTemplate.opsForValue().set(Const.COLD_DOWN, System.currentTimeMillis());
         return ResponseEntity.ok("Reset CD.");
     }
@@ -62,6 +66,7 @@ public class AdminController {
 
     @PostMapping("renew")
     public ResponseEntity<String> renew(@RequestParam String username, @RequestParam int day) {
+        log.info("An admin renewed the expire date of user {} ({}d)", username, day);
         if (crackedUserService.renewUser(username, day)) {
             return ResponseEntity.ok("OK");
         }
@@ -70,6 +75,7 @@ public class AdminController {
 
     @PostMapping("removeUser")
     public String removeUser(@RequestParam String username) {
+        log.info("An admin removed a user with name {}", username);
         crackedUserService.removeUser(username);
         return "Success";
     }
