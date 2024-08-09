@@ -34,7 +34,6 @@ public class AdminFilter implements Filter {
             String adminParam = httpRequest.getParameter("admin");
 
             if (adminPassword.equals(adminParam)) {
-                log.info("Someone logged into the admin panel.");
                 chain.doFilter(request, response);
             } else {
                 log.warn("Someone tried to log in to the dashboard, but the password was incorrect.");
