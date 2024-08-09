@@ -14,10 +14,10 @@ import okhttp3.*;
 import okhttp3.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -122,68 +122,5 @@ public class AuthController {
         return new ColdDown(next);
     }
 
-    @GetMapping("reset")
-    public String reset(@RequestParam String pwd) {
-        if (!Objects.equals(pwd, adminPassword)) {
-            throw new IllegalArgumentException("Wrong admin password");
-        }
-        redisTemplate.delete(Const.COLD_DOWN);
-        return "Reset CD.";
-    }
 
-    @GetMapping("user/add")
-    public String addUser(@RequestParam(value = "admin") String admin, @RequestParam String username, @RequestParam String password, @RequestParam int day) {
-        if (!Objects.equals(adminPassword, admin)) {
-            throw new IllegalArgumentException("Wrong admin password");
-        }
-        long expire = -1L;
-        if (day != -1) {
-            expire = System.currentTimeMillis() + (long) day * 24 * 60 * 60 * 1000;
-        }
-        if (crackedUserService.addUser(CrackedUser.builder().password(password).username(username).expire(expire).build())) {
-            return "Success";
-        }
-        return "Failed";
-    }
-
-    @GetMapping("user/gen")
-    public List<RedeemCode> generateRedeemCode(@RequestParam(value = "admin") String admin, @RequestParam int count, @RequestParam int day) {
-        if (!Objects.equals(adminPassword, admin)) {
-            throw new IllegalArgumentException("Wrong admin password");
-        }
-        List<RedeemCode> result = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            RedeemCode code = generateOne(day);
-            redeemService.addCode(code);
-            result.add(code);
-        }
-        return result;
-    }
-
-    private RedeemCode generateOne(int day) {
-        RedeemCode redeemCode = new RedeemCode();
-        redeemCode.setDate(day);
-        redeemCode.setCode(UUID.randomUUID().toString());
-        return redeemCode;
-    }
-
-    @GetMapping("user/renew")
-    public String renew(@RequestParam String admin, @RequestParam String username, @RequestParam int day) {
-        if (!Objects.equals(adminPassword, admin)) {
-            throw new IllegalArgumentException("Wrong admin password");
-        }
-        if (crackedUserService.renewUser(username, day)) {
-            return "Success";
-        }
-        return "Failed";
-    }
-
-    @GetMapping("user/remove")
-    public String removeUser(@RequestParam(value = "admin") String admin, @RequestParam String username) {
-        if (!Objects.equals(adminPassword, admin)) {
-            return "Wrong admin password";
-        }
-        crackedUserService.removeUser(username);
-        return "Success";
-    }
 }
