@@ -1,5 +1,7 @@
 package fuck.manthe.nmsl.controller;
 
+import cn.hutool.core.util.HashUtil;
+import cn.hutool.crypto.SecureUtil;
 import fuck.manthe.nmsl.entity.Analysis;
 import fuck.manthe.nmsl.entity.CrackedUser;
 import fuck.manthe.nmsl.entity.RedeemCode;
@@ -51,7 +53,7 @@ public class AdminController {
         if (day != -1) {
             expire = System.currentTimeMillis() + (long) day * 24 * 60 * 60 * 1000;
         }
-        if (crackedUserService.addUser(CrackedUser.builder().password(password).username(username).expire(expire).build())) {
+        if (crackedUserService.addUser(CrackedUser.builder().password(SecureUtil.sha1(password)).username(username).expire(expire).build())) {
             return ResponseEntity.ok(RestBean.success("OK"));
         }
         return new ResponseEntity<>(RestBean.failure(409, "Conflict"), HttpStatus.CONFLICT);
@@ -109,6 +111,11 @@ public class AdminController {
                 .totalLaunch(totalLaunch)
                 .currentUsers(userRepository.count())
                 .build();
+    }
+
+    @GetMapping("listUsers")
+    public List<CrackedUser> listUsers() {
+        return userRepository.findAll();
     }
 
     @NotNull

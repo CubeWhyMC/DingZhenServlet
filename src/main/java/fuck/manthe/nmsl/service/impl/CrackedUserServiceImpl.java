@@ -1,5 +1,6 @@
 package fuck.manthe.nmsl.service.impl;
 
+import cn.hutool.crypto.SecureUtil;
 import fuck.manthe.nmsl.entity.CrackedUser;
 import fuck.manthe.nmsl.repository.UserRepository;
 import fuck.manthe.nmsl.service.CrackedUserService;
@@ -18,7 +19,7 @@ public class CrackedUserServiceImpl implements CrackedUserService {
         Optional<CrackedUser> optional = userRepository.findByUsername(username);
         if (optional.isPresent()) {
             CrackedUser user = optional.get();
-            return user.getPassword().equals(password);
+            return user.getPassword().equals(SecureUtil.sha1(password));
         }
         return false;
     }

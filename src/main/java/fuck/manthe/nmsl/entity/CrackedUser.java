@@ -20,7 +20,7 @@ public class CrackedUser {
     private Long id;
 
     private String username;
-    private String password; // Vape.gg要求明文存储.
+    private String password;
 
     @Builder.Default
     private Long expire = -1L; // 失效时间,设置为-1禁用
