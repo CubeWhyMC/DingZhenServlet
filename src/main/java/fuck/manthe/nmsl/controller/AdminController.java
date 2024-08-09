@@ -36,8 +36,8 @@ public class AdminController {
     @Resource
     RedeemServiceImpl redeemService;
 
-    @Autowired
-    private RestartEndpoint restartEndpoint;
+//    @Autowired
+//    private RestartEndpoint restartEndpoint;
     @Autowired
     private UserRepository userRepository;
 
@@ -93,12 +93,12 @@ public class AdminController {
         return RestBean.success();
     }
 
-    @GetMapping("restartServlet")
-    public RestBean<String> restartServlet() {
-        log.info("Restart servlet. (Requested by an admin)");
-        restartEndpoint.restart();
-        return RestBean.success();
-    }
+//    @GetMapping("restartServlet")
+//    public RestBean<String> restartServlet() {
+//        log.info("Restart servlet. (Requested by an admin)");
+//        restartEndpoint.restart();
+//        return RestBean.success();
+//    }
 
     @GetMapping("analysis")
     public Analysis analysis() {

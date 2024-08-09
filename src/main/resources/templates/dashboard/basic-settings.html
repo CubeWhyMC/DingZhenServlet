@@ -11,11 +11,11 @@
                 <div class="mdui-card-primary-subtitle">请谨慎操作</div>
             </div>
             <div class="mdui-card-content">
-                <p>点击下方按钮重启系统。请注意，重启过程可能需要几分钟，期间系统将无法访问。</p>
+                <p>点击下方按钮重置注入冷却。</p>
             </div>
             <div class="mdui-card-actions">
                 <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="restartSystem()">
-                    重启系统
+                    重置
                 </button>
             </div>
         </div>
@@ -26,9 +26,9 @@
     function restartSystem() {
         const adminPassword = sessionStorage.getItem('adminPassword');
 
-        mdui.confirm('确定要重启系统吗？', '重启确认',
+        mdui.confirm('确定要重置注入冷却吗吗？', '重启确认',
             function () {
-                fetch('/admin/restartServlet', {
+                fetch('/admin/colddown/reset', {
                     method: 'GET',
                     headers: {
                         'X-Admin-Password': adminPassword
@@ -37,24 +37,20 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            mdui.alert('系统正在重启，请稍后再试登录。', function () {
-                                // 重启后登出用户
-                                sessionStorage.removeItem('adminPassword');
-                                window.location.href = '/dashboard/login';
-                            });
+                            mdui.alert('CD重置成功');
                         } else {
-                            mdui.alert('重启失败: ' + data.message);
+                            mdui.alert('CD重置失败: ' + data.message);
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        mdui.alert('重启请求失败，请稍后再试');
+                        mdui.alert('请求失败，请稍后再试');
                     });
             },
             function () {
             },
             {
-                confirmText: '确定重启',
+                confirmText: '确定重置',
                 cancelText: '取消'
             }
         );
