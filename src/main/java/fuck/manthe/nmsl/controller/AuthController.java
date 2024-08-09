@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.*;
 
 @RestController
@@ -56,9 +57,12 @@ public class AuthController {
             return "Somebody is injecting";
         }
         log.info("User {} tried to inject!", email);
-//        Long todayLaunch = redisTemplate.opsForValue().get(Const.TODAY_LAUNCH);
-//        if (todayLaunch == null) todayLaunch = 0L;
-//        redisTemplate.opsForValue().set(Const.TODAY_LAUNCH, todayLaunch, new );
+        Long todayLaunch = redisTemplate.opsForValue().get(Const.TODAY_LAUNCH);
+        Long totalLaunch = redisTemplate.opsForValue().get(Const.TOTAL_LAUNCH);
+        if (todayLaunch == null) todayLaunch = 0L;
+        if (totalLaunch == null) totalLaunch = 0L;
+        redisTemplate.opsForValue().set(Const.TODAY_LAUNCH, ++todayLaunch, Duration.ofDays(1));
+        redisTemplate.opsForValue().set(Const.TOTAL_LAUNCH, ++totalLaunch);
         try (Response response = httpClient.newCall(new Request.Builder().post(RequestBody.create("email=" + sharedUsername + "&password=" + this.sharedPassword + "&hwid=FUMANTHE&v=v3&t=true", MediaType.parse("application/x-www-form-urlencoded"))).url("https://www.vape.gg/auth.php").header("User-Agent", "Agent_114514").build()).execute()) {
             if (response.body() != null) {
                 if (response.isSuccessful()) {

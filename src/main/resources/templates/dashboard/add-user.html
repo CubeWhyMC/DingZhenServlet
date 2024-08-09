@@ -39,17 +39,11 @@ function addUser() {
         return;
     }
 
-    const url = new URL('/admin/addUser', window.location.origin);
-    url.searchParams.append('super_password', adminPassword);
-    url.searchParams.append('username', username);
-    url.searchParams.append('password', password);
-    url.searchParams.append('days', days);
-
-    fetch(url, {
-        method: 'GET',
+    fetch(`/admin/addUser?username=${username}&password=${password}&day=${days}`, {
+        method: 'POST',
         headers: {
             'X-Admin-Password': adminPassword
-        }
+        },
     })
     .then(response => {
         if (response.status === 200) {
