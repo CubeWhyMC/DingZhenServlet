@@ -99,16 +99,16 @@ public class AdminController {
     }
 
     @GetMapping("analysis")
-    public RestBean<Analysis> analysis() {
+    public Analysis analysis() {
         Long todayLaunch = redisTemplate.opsForValue().get(Const.TODAY_LAUNCH);
         Long totalLaunch = redisTemplate.opsForValue().get(Const.TOTAL_LAUNCH);
         if (totalLaunch == null) totalLaunch = 0L;
         if (todayLaunch == null) todayLaunch = 0L;
-        return RestBean.success(Analysis.builder()
+        return Analysis.builder()
                 .todayLaunch(todayLaunch)
                 .totalLaunch(totalLaunch)
                 .currentUsers(userRepository.count())
-                .build());
+                .build();
     }
 
     @NotNull

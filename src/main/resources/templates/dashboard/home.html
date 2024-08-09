@@ -39,7 +39,7 @@ function fetchDashboardData() {
             'X-Admin-Password': sessionStorage.getItem('adminPassword')
         }
     })
-        .then(response => response.json().data)
+        .then(response => response.json())
         .then(data => {
             document.getElementById('today-starts').textContent = data.todayLaunch;
             document.getElementById('current-users').textContent = data.currentUsers;
