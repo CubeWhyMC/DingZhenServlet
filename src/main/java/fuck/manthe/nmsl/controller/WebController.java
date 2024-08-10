@@ -22,7 +22,7 @@ public class WebController {
         return "colddown";
     }
 
-    @GetMapping("register")
+    @GetMapping("redeem")
     public String register() {
         return "redeem";
     }
