@@ -22,4 +22,9 @@ public class WebController {
     public String coldDown(Model model) {
         return "colddown";
     }
+
+    @GetMapping("register")
+    public String register() {
+        return "register";
+    }
 }

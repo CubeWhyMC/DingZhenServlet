@@ -5,6 +5,7 @@ import fuck.manthe.nmsl.entity.Analysis;
 import fuck.manthe.nmsl.entity.CrackedUser;
 import fuck.manthe.nmsl.entity.RedeemCode;
 import fuck.manthe.nmsl.entity.RestBean;
+import fuck.manthe.nmsl.repository.RedeemRepository;
 import fuck.manthe.nmsl.repository.UserRepository;
 import fuck.manthe.nmsl.service.impl.CrackedUserServiceImpl;
 import fuck.manthe.nmsl.service.impl.RedeemServiceImpl;
@@ -34,10 +35,10 @@ public class AdminController {
     @Resource
     RedeemServiceImpl redeemService;
 
-    //    @Autowired
-//    private RestartEndpoint restartEndpoint;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private RedeemRepository redeemRepository;
 
     @RequestMapping("ping")
     public ResponseEntity<String> ping() {
@@ -65,14 +66,27 @@ public class AdminController {
     }
 
     @PostMapping("redeem/gen")
-    public ResponseEntity<RestBean<List<RedeemCode>>> generateRedeemCode(@RequestParam int count, @RequestParam int day) {
+    public ResponseEntity<List<RedeemCode>> generateRedeemCode(@RequestParam int count, @RequestParam int day) {
         List<RedeemCode> result = new ArrayList<>();
         for (int i = 0; i < count; i++) {
             RedeemCode code = generateOne(day);
             redeemService.addCode(code);
             result.add(code);
         }
-        return ResponseEntity.ok(RestBean.success(result));
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("redeem/list")
+    public ResponseEntity<List<RedeemCode>> redeemCodeList() {
+        return ResponseEntity.ok(redeemRepository.findAll());
+    }
+
+    @DeleteMapping("redeem/destroy")
+    public ResponseEntity<RestBean<String>> destroyRedeemCode(@RequestParam String code) {
+        if (redeemService.removeCode(code)) {
+            return ResponseEntity.ok(RestBean.success("Success"));
+        }
+        return new ResponseEntity<>(RestBean.failure(404, "Code not found"), HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("renew/{username}")
