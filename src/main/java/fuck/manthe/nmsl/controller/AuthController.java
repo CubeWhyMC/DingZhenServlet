@@ -3,6 +3,7 @@ package fuck.manthe.nmsl.controller;
 import fuck.manthe.nmsl.entity.ColdDown;
 import fuck.manthe.nmsl.entity.CrackedUser;
 import fuck.manthe.nmsl.entity.RedeemCode;
+import fuck.manthe.nmsl.entity.RestBean;
 import fuck.manthe.nmsl.service.impl.CrackedUserServiceImpl;
 import fuck.manthe.nmsl.service.impl.RedeemServiceImpl;
 import fuck.manthe.nmsl.utils.Const;
@@ -118,11 +119,17 @@ public class AuthController {
         return "OK";
     }
 
+    @GetMapping("/verify")
+    public ResponseEntity<String> verify(@RequestParam String username, @RequestParam String password) {
+        if (!crackedUserService.isValid(username, password) || crackedUserService.hasExpired(username)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        return ResponseEntity.ok("Valid user");
+    }
+
     @GetMapping("colddown/json")
     public ColdDown coldDownJson() {
         Long next = redisTemplate.opsForValue().get(Const.COLD_DOWN);
         return new ColdDown(next);
     }
-
-
 }

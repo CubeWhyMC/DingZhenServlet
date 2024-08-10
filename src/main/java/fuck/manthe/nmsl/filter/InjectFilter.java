@@ -28,6 +28,14 @@ public class InjectFilter implements Filter {
             }
         }
 
+        if (httpRequest.getRequestURI().equals("/verify")) {
+            if (!httpRequest.getHeader("User-Agent").startsWith("VapeShare_")) {
+                // Only permit requests from vape-launcher.exe
+                httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                return;
+            }
+        }
+
         filterChain.doFilter(request, response);
     }
 }
