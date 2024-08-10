@@ -91,7 +91,7 @@ function fetchCodes() {
                 const li = document.createElement('li');
                 li.className = 'mdui-list-item mdui-ripple';
                 li.innerHTML = `
-                    <div class="mdui-list-item-content">${code.code} (${code.day}天)</div>
+                    <div class="mdui-list-item-content">${code.code} (${code.date}天)</div>
                     <button class="mdui-btn mdui-btn-icon mdui-ripple" onclick="deleteCode('${code.code}')">
                         <i class="mdui-icon material-icons">delete</i>
                     </button>
@@ -109,8 +109,8 @@ function fetchCodes() {
 }
 
 function deleteCode(code) {
-    fetch(`/admin/redeem/destory?code=${code}`, {
-        method: 'GET',
+    fetch(`/admin/redeem/destroy?code=${code}`, {
+        method: 'DELETE',
         headers: {
             'X-Admin-Password': adminPassword
         }
