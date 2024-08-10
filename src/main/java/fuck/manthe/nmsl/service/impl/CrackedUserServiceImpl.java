@@ -72,7 +72,7 @@ public class CrackedUserServiceImpl implements CrackedUserService {
     @Override
     public boolean resetPassword(String username, String newPassword) {
         Optional<CrackedUser> optional = userRepository.findByUsername(username);
-        if (optional.isEmpty()) return true;
+        if (optional.isEmpty()) return false;
         CrackedUser user = optional.get();
         user.setPassword(SecureUtil.sha1(newPassword));
         userRepository.save(user);
