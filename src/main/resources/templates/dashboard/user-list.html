@@ -52,6 +52,7 @@
                 <td>${expire}</td>
                 <td>${new Date(user.expire)}</td>
                 <td>
+                    <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-blue" onclick="changePassword('${user.username}')">修改密码</button>
                     <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="addDays('${user.username}')" ${user.expire === -1 ? 'hidden' : ''}>增加天数</button>
                     <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-red" onclick="deleteUser('${user.username}')">删除</button>
                 </td>
@@ -97,6 +98,39 @@
             }
         );
     }
+
+    function changePassword(username) {
+        mdui.prompt('请输入新密码：', '修改密码',
+            function (value) {
+                if (isNaN(value)) {
+                    mdui.alert('不是一个有效的密码');
+                    return
+                }
+                fetch(`/admin/password/${username}/reset?newPassword=${value}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-Admin-Password': sessionStorage.getItem('adminPassword')
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        mdui.alert('已为用户 ' + username + ' 设置新的密码');
+                        fetchUserData(); // 重新加载用户列表
+                    })
+                    .catch(error => {
+                        console.error('Error adding days:', error);
+                        mdui.alert('设置密码失败');
+                    });
+            },
+            function (value) {
+            },
+            {
+                confirmText: '确认',
+                cancelText: '取消'
+            }
+        );
+    }
+
 
     // 删除用户函数（示例）
     function deleteUser(username) {

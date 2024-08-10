@@ -10,4 +10,6 @@ public interface CrackedUserService {
     boolean renewUser(String username, int day);
 
     boolean hasExpired(String username);
+
+    boolean resetPassword(String username, String newPassword);
 }
