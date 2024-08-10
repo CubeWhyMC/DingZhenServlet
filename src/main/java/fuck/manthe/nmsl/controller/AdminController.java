@@ -1,6 +1,5 @@
 package fuck.manthe.nmsl.controller;
 
-import cn.hutool.core.util.HashUtil;
 import cn.hutool.crypto.SecureUtil;
 import fuck.manthe.nmsl.entity.Analysis;
 import fuck.manthe.nmsl.entity.CrackedUser;
@@ -14,7 +13,6 @@ import jakarta.annotation.Resource;
 import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.context.restart.RestartEndpoint;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +34,7 @@ public class AdminController {
     @Resource
     RedeemServiceImpl redeemService;
 
-//    @Autowired
+    //    @Autowired
 //    private RestartEndpoint restartEndpoint;
     @Autowired
     private UserRepository userRepository;
@@ -91,6 +89,15 @@ public class AdminController {
         log.info("An admin removed a user with name {}", username);
         crackedUserService.removeUser(username);
         return RestBean.success();
+    }
+
+    @PostMapping("password/{username}/reset")
+    public ResponseEntity<RestBean<String>> resetPassword(@PathVariable String username, @RequestParam String password) {
+        log.info("An admin reset the password of user {}", username);
+        if (crackedUserService.resetPassword(username, password)) {
+            return ResponseEntity.ok(RestBean.success());
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
 //    @GetMapping("restartServlet")

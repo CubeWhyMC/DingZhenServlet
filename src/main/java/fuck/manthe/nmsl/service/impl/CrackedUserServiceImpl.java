@@ -66,4 +66,14 @@ public class CrackedUserServiceImpl implements CrackedUserService {
         } else
             return System.currentTimeMillis() > optional.get().getExpire();
     }
+
+    @Override
+    public boolean resetPassword(String username, String newPassword) {
+        Optional<CrackedUser> optional = userRepository.findByUsername(username);
+        if (optional.isEmpty()) return true;
+        CrackedUser user = optional.get();
+        user.setPassword(SecureUtil.sha1(newPassword));
+        userRepository.save(user);
+        return true;
+    }
 }
