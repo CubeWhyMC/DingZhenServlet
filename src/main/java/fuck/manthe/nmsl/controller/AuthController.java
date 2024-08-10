@@ -12,12 +12,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.*;
-import okhttp3.RequestBody;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -64,7 +65,7 @@ public class AuthController {
         if (totalLaunch == null) totalLaunch = 0L;
         redisTemplate.opsForValue().set(Const.TODAY_LAUNCH, ++todayLaunch, Duration.ofDays(1));
         redisTemplate.opsForValue().set(Const.TOTAL_LAUNCH, ++totalLaunch);
-        try (Response response = httpClient.newCall(new Request.Builder().post(RequestBody.create("email=" + sharedUsername + "&password=" + this.sharedPassword + "&hwid=FUMANTHE&v=v3&t=true", MediaType.parse("application/x-www-form-urlencoded"))).url("https://www.vape.gg/auth.php").header("User-Agent", "Agent_114514").build()).execute()) {
+        try (Response response = httpClient.newCall(new Request.Builder().post(okhttp3.RequestBody.create("email=" + sharedUsername + "&password=" + this.sharedPassword + "&hwid=FUMANTHE&v=v3&t=true", MediaType.parse("application/x-www-form-urlencoded"))).url("https://www.vape.gg/auth.php").header("User-Agent", "Agent_114514").build()).execute()) {
             if (response.body() != null) {
                 if (response.isSuccessful()) {
                     redisTemplate.opsForValue().set(Const.COLD_DOWN, System.currentTimeMillis() + 300000);
@@ -76,6 +77,7 @@ public class AuthController {
         return "1"; // cert expired
     }
 
+    @NotNull
     private Map<String, String> decodeParam(String encodedString) {
         String decodedString = URLDecoder.decode(encodedString, StandardCharsets.UTF_8);
         Map<String, String> map = new HashMap<>();
@@ -90,18 +92,18 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String register(@RequestParam String username, @RequestParam String password, @RequestParam String code, HttpServletResponse response) {
+    public ResponseEntity<RestBean<String>> register(@RequestParam String username, @RequestParam String password, @RequestParam String code, HttpServletResponse response) {
         RedeemCode redeemCode = redeemService.redeem(code);
-        if (redeemCode == null) return "Code not found.";
+        if (redeemCode == null) return new ResponseEntity<>(RestBean.failure(404, "Code not found."), HttpStatus.NOT_FOUND);
         long expire = -1L;
         if (redeemCode.getDate() != -1) {
             expire = System.currentTimeMillis() + (long) redeemCode.getDate() * 24 * 60 * 60 * 1000;
         }
         if (crackedUserService.addUser(CrackedUser.builder().password(password).username(username).expire(expire).build())) {
-            return "Success";
+            return ResponseEntity.ok(RestBean.success("OK"));
         }
        response.setStatus(HttpServletResponse.SC_CONFLICT);
-       return "Account exist";
+       return new ResponseEntity<>(RestBean.failure(409, "User already exists."), HttpStatus.CONFLICT);
     }
 
     @PostMapping("/renew")

@@ -27,4 +27,11 @@ public class RedeemServiceImpl implements RedeemService {
     public void addCode(RedeemCode code) {
         redeemRepository.save(code);
     }
+
+    @Override
+    public boolean removeCode(String code) {
+        if (redeemRepository.findByCode(code).isEmpty()) return false;
+        redeemRepository.deleteByCode(code);
+        return true;
+    }
 }

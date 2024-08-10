@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>账户注册</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes floatLabel {
+            from {
+                transform: translateY(0);
+            }
+            to {
+                transform: translateY(-1.5rem);
+                font-size: 0.875rem;
+                color: #4c51bf;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .input-focus {
+            transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .input-focus:focus {
+            border-color: #4c51bf;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+        }
+
+        .input-container {
+            position: relative;
+            margin-top: 1.5rem;
+        }
+
+        .input-container label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 0 0.25rem;
+            background-color: white;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            transform-origin: left top;
+        }
+
+        .input-container input:not(:placeholder-shown) + label {
+            animation: floatLabel 0.3s forwards;
+        }
+
+        .input-container input:focus + label {
+            animation: floatLabel 0.3s forwards;
+        }
+
+        .button-hover {
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .button-hover:hover {
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex items-center justify-center">
+
+<div class="w-full max-w-md bg-white rounded-lg shadow-lg p-8 fade-in">
+    <h2 class="text-3xl font-extrabold text-center text-gray-800 mb-8">创建账户</h2>
+    <div class="text-red-500 mb-4 hidden" id="error-message"></div>
+    <form id="registerForm" class="space-y-6">
+        <div class="input-container">
+            <input type="text" id="username" name="username" required placeholder=" "
+                   class="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm input-focus">
+            <label for="username" class="text-sm text-gray-500">用户名</label>
+        </div>
+
+        <div class="input-container">
+            <input type="password" id="password" name="password" required placeholder=" "
+                   class="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm input-focus">
+            <label for="password" class="text-sm text-gray-500">密码</label>
+        </div>
+
+        <div class="input-container">
+            <input type="text" id="code" name="code" required placeholder=" "
+                   class="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm input-focus">
+            <label for="code" class="text-sm text-gray-500">邀请码</label>
+        </div>
+
+        <button type="submit"
+                class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md button-hover hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+            注册
+        </button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('registerForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const code = document.getElementById('code').value;
+        const errorMessage = document.getElementById('error-message');
+
+        if (username === '' || password === '' || code === '') {
+            errorMessage.textContent = '请填写所有字段';
+            errorMessage.classList.remove('hidden');
+            return;
+        }
+
+        errorMessage.classList.add('hidden');
+
+        try {
+            const response = await fetch(`/register?username=${username}&password=${password}&code=${code}`, {
+                method: 'POST',
+                headers: {
+                }
+            });
+
+            if (response.ok) {
+                alert('注册成功！');
+            } else {
+                const errorData = await response.json();
+                errorMessage.textContent = errorData.message || '注册失败，请重试。';
+                errorMessage.classList.remove('hidden');
+            }
+        } catch (error) {
+            errorMessage.textContent = '网络错误，请重试。';
+            errorMessage.classList.remove('hidden');
+        }
+    });
+</script>
+
+</body>
+</html>
