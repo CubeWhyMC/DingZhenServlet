@@ -36,4 +36,9 @@ public class DashboardController {
     public String basicSettings() {
         return "dashboard/basic-settings";
     }
+
+    @GetMapping("activation")
+    public String activation() {
+        return "dashboard/manage-activation-codes";
+    }
 }
