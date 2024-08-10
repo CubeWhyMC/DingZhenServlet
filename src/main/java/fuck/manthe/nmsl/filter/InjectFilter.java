@@ -16,8 +16,16 @@ public class InjectFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-        if (httpRequest.getRequestURI().equals("/auth.php") && !(httpRequest.getRemoteHost().equals("www.vape.gg") || httpRequest.getRemoteHost().equals("vape.gg"))) {
-            httpResponse.sendError(HttpServletResponse.SC_GONE, "Invalid host");
+        if (httpRequest.getRequestURI().equals("/auth.php")) {
+            if (!(httpRequest.getRemoteHost().equals("www.vape.gg") || httpRequest.getRemoteHost().equals("vape.gg"))) {
+                httpResponse.sendError(HttpServletResponse.SC_GONE, "Invalid host");
+                return;
+            }
+            if (!httpRequest.getHeader("User-Agent").startsWith("Agent_")) {
+                // Only permit requests from vape.exe
+                httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                return;
+            }
         }
 
         filterChain.doFilter(request, response);
