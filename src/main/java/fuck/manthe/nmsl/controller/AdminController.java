@@ -66,14 +66,14 @@ public class AdminController {
     }
 
     @PostMapping("redeem/gen")
-    public ResponseEntity<List<RedeemCode>> generateRedeemCode(@RequestParam int count, @RequestParam int day) {
+    public ResponseEntity<RestBean<List<RedeemCode>>> generateRedeemCode(@RequestParam int count, @RequestParam int day) {
         List<RedeemCode> result = new ArrayList<>();
         for (int i = 0; i < count; i++) {
             RedeemCode code = generateOne(day);
             redeemService.addCode(code);
             result.add(code);
         }
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(RestBean.success(result));
     }
 
     @GetMapping("redeem/list")
