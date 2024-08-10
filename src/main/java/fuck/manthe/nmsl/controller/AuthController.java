@@ -97,29 +97,21 @@ public class AuthController {
         return map;
     }
 
-    @PostMapping("/register")
+    @PostMapping("/redeem")
     public ResponseEntity<RestBean<String>> register(@RequestParam String username, @RequestParam String password, @RequestParam String code, HttpServletResponse response) {
         RedeemCode redeemCode = redeemService.redeem(code);
-        if (redeemCode == null) return new ResponseEntity<>(RestBean.failure(404, "Code not found."), HttpStatus.NOT_FOUND);
+        if (redeemCode == null)
+            return new ResponseEntity<>(RestBean.failure(404, "Code not found."), HttpStatus.NOT_FOUND);
         long expire = -1L;
         if (redeemCode.getDate() != -1) {
             expire = System.currentTimeMillis() + (long) redeemCode.getDate() * 24 * 60 * 60 * 1000;
         }
         if (crackedUserService.addUser(CrackedUser.builder().password(password).username(username).expire(expire).build())) {
-            return ResponseEntity.ok(RestBean.success("OK"));
+            return ResponseEntity.ok(RestBean.success("Registered."));
+        } else if (crackedUserService.renewUser(username, redeemCode.getDate())) {
+            return ResponseEntity.ok(RestBean.success("Renewed."));
         }
-       response.setStatus(HttpServletResponse.SC_CONFLICT);
-       return new ResponseEntity<>(RestBean.failure(409, "User already exists."), HttpStatus.CONFLICT);
-    }
-
-    @PostMapping("/renew")
-    public String renew(@RequestParam String username, @RequestParam String code) {
-        RedeemCode redeemCode = redeemService.redeem(code);
-        if (redeemCode == null) return "Code not found.";
-        if (crackedUserService.renewUser(username, redeemCode.getDate())) {
-            return "OK";
-        }
-        return "Failed";
+        return new ResponseEntity<>(RestBean.failure(500, "Internal server error"), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @GetMapping("/check")

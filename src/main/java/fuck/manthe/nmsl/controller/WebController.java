@@ -1,6 +1,5 @@
 package fuck.manthe.nmsl.controller;
 
-import fuck.manthe.nmsl.utils.Const;
 import jakarta.annotation.Resource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
@@ -25,6 +24,6 @@ public class WebController {
 
     @GetMapping("register")
     public String register() {
-        return "register";
+        return "redeem";
     }
 }
