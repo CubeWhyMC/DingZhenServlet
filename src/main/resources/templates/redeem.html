@@ -75,7 +75,7 @@
 <body class="gradient-bg min-h-screen flex items-center justify-center">
 
 <div class="w-full max-w-md bg-white rounded-lg shadow-lg p-8 fade-in">
-    <h2 class="text-3xl font-extrabold text-center text-gray-800 mb-8">创建账户</h2>
+    <h2 class="text-3xl font-extrabold text-center text-gray-800 mb-8">注册/兑换</h2>
     <div class="text-red-500 mb-4 hidden" id="error-message"></div>
     <form id="registerForm" class="space-y-6">
         <div class="input-container">
@@ -98,7 +98,7 @@
 
         <button type="submit"
                 class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md button-hover hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-            注册
+            兑换
         </button>
     </form>
 </div>
@@ -121,17 +121,17 @@
         errorMessage.classList.add('hidden');
 
         try {
-            const response = await fetch(`/register?username=${username}&password=${password}&code=${code}`, {
+            const response = await fetch(`/redeem?username=${username}&password=${password}&code=${code}`, {
                 method: 'POST',
                 headers: {
                 }
             });
 
             if (response.ok) {
-                alert('注册成功！');
+                alert('兑换成功！');
             } else {
                 const errorData = await response.json();
-                errorMessage.textContent = errorData.message || '注册失败，请重试。';
+                errorMessage.textContent = errorData.message || '兑换失败，请重试。';
                 errorMessage.classList.remove('hidden');
             }
         } catch (error) {
