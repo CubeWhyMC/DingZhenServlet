@@ -26,10 +26,10 @@
     function restartSystem() {
         const adminPassword = sessionStorage.getItem('adminPassword');
 
-        mdui.confirm('确定要重置注入冷却吗吗？', '重启确认',
+        mdui.confirm('确定要重置注入冷却吗？', '重启确认',
             function () {
                 fetch('/admin/colddown/reset', {
-                    method: 'GET',
+                    method: 'POST',
                     headers: {
                         'X-Admin-Password': adminPassword
                     },
