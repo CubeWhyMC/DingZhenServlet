@@ -77,8 +77,8 @@ public class AdminController {
     }
 
     @GetMapping("redeem/list")
-    public ResponseEntity<List<RedeemCode>> redeemCodeList() {
-        return ResponseEntity.ok(redeemRepository.findAll());
+    public ResponseEntity<RestBean<List<RedeemCode>>> redeemCodeList() {
+        return ResponseEntity.ok(RestBean.success(redeemRepository.findAll()));
     }
 
     @DeleteMapping("redeem/destroy")
