@@ -39,7 +39,7 @@
 </div>
 
 <script>
-const adminPassword = localStorage.getItem('adminPassword');
+const adminPassword = sessionStorage.getItem('adminPassword');
 
 function generateCodes() {
     const days = parseInt(document.getElementById('days').value);
