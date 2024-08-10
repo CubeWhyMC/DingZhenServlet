@@ -41,7 +41,6 @@ public class AuthController {
     String sharedUsername = System.getProperty("username");
     String sharedPassword = System.getProperty("password");
 
-
     @PostMapping("/auth.php")
     public String auth(HttpServletRequest request) throws Exception {
         String bodyParam = new String(request.getInputStream().readAllBytes());
@@ -68,13 +67,20 @@ public class AuthController {
         try (Response response = httpClient.newCall(new Request.Builder().post(okhttp3.RequestBody.create("email=" + sharedUsername + "&password=" + this.sharedPassword + "&hwid=FUMANTHE&v=v3&t=true", MediaType.parse("application/x-www-form-urlencoded"))).url("https://www.vape.gg/auth.php").header("User-Agent", "Agent_114514").build()).execute()) {
             if (response.body() != null) {
                 if (response.isSuccessful()) {
-                    redisTemplate.opsForValue().set(Const.COLD_DOWN, System.currentTimeMillis() + 300000);
+                    redisTemplate.opsForValue().set(Const.COLD_DOWN, System.currentTimeMillis() + randomColdDown() * 60 * 1000);
                 }
                 return response.body().string();
             }
         }
         log.error("Vape authorize was expired. (wrong password)");
         return "1"; // cert expired
+    }
+
+    private int randomColdDown() {
+        Random random = new Random();
+        int min = 3;
+        int max = 6;
+        return random.nextInt(max - min + 1) + min;
     }
 
     @NotNull
