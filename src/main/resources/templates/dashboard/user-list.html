@@ -102,7 +102,7 @@
     function changePassword(username) {
         mdui.prompt('请输入新密码：', '修改密码',
             function (value) {
-                fetch(`/admin/password/${username}/reset?newPassword=${value}`, {
+                fetch(`/admin/password/${username}/reset?password=${value}`, {
                     method: 'POST',
                     headers: {
                         'X-Admin-Password': sessionStorage.getItem('adminPassword')
