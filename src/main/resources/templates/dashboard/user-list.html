@@ -47,21 +47,20 @@
             let expire = ((user.expire - Date.now()) / (24 * 60 * 60 * 1000)).toFixed(2)
             if (user.expire === -1) expire = "无限时长"
             else if (user.expire < Date.now()) expire = `已过期 ${Math.abs(parseFloat(expire))} 天`
-            else {
-                let date = new Date(user.expire)
-                var year = date.getFullYear();
-                var month = (date.getMonth() + 1).toString().padStart(2, '0');
-                var day = date.getDate().toString().padStart(2, '0');
-                var hours = date.getHours().toString().padStart(2, '0');
-                var minutes = date.getMinutes().toString().padStart(2, '0');
-                var seconds = date.getSeconds().toString().padStart(2, '0');
+            // 到期时间
+            let date = new Date(user.expire)
+            var year = date.getFullYear();
+            var month = (date.getMonth() + 1).toString().padStart(2, '0');
+            var day = date.getDate().toString().padStart(2, '0');
+            var hours = date.getHours().toString().padStart(2, '0');
+            var minutes = date.getMinutes().toString().padStart(2, '0');
+            var seconds = date.getSeconds().toString().padStart(2, '0');
 
-                expire = `${year}年${month}月${day}日 ${hours}:${minutes}:${seconds}`;
-            }
+            let expire1 = `${year}年${month}月${day}日 ${hours}:${minutes}:${seconds}`;
             row.innerHTML = `
                 <td>${user.username}</td>
                 <td>${expire}</td>
-                <td>${new Date(user.expire)}</td>
+                <td>${expire1}</td>
                 <td>
                     <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-blue" onclick="changePassword('${user.username}')">修改密码</button>
                     <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="addDays('${user.username}')" ${user.expire === -1 ? 'hidden' : ''}>增加天数</button>
