@@ -108,7 +108,7 @@ public class AuthController {
         }
         if (crackedUserService.addUser(CrackedUser.builder().password(password).username(username).expire(expire).build())) {
             return ResponseEntity.ok(RestBean.success("Registered."));
-        } else if (crackedUserService.renewUser(username, redeemCode.getDate())) {
+        } else if (crackedUserService.isValid(username, password) && crackedUserService.renewUser(username, redeemCode.getDate())) {
             return ResponseEntity.ok(RestBean.success("Renewed."));
         }
         return new ResponseEntity<>(RestBean.failure(500, "Internal server error"), HttpStatus.INTERNAL_SERVER_ERROR);
