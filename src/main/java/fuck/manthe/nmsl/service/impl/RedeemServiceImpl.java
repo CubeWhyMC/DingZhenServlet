@@ -15,6 +15,7 @@ public class RedeemServiceImpl implements RedeemService {
     RedeemRepository redeemRepository;
 
     @Override
+    @Transactional
     public RedeemCode redeem(String codeString) {
         Optional<RedeemCode> redeemCode = redeemRepository.findByCode(codeString);
         if (redeemCode.isEmpty()) {
