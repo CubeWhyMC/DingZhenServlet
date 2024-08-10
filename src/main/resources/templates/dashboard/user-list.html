@@ -102,10 +102,6 @@
     function changePassword(username) {
         mdui.prompt('请输入新密码：', '修改密码',
             function (value) {
-                if (isNaN(value)) {
-                    mdui.alert('不是一个有效的密码');
-                    return
-                }
                 fetch(`/admin/password/${username}/reset?newPassword=${value}`, {
                     method: 'POST',
                     headers: {
