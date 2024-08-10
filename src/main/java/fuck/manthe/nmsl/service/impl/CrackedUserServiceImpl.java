@@ -50,6 +50,8 @@ public class CrackedUserServiceImpl implements CrackedUserService {
         } else {
             if (user.getExpire() == -1L) {
                 user.setExpire(0L);
+            } else if (user.getExpire() < System.currentTimeMillis()) {
+                user.setExpire(System.currentTimeMillis());
             }
             user.setExpire(user.getExpire() + (long) day * 24 * 60 * 60 * 1000);
         }
