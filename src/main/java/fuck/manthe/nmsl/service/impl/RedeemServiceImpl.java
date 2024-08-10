@@ -3,6 +3,7 @@ package fuck.manthe.nmsl.service.impl;
 import fuck.manthe.nmsl.entity.RedeemCode;
 import fuck.manthe.nmsl.repository.RedeemRepository;
 import fuck.manthe.nmsl.service.RedeemService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,7 @@ public class RedeemServiceImpl implements RedeemService {
     }
 
     @Override
+    @Transactional
     public boolean removeCode(String code) {
         if (redeemRepository.findByCode(code).isEmpty()) return false;
         redeemRepository.deleteByCode(code);
