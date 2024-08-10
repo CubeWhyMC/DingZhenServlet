@@ -44,9 +44,9 @@
 
         users.forEach(user => {
             const row = document.createElement('tr');
-            let expire = ((user.expire - Date.now()) / (24 * 60 * 60 * 1000)).toFixed(2)
-            if (user.expire === -1) expire = "无限时长"
-            else if (user.expire < Date.now()) expire = `已过期 ${Math.abs(parseFloat(expire))} 天`
+            let expire = ((user.expire - Date.now()) / (24 * 60 * 60 * 1000)).toFixed(2);
+            if (user.expire === -1) expire = "无限时长";
+            else if (user.expire < Date.now()) expire = `已过期 ${Math.abs(parseFloat(expire))} 天`;
             // 到期时间
             let date = new Date(user.expire)
             var year = date.getFullYear();
@@ -57,6 +57,7 @@
             var seconds = date.getSeconds().toString().padStart(2, '0');
 
             let expire1 = `${year}年${month}月${day}日 ${hours}:${minutes}:${seconds}`;
+            if (user.expire === -1) expire1 = "好像到期不了";
             row.innerHTML = `
                 <td>${user.username}</td>
                 <td>${expire}</td>
