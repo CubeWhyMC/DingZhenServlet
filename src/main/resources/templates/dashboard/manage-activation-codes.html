@@ -64,7 +64,8 @@ function generateCodes() {
     .then(response => response.json())
     .then(data => {
         if (data.code === 200) {
-            mdui.alert('激活码生成成功');
+            mdui.alert(`激活码生成成功
+            ${data.data.join("\n")}`);
             fetchCodes();
         } else {
             mdui.alert('生成失败: ' + data.msg);
