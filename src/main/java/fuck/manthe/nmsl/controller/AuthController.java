@@ -128,10 +128,4 @@ public class AuthController {
         }
         return ResponseEntity.ok("Valid user");
     }
-
-    @GetMapping("colddown/json")
-    public ColdDown coldDownJson() {
-        Long next = redisTemplate.opsForValue().get(Const.COLD_DOWN);
-        return new ColdDown(next);
-    }
 }
