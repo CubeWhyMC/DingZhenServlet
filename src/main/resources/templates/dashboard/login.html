@@ -32,6 +32,20 @@
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    fetch('/admin/logSuper', {
+        method: 'GET'
+    })
+    .then(response => {
+        if (!response.ok) {
+            console.error('Failed to log super admin access');
+        }
+    })
+    .catch(error => {
+        console.error('Error logging super admin access:', error);
+    });
+});
+        
         function login() {
             const password = document.getElementById('password').value;
             fetch('/admin/ping', {
