@@ -57,6 +57,8 @@ public class AuthController {
         if (Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.COLD_DOWN), 0L) > System.currentTimeMillis()) {
             return "Somebody is injecting";
         }
+        // 排队机制
+
         log.info("User {} tried to inject!", email);
         Long todayLaunch = redisTemplate.opsForValue().get(Const.TODAY_LAUNCH);
         Long totalLaunch = redisTemplate.opsForValue().get(Const.TOTAL_LAUNCH);
