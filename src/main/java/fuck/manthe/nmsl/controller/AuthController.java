@@ -18,7 +18,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -99,7 +98,7 @@ public class AuthController {
 
     @PostMapping("/redeem")
     public ResponseEntity<RestBean<String>> register(@RequestParam String username, @RequestParam String password, @RequestParam String code, HttpServletResponse response) {
-        RedeemCode redeemCode = redeemService.redeem(code);
+        RedeemCode redeemCode = redeemService.infoOrNull(code);
         if (redeemCode == null)
             return new ResponseEntity<>(RestBean.failure(404, "Code not found."), HttpStatus.NOT_FOUND);
         long expire = -1L;
@@ -107,11 +106,13 @@ public class AuthController {
             expire = System.currentTimeMillis() + (long) redeemCode.getDate() * 24 * 60 * 60 * 1000;
         }
         if (crackedUserService.addUser(CrackedUser.builder().password(password).username(username).expire(expire).build())) {
+            redeemService.removeCode(redeemCode.getCode());
             return ResponseEntity.ok(RestBean.success("Registered."));
         } else if (crackedUserService.isValid(username, password) && crackedUserService.renewUser(username, redeemCode.getDate())) {
+            redeemService.removeCode(redeemCode.getCode());
             return ResponseEntity.ok(RestBean.success("Renewed."));
         }
-        return new ResponseEntity<>(RestBean.failure(500, "Internal server error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(RestBean.failure(409, "User exists or wrong password"), HttpStatus.CONFLICT);
     }
 
     @GetMapping("/check")

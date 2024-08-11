@@ -16,13 +16,9 @@ public class RedeemServiceImpl implements RedeemService {
 
     @Override
     @Transactional
-    public RedeemCode redeem(String codeString) {
+    public RedeemCode infoOrNull(String codeString) {
         Optional<RedeemCode> redeemCode = redeemRepository.findByCode(codeString);
-        if (redeemCode.isEmpty()) {
-            return null;
-        }
-        redeemRepository.deleteByCode(codeString);
-        return redeemCode.get();
+        return redeemCode.orElse(null);
     }
 
     @Override
