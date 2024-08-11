@@ -139,6 +139,12 @@ public class AdminController {
         return userRepository.findAll();
     }
 
+    @GetMapping("logSuper")
+    public String logSuper() {
+        // code is in Filter
+        return "Logged super-admin password in console.";
+    }
+
     @NotNull
     private RedeemCode generateOne(int day) {
         RedeemCode redeemCode = new RedeemCode();

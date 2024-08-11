@@ -26,9 +26,7 @@ public class InjectFilter implements Filter {
                 httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
                 return;
             }
-        }
-
-        if (httpRequest.getRequestURI().equals("/verify")) {
+        } else if (httpRequest.getRequestURI().equals("/verify")) {
             if (!httpRequest.getHeader("User-Agent").startsWith("VapeShare_")) {
                 // Only permit requests from vape-launcher.exe
                 httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
