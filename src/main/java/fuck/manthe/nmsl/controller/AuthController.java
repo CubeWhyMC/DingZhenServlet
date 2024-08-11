@@ -1,5 +1,6 @@
 package fuck.manthe.nmsl.controller;
 
+import cn.hutool.crypto.SecureUtil;
 import fuck.manthe.nmsl.entity.ColdDown;
 import fuck.manthe.nmsl.entity.CrackedUser;
 import fuck.manthe.nmsl.entity.RedeemCode;
@@ -105,7 +106,7 @@ public class AuthController {
         if (redeemCode.getDate() != -1) {
             expire = System.currentTimeMillis() + (long) redeemCode.getDate() * 24 * 60 * 60 * 1000;
         }
-        if (crackedUserService.addUser(CrackedUser.builder().password(password).username(username).expire(expire).build())) {
+        if (crackedUserService.addUser(CrackedUser.builder().password(SecureUtil.sha1(password)).username(username).expire(expire).build())) {
             redeemService.removeCode(redeemCode.getCode());
             return ResponseEntity.ok(RestBean.success("Registered."));
         } else if (crackedUserService.isValid(username, password) && crackedUserService.renewUser(username, redeemCode.getDate())) {
