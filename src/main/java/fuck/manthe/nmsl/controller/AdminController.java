@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -151,5 +152,10 @@ public class AdminController {
         redeemCode.setDate(day);
         redeemCode.setCode(UUID.randomUUID().toString());
         return redeemCode;
+    }
+
+    @Scheduled(cron = "0 0 0 * * *")
+    public void resetAnalysis() {
+        redisTemplate.opsForValue().set(Const.TODAY_LAUNCH, 0L);
     }
 }
