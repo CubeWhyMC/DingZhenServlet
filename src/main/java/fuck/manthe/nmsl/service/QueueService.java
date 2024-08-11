@@ -8,4 +8,6 @@ public interface QueueService {
     boolean join(String username);
     boolean isInQueue(String username);
     boolean isNext(String username);
+
+    boolean state();
 }

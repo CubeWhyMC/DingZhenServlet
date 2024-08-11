@@ -1,11 +1,11 @@
 package fuck.manthe.nmsl.controller;
 
 import cn.hutool.crypto.SecureUtil;
-import fuck.manthe.nmsl.entity.ColdDown;
 import fuck.manthe.nmsl.entity.CrackedUser;
 import fuck.manthe.nmsl.entity.RedeemCode;
 import fuck.manthe.nmsl.entity.RestBean;
 import fuck.manthe.nmsl.service.impl.CrackedUserServiceImpl;
+import fuck.manthe.nmsl.service.impl.QueueServiceImpl;
 import fuck.manthe.nmsl.service.impl.RedeemServiceImpl;
 import fuck.manthe.nmsl.utils.Const;
 import jakarta.annotation.Resource;
@@ -40,26 +40,30 @@ public class AuthController {
 
     String sharedUsername = System.getProperty("username");
     String sharedPassword = System.getProperty("password");
+    @Resource
+    private QueueServiceImpl queueService;
 
     @PostMapping("/auth.php")
     public String auth(HttpServletRequest request) throws Exception {
         String bodyParam = new String(request.getInputStream().readAllBytes());
         Map<String, String> map = decodeParam(bodyParam);
-        String email = map.get("email");
+        String username = map.get("email");
         String password = map.get("password");
-        log.info("User {} login", email);
-        if (!crackedUserService.isValid(email, password)) {
+        log.info("User {} login", username);
+        if (!crackedUserService.isValid(username, password)) {
             return "Unauthorized";
         }
-        if (crackedUserService.hasExpired(email)) {
+        if (crackedUserService.hasExpired(username)) {
             return "Expired";
         }
         if (Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.COLD_DOWN), 0L) > System.currentTimeMillis()) {
             return "Somebody is injecting";
         }
         // 排队机制
-
-        log.info("User {} tried to inject!", email);
+        if (queueService.state() && !queueService.isNext(username)) {
+            return "Not your turn";
+        }
+        log.info("User {} tried to inject!", username);
         Long todayLaunch = redisTemplate.opsForValue().get(Const.TODAY_LAUNCH);
         Long totalLaunch = redisTemplate.opsForValue().get(Const.TOTAL_LAUNCH);
         if (todayLaunch == null) todayLaunch = 0L;

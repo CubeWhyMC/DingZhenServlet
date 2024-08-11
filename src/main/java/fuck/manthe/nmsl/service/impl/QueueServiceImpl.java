@@ -45,4 +45,10 @@ public class QueueServiceImpl implements QueueService {
     public boolean isNext(String username) {
         return Objects.requireNonNull(redisTemplate.opsForList().range(Const.QUEUE, -1, -1)).equals(username);
     }
+
+    @Override
+    public boolean state() {
+        // TODO
+        return false;
+    }
 }
