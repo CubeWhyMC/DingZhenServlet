@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>倒计时</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>发车倒计时</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -12,7 +11,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: #1a1a1a;
+            background: linear-gradient(45deg, #1a1a1a, #2a2a2a);
             margin: 0;
             color: #fff;
             text-align: center;
@@ -22,66 +21,95 @@
             flex-direction: column;
             align-items: center;
             padding: 40px;
-            background: #333;
+            background: rgba(51, 51, 51, 0.8);
             border-radius: 20px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
             width: 80%;
             max-width: 600px;
         }
-        .countdown {
-            font-size: 72px;
-            margin: 20px 0;
-            display: flex;
-            justify-content: center;
+        .clock {
+            width: 300px;
+            height: 300px;
+            border: 10px solid #fff;
+            border-radius: 50%;
+            margin: 20px auto;
+            position: relative;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
         }
-        .countdown div {
-            margin: 0 20px;
-            text-align: center;
+        .clock-face {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform: translateY(-3px);
         }
-        .countdown div span {
-            display: block;
-            font-size: 36px;
+        .hand {
+            position: absolute;
+            top: 50%;
+            right: 50%;
+            transform-origin: 100%;
+            transform: rotate(90deg);
+            transition: all 0.05s;
+            transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
         }
-        .countdown div i {
+        .minute-hand {
+            width: 40%;
+            height: 4px;
+            background: #fff;
+        }
+        .second-hand {
+            width: 45%;
+            height: 2px;
+            background: #ff6b6b;
+        }
+        .digital-clock {
             font-size: 48px;
-            animation: pulse 1s infinite;
+            margin: 20px 0;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+        .number {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
         }
-        @media (max-width: 768px) {
-            .countdown {
-                font-size: 48px;
-            }
-            .countdown div {
-                margin: 0 10px;
-            }
-            .countdown div span {
-                font-size: 24px;
-            }
-            .countdown div i {
-                font-size: 36px;
-            }
+        .number span {
+            display: inline-block;
+            transform: rotate(-60deg);
+        }
+        .center-dot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>倒计时</h1>
-    <div class="countdown" id="countdown">
-        <div>
-            <i class="far fa-clock"></i>
-            <span id="minutes">00</span>
-            分钟
-        </div>
-        <div>
-            <i class="far fa-clock"></i>
-            <span id="seconds">00</span>
-            秒
+    <h1>发车倒计时</h1>
+    <div class="clock">
+        <div class="clock-face">
+            <div class="hand minute-hand"></div>
+            <div class="hand second-hand"></div>
+            <div class="center-dot"></div>
+            <script>
+                for (let i = 0; i <= 6; i++) {
+                    document.write(`<div class="number" style="transform: rotate(${i * 60}deg);">
+                        <span style="transform: rotate(-${i * 60}deg);">${i}</span>
+                    </div>`);
+                }
+            </script>
         </div>
     </div>
+    <div class="digital-clock" id="digital-clock">06:00</div>
 </div>
 
 <script>
@@ -92,12 +120,16 @@
     }
 
     function startCountdown(endTime) {
+        const minuteHand = document.querySelector('.minute-hand');
+        const secondHand = document.querySelector('.second-hand');
+        const digitalClock = document.getElementById('digital-clock');
+
         function updateCountdown() {
             const now = new Date().getTime();
             const distance = endTime.getTime() - now;
 
             if (distance < 0) {
-                document.getElementById('countdown').innerHTML = "倒计时结束";
+                digitalClock.innerHTML = "倒计时结束，你现在可以注入";
                 clearInterval(interval);
                 return;
             }
@@ -105,8 +137,13 @@
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            document.getElementById('minutes').innerHTML = minutes.toString().padStart(2, '0');
-            document.getElementById('seconds').innerHTML = seconds.toString().padStart(2, '0');
+            const secondsDegrees = ((seconds / 60) * 360) + 90;
+            const minutesDegrees = ((minutes / 6) * 360) + ((seconds/60)*6) + 90;
+
+            secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
+            minuteHand.style.transform = `rotate(${minutesDegrees}deg)`;
+
+            digitalClock.innerHTML = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         }
 
         updateCountdown();
