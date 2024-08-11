@@ -30,6 +30,7 @@
                 <div class="mdui-card-primary-title">激活码列表</div>
             </div>
             <div class="mdui-card-content">
+                <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-red" onclick="deleteSelectedCodes()">删除选中</button>
                 <ul class="mdui-list" id="code-list">
                     <!-- 激活码将在这里动态添加 -->
                 </ul>
@@ -75,6 +76,7 @@ function generateCodes() {
         mdui.alert('生成请求失败，请稍后再试');
     });
 }
+
 function fetchCodes() {
     fetch('/admin/redeem/list', {
         method: 'GET',
@@ -91,8 +93,12 @@ function fetchCodes() {
                 const li = document.createElement('li');
                 li.className = 'mdui-list-item mdui-ripple';
                 li.innerHTML = `
+                    <label class="mdui-checkbox">
+                        <input type="checkbox" value="${code.code}"/>
+                        <i class="mdui-checkbox-icon"></i>
+                    </label>
                     <div class="mdui-list-item-content">${code.code} (${code.date}天)</div>
-                    <button class="mdui-btn mdui-btn-icon mdui-ripple" onclick="deleteCode('${code.code}')">
+                    <button class="mdui-btn mdui-btn-icon mdui-ripple" onclick="confirmDeleteCode('${code.code}')">
                         <i class="mdui-icon material-icons">delete</i>
                     </button>
                 `;
@@ -106,6 +112,19 @@ function fetchCodes() {
         console.error('Error:', error);
         mdui.alert('获取激活码失败，请稍后再试');
     });
+}
+
+function confirmDeleteCode(code) {
+    mdui.confirm('确定要删除这个激活码吗？', '确认删除', 
+        function(){
+            deleteCode(code);
+        },
+        function(){},
+        {
+            confirmText: '确定',
+            cancelText: '取消'
+        }
+    );
 }
 
 function deleteCode(code) {
@@ -130,7 +149,44 @@ function deleteCode(code) {
     });
 }
 
+function deleteSelectedCodes() {
+    const selectedCodes = Array.from(document.querySelectorAll('#code-list input[type="checkbox"]:checked'))
+        .map(checkbox => checkbox.value);
+
+    if (selectedCodes.length === 0) {
+        mdui.alert('请选择要删除的激活码');
+        return;
+    }
+
+    mdui.confirm(`确定要删除选中的 ${selectedCodes.length} 个激活码吗？`, '确认批量删除', 
+        function(){
+            Promise.all(selectedCodes.map(code => 
+                fetch(`/admin/redeem/destroy?code=${code}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-Admin-Password': adminPassword
+                    }
+                }).then(response => response.json())
+            ))
+            .then(results => {
+                const successCount = results.filter(result => result.code === 200).length;
+                mdui.alert(`成功删除 ${successCount} 个激活码，失败 ${results.length - successCount} 个`);
+                fetchCodes();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                mdui.alert('批量删除请求失败，请稍后再试');
+            });
+        },
+        function(){},
+        {
+            confirmText: '确定',
+            cancelText: '取消'
+        }
+    );
+}
+
 // 页面加载时获取激活码列表
 document.addEventListener('DOMContentLoaded', fetchCodes);
-fetchCodes()
+fetchCodes();
 </script>
