@@ -1,9 +1,12 @@
 package fuck.manthe.nmsl.filter;
 
+import fuck.manthe.nmsl.utils.Const;
+import jakarta.annotation.Resource;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.core.annotation.Order;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -11,6 +14,9 @@ import java.io.IOException;
 @Component
 @Order(0)
 public class InjectFilter implements Filter {
+//    @Resource
+//    RedisTemplate<String, Long> redisTemplate;
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
