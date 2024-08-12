@@ -24,4 +24,9 @@ public class AnalysisServiceImpl implements AnalysisService {
     public void authRequested(String username) {
         redisTemplate.opsForValue().increment(Const.TOTAL_REQUEST_AUTH_PRE_USER + username, 1L);
     }
+
+    @Override
+    public void userRegistered() {
+        redisTemplate.opsForValue().increment(Const.TODAY_REGISTER_USER, 1L);
+    }
 }

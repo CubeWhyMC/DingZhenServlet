@@ -3,6 +3,7 @@ package fuck.manthe.nmsl.service.impl;
 import cn.hutool.crypto.SecureUtil;
 import fuck.manthe.nmsl.entity.CrackedUser;
 import fuck.manthe.nmsl.repository.UserRepository;
+import fuck.manthe.nmsl.service.AnalysisService;
 import fuck.manthe.nmsl.service.CrackedUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,8 @@ import java.util.Optional;
 public class CrackedUserServiceImpl implements CrackedUserService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private AnalysisService analysisService;
 
     @Override
     public boolean isValid(String username, String password) {
@@ -29,6 +32,7 @@ public class CrackedUserServiceImpl implements CrackedUserService {
         if (userRepository.existsByUsername(user.getUsername())) {
             return false;
         }
+        analysisService.userRegistered();
         userRepository.save(user);
         return true;
     }
