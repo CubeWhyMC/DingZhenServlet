@@ -4,6 +4,7 @@ import fuck.manthe.nmsl.service.AnalysisService;
 import fuck.manthe.nmsl.utils.Const;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ import java.util.Objects;
 
 @Service
 public class AnalysisServiceImpl implements AnalysisService {
-    @Resource
+    @Resource(shareable = false)
     RedisTemplate<String, Integer> redisTemplate;
 
     @PostConstruct

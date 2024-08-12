@@ -37,11 +37,6 @@ public class VapeAccountServiceImpl implements VapeAccountService {
     @Resource
     CryptUtil cryptUtil;
 
-    @PostConstruct
-    public void init() {
-        redisTemplate.setValueSerializer(new GenericToStringSerializer<>(Long.class));
-    }
-
     @Override
     public VapeAccount getOne() {
         List<VapeAccount> all = vapeAccountRepository.findAll();
@@ -57,7 +52,7 @@ public class VapeAccountServiceImpl implements VapeAccountService {
 
     @Override
     public boolean isColdDown(VapeAccount account) {
-        return getColdDown(account.getUsername()) < System.currentTimeMillis();
+        return getColdDown(account) > System.currentTimeMillis();
     }
 
     @Override
@@ -107,8 +102,8 @@ public class VapeAccountServiceImpl implements VapeAccountService {
     }
 
     @Override
-    public long getColdDown(String username) {
-        Long value = redisTemplate.opsForValue().get(Const.ACCOUNT_COLD_DOWN + username);
+    public long getColdDown(VapeAccount account) {
+        Long value = redisTemplate.opsForValue().get(Const.ACCOUNT_COLD_DOWN + account.getId());
         if (value == null) {
             return 0;
         }
