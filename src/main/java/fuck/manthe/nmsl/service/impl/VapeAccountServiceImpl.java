@@ -47,11 +47,7 @@ public class VapeAccountServiceImpl implements VapeAccountService {
 
     @Override
     public boolean isColdDown(VapeAccount account) {
-        Long value = redisTemplate.opsForValue().get(Const.ACCOUNT_COLD_DOWN + account.getId());
-        if (value == null) {
-            return false;
-        }
-        return value < System.currentTimeMillis();
+        return getColdDown(account.getUsername()) < System.currentTimeMillis();
     }
 
     @Override
@@ -97,5 +93,14 @@ public class VapeAccountServiceImpl implements VapeAccountService {
     @Override
     public List<VapeAccount> listAccounts() {
         return vapeAccountRepository.findAll();
+    }
+
+    @Override
+    public long getColdDown(String username) {
+        Long value = redisTemplate.opsForValue().get(Const.ACCOUNT_COLD_DOWN + username);
+        if (value == null) {
+            return 0;
+        }
+        return value;
     }
 }

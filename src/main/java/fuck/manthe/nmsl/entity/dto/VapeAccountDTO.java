@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
+@SuppressWarnings("unused")
 public class VapeAccountDTO {
     String username;
     String password;
