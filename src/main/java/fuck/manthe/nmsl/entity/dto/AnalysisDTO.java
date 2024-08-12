@@ -11,8 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @SuppressWarnings("unused")
 public class AnalysisDTO {
-    long todayLaunch;
+    int todayLaunch;
     long currentUsers;
-    long totalLaunch;
-
+    int totalLaunch;
 }

@@ -11,5 +11,5 @@ public class CrackedUserDTO {
     private Long expire;
 
     // analysis
-    private Long totalLaunch;
+    private int totalLaunch;
 }
