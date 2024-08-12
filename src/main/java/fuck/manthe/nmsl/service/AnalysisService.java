@@ -9,4 +9,6 @@ public interface AnalysisService {
     Integer getTotalLaunch();
     Integer getTotalLaunch(String username);
     Integer getTodayRegister();
+
+    void reset();
 }

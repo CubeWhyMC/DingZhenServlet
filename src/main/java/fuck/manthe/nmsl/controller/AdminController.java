@@ -31,8 +31,6 @@ import java.util.UUID;
 public class AdminController {
     @Resource
     RedisTemplate<String, Long> redisTemplate;
-    @Resource
-    RedisTemplate<String, Integer> integerRedisTemplate;
 
     @Resource
     CrackedUserService crackedUserService;
@@ -40,11 +38,6 @@ public class AdminController {
     RedeemService redeemService;
     @Resource
     AnalysisService analysisService;
-
-    @PostConstruct
-    public void init() {
-        integerRedisTemplate.setValueSerializer(new GenericToStringSerializer<>(Integer.class));
-    }
 
     @RequestMapping("ping")
     public ResponseEntity<String> ping() {
@@ -156,7 +149,6 @@ public class AdminController {
 
     @Scheduled(cron = "0 0 0 * * *")
     public void resetAnalysis() {
-        integerRedisTemplate.opsForValue().set(Const.TODAY_LAUNCH, 0);
-        integerRedisTemplate.opsForValue().set(Const.TODAY_REGISTER_USER, 0);
+        analysisService.reset();
     }
 }
