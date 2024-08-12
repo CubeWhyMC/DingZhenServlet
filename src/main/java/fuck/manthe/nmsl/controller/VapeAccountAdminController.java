@@ -3,35 +3,31 @@ package fuck.manthe.nmsl.controller;
 import fuck.manthe.nmsl.entity.RestBean;
 import fuck.manthe.nmsl.entity.VapeAccount;
 import fuck.manthe.nmsl.entity.dto.VapeAccountDTO;
-import fuck.manthe.nmsl.service.impl.VapeAccountServiceImpl;
+import fuck.manthe.nmsl.entity.dto.VapeAccountInfoDTO;
+import fuck.manthe.nmsl.service.VapeAccountService;
 import fuck.manthe.nmsl.utils.CryptUtil;
 import jakarta.annotation.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/admin/shared")
 public class VapeAccountAdminController {
     @Resource
-    VapeAccountServiceImpl vapeAccountService;
+    VapeAccountService vapeAccountService;
     @Resource
     CryptUtil cryptUtil;
 
     @GetMapping("list")
-    public RestBean<List<VapeAccountDTO>> list() {
-        List<VapeAccount> accounts = vapeAccountService.listAccounts();
-        List<VapeAccountDTO> result = new ArrayList<>();
-        for (VapeAccount account : accounts) {
-            result.add(VapeAccountDTO.builder()
-                    .username(account.getUsername())
-                    .hwid(account.getHwid())
-                    .build());
-        }
-        return RestBean.success(result);
+    public RestBean<List<VapeAccountInfoDTO>> list() {
+        return RestBean.success(vapeAccountService.listAccounts().stream().map(account -> VapeAccountInfoDTO.builder()
+                .hwid(account.getHwid())
+                .username(account.getUsername())
+                .colddown(vapeAccountService.getColdDown(account.getUsername()))
+                .build()).toList());
     }
 
     @PostMapping("add")

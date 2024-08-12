@@ -21,4 +21,6 @@ public interface VapeAccountService {
     boolean updateHwid(String username, String newHwid);
 
     List<VapeAccount> listAccounts();
+
+    long getColdDown(String username);
 }
