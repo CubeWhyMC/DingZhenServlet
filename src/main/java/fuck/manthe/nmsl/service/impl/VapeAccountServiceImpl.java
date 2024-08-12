@@ -30,12 +30,17 @@ public class VapeAccountServiceImpl implements VapeAccountService {
     @Value("${share.cold-down.pre-account.during-min}")
     int coldDownMin;
 
-    @Resource
+    @Resource(shareable = false)
     RedisTemplate<String, Long> redisTemplate;
     @Resource
     VapeAccountRepository vapeAccountRepository;
     @Resource
     CryptUtil cryptUtil;
+
+    @PostConstruct
+    public void init() {
+        redisTemplate.setValueSerializer(new GenericToStringSerializer<>(Long.class));
+    }
 
     @Override
     public VapeAccount getOne() {
