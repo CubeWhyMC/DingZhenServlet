@@ -6,10 +6,12 @@ import fuck.manthe.nmsl.repository.VapeAccountRepository;
 import fuck.manthe.nmsl.service.VapeAccountService;
 import fuck.manthe.nmsl.utils.Const;
 import fuck.manthe.nmsl.utils.CryptUtil;
+import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.BadPaddingException;
@@ -32,6 +34,11 @@ public class VapeAccountServiceImpl implements VapeAccountService {
     VapeAccountRepository vapeAccountRepository;
     @Resource
     CryptUtil cryptUtil;
+
+    @PostConstruct
+    public void init() {
+        redisTemplate.setValueSerializer(new GenericToStringSerializer<>(Long.class));
+    }
 
     @Override
     public VapeAccount getOne() {
