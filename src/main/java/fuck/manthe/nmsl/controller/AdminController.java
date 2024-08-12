@@ -39,11 +39,6 @@ public class AdminController {
     @Resource
     AnalysisService analysisService;
 
-    @Resource
-    private UserRepository userRepository;
-    @Resource
-    private RedeemRepository redeemRepository;
-
     @RequestMapping("ping")
     public ResponseEntity<String> ping() {
         return ResponseEntity.ok("Pong");
@@ -82,7 +77,7 @@ public class AdminController {
 
     @GetMapping("redeem/list")
     public ResponseEntity<RestBean<List<RedeemCode>>> redeemCodeList() {
-        return ResponseEntity.ok(RestBean.success(redeemRepository.findAll()));
+        return ResponseEntity.ok(RestBean.success(redeemService.list()));
     }
 
     @DeleteMapping("redeem/destroy")
@@ -123,13 +118,13 @@ public class AdminController {
         return Analysis.builder()
                 .todayLaunch(analysisService.getTodayLaunch())
                 .totalLaunch(analysisService.getTotalLaunch())
-                .currentUsers(userRepository.count())
+                .currentUsers(crackedUserService.count())
                 .build();
     }
 
     @GetMapping("listUsers")
     public List<CrackedUser> listUsers() {
-        return userRepository.findAll();
+        return crackedUserService.list();
     }
 
     @GetMapping("logSuper")
