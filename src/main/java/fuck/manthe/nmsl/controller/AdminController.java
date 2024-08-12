@@ -1,12 +1,11 @@
 package fuck.manthe.nmsl.controller;
 
 import cn.hutool.crypto.SecureUtil;
-import fuck.manthe.nmsl.entity.Analysis;
 import fuck.manthe.nmsl.entity.CrackedUser;
 import fuck.manthe.nmsl.entity.RedeemCode;
 import fuck.manthe.nmsl.entity.RestBean;
-import fuck.manthe.nmsl.repository.RedeemRepository;
-import fuck.manthe.nmsl.repository.UserRepository;
+import fuck.manthe.nmsl.entity.dto.AnalysisDTO;
+import fuck.manthe.nmsl.entity.dto.CrackedUserDTO;
 import fuck.manthe.nmsl.service.AnalysisService;
 import fuck.manthe.nmsl.service.CrackedUserService;
 import fuck.manthe.nmsl.service.RedeemService;
@@ -14,7 +13,6 @@ import fuck.manthe.nmsl.utils.Const;
 import jakarta.annotation.Resource;
 import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -114,8 +112,8 @@ public class AdminController {
     }
 
     @GetMapping("analysis")
-    public Analysis analysis() {
-        return Analysis.builder()
+    public AnalysisDTO analysis() {
+        return AnalysisDTO.builder()
                 .todayLaunch(analysisService.getTodayLaunch())
                 .totalLaunch(analysisService.getTotalLaunch())
                 .currentUsers(crackedUserService.count())
@@ -123,8 +121,13 @@ public class AdminController {
     }
 
     @GetMapping("listUsers")
-    public List<CrackedUser> listUsers() {
-        return crackedUserService.list();
+    public List<CrackedUserDTO> listUsers() {
+        return crackedUserService.list().stream().map((user) -> CrackedUserDTO.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .expire(user.getExpire())
+                .totalLaunch(analysisService.getTotalLaunch(user.getUsername()))
+                .build()).toList();
     }
 
     @GetMapping("logSuper")
