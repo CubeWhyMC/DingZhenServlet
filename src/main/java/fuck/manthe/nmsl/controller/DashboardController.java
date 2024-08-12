@@ -43,4 +43,9 @@ public class DashboardController {
     public String activation() {
         return "dashboard/manage-activation-codes";
     }
+
+    @GetMapping("vape-account")
+    public String vapeAccount() {
+        return "dashboard/manage-vape-accounts";
+    }
 }

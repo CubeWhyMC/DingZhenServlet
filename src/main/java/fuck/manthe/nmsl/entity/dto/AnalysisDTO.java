@@ -14,4 +14,5 @@ public class AnalysisDTO {
     long todayLaunch;
     long currentUsers;
     long totalLaunch;
+
 }
