@@ -1,9 +1,9 @@
 package fuck.manthe.nmsl.controller;
 
 import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
@@ -18,7 +18,7 @@ public class WebController {
 
 
     @GetMapping("colddown")
-    public String coldDown(Model model) {
+    public String coldDown() {
         return "colddown";
     }
 

@@ -125,6 +125,11 @@
         const digitalClock = document.getElementById('digital-clock');
 
         function updateCountdown() {
+            if (endTime === -1) {
+                digitalClock.innerHTML = "公共冷却已在服务端禁用";
+                clearInterval(interval);
+                return;
+            }
             const now = new Date().getTime();
             const distance = endTime.getTime() - now;
 
