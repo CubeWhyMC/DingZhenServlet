@@ -127,13 +127,11 @@
     function deleteVapeAccount(username) {
         mdui.confirm('确定要删除此 VAPE 账号吗？', '删除确认',
             function () {
-                fetch('/admin/shared/remove', {
+                fetch(`/admin/shared/remove?username=${username}`, {
                     method: 'DELETE',
                     headers: {
-                        'Content-Type': 'application/json',
                         'X-Admin-Password': adminPassword
                     },
-                    body: JSON.stringify({username})
                 })
                     .then(response => response.json())
                     .then(data => {
