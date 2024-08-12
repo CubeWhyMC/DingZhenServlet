@@ -42,4 +42,8 @@ public class CryptUtil {
     public byte[] decryptString(String encrypted) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         return this.decrypt(Base64.getDecoder().decode(encrypted));
     }
+
+    public String decryptStringToString(String input) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        return new String(this.decryptString(input), StandardCharsets.UTF_8);
+    }
 }

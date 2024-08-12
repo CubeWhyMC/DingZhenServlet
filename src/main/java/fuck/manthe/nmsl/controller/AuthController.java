@@ -8,6 +8,7 @@ import fuck.manthe.nmsl.entity.RestBean;
 import fuck.manthe.nmsl.entity.VapeAccount;
 import fuck.manthe.nmsl.service.*;
 import fuck.manthe.nmsl.utils.Const;
+import fuck.manthe.nmsl.utils.CryptUtil;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.log4j.Log4j2;
@@ -59,6 +60,8 @@ public class AuthController {
 
     @Value("${share.cold-down.global.during-max}")
     int coldDownMax;
+    @Autowired
+    private CryptUtil cryptUtil;
 
     @PostMapping("/auth.php")
     public String auth(HttpServletRequest request) throws Exception {
@@ -90,7 +93,7 @@ public class AuthController {
         }
         // 统计启动次数
         analysisService.launchInvoked(username);
-        try (Response response = httpClient.newCall(new Request.Builder().post(okhttp3.RequestBody.create("email=" + vapeAccount.getUsername() + "&password=" + vapeAccount.getPassword() + "&hwid=" + vapeAccount.getHwid() + "&v=v3&t=true", MediaType.parse("application/x-www-form-urlencoded"))).url("https://www.vape.gg/auth.php").header("User-Agent", "Agent_114514").build()).execute()) {
+        try (Response response = httpClient.newCall(new Request.Builder().post(okhttp3.RequestBody.create("email=" + vapeAccount.getUsername() + "&password=" + cryptUtil.decryptStringToString(vapeAccount.getPassword()) + "&hwid=" + vapeAccount.getHwid() + "&v=v3&t=true", MediaType.parse("application/x-www-form-urlencoded"))).url("https://www.vape.gg/auth.php").header("User-Agent", "Agent_114514").build()).execute()) {
             if (response.body() != null) {
                 if (coldDownEnabled && response.isSuccessful()) {
                     redisTemplate.opsForValue().set(Const.COLD_DOWN, System.currentTimeMillis() + (long) RandomUtil.randomInt(coldDownMin, coldDownMax, true, true) * 60 * 1000);
