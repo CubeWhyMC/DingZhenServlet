@@ -95,8 +95,14 @@ public class AuthController {
         analysisService.launchInvoked(username);
         try (Response response = httpClient.newCall(new Request.Builder().post(okhttp3.RequestBody.create("email=" + vapeAccount.getUsername() + "&password=" + cryptUtil.decryptStringToString(vapeAccount.getPassword()) + "&hwid=" + vapeAccount.getHwid() + "&v=v3&t=true", MediaType.parse("application/x-www-form-urlencoded"))).url("https://www.vape.gg/auth.php").header("User-Agent", "Agent_114514").build()).execute()) {
             if (response.body() != null) {
-                if (coldDownEnabled && response.isSuccessful()) {
-                    redisTemplate.opsForValue().set(Const.COLD_DOWN, System.currentTimeMillis() + (long) RandomUtil.randomInt(coldDownMin, coldDownMax, true, true) * 60 * 1000);
+                if (response.isSuccessful()) {
+                    if (coldDownEnabled) {
+                        redisTemplate.opsForValue().set(Const.COLD_DOWN, System.currentTimeMillis() + (long) RandomUtil.randomInt(coldDownMin, coldDownMax, true, true) * 60 * 1000);
+                    }
+                    if (response.body().string().length() != 33) {
+                        // not a valid token
+                        log.error("Account {} seems banned or incorrect ({})", username, response.body().string());
+                    }
                 }
                 return response.body().string();
             }
