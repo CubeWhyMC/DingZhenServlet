@@ -115,13 +115,6 @@ public class AdminController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-//    @GetMapping("restartServlet")
-//    public RestBean<String> restartServlet() {
-//        log.info("Restart servlet. (Requested by an admin)");
-//        restartEndpoint.restart();
-//        return RestBean.success();
-//    }
-
     @GetMapping("analysis")
     public Analysis analysis() {
         Long todayLaunch = redisTemplate.opsForValue().get(Const.TODAY_LAUNCH);

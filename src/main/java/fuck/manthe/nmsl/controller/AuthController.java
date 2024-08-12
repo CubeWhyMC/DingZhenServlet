@@ -6,10 +6,7 @@ import fuck.manthe.nmsl.entity.CrackedUser;
 import fuck.manthe.nmsl.entity.RedeemCode;
 import fuck.manthe.nmsl.entity.RestBean;
 import fuck.manthe.nmsl.entity.VapeAccount;
-import fuck.manthe.nmsl.service.impl.CrackedUserServiceImpl;
-import fuck.manthe.nmsl.service.impl.QueueServiceImpl;
-import fuck.manthe.nmsl.service.impl.RedeemServiceImpl;
-import fuck.manthe.nmsl.service.impl.VapeAccountServiceImpl;
+import fuck.manthe.nmsl.service.*;
 import fuck.manthe.nmsl.utils.Const;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -41,17 +38,19 @@ public class AuthController {
     @Resource
     RedisTemplate<String, Long> redisTemplate;
     @Resource
-    CrackedUserServiceImpl crackedUserService;
+    CrackedUserService crackedUserService;
     @Resource
-    RedeemServiceImpl redeemService;
+    RedeemService redeemService;
 
     @Autowired
     OkHttpClient httpClient;
 
     @Resource
-    private QueueServiceImpl queueService;
-    @Autowired
-    private VapeAccountServiceImpl vapeAccountService;
+    QueueService queueService;
+    @Resource
+    AnalysisService analysisService;
+    @Resource
+    VapeAccountService vapeAccountService;
 
     @Value("${share.cold-down.global.enabled}")
     boolean coldDownEnabled;
@@ -68,6 +67,8 @@ public class AuthController {
         String username = map.get("email");
         String password = map.get("password");
         log.info("User {} login", username);
+        // 统计请求次数
+        analysisService.authRequested(username);
         if (!crackedUserService.isValid(username, password)) {
             return "Unauthorized";
         }
@@ -87,14 +88,8 @@ public class AuthController {
         if (vapeAccount == null) {
             return "No account for you";
         }
-
-        Long todayLaunch = redisTemplate.opsForValue().get(Const.TODAY_LAUNCH);
-        Long totalLaunch = redisTemplate.opsForValue().get(Const.TOTAL_LAUNCH);
-        if (todayLaunch == null) todayLaunch = 0L;
-        if (totalLaunch == null) totalLaunch = 0L;
-        redisTemplate.opsForValue().set(Const.TODAY_LAUNCH, ++todayLaunch);
-        redisTemplate.opsForValue().set(Const.TOTAL_LAUNCH, ++totalLaunch);
-
+        // 统计启动次数
+        analysisService.launchInvoked(username);
         try (Response response = httpClient.newCall(new Request.Builder().post(okhttp3.RequestBody.create("email=" + vapeAccount.getUsername() + "&password=" + vapeAccount.getPassword() + "&hwid=" + vapeAccount.getHwid() + "&v=v3&t=true", MediaType.parse("application/x-www-form-urlencoded"))).url("https://www.vape.gg/auth.php").header("User-Agent", "Agent_114514").build()).execute()) {
             if (response.body() != null) {
                 if (coldDownEnabled && response.isSuccessful()) {

@@ -16,7 +16,7 @@ public class CryptUtil {
     @Value("${share.crypt.secret-key}")
     String secretKey;
 
-    public String encrypt(byte @NotNull [] input) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+    public String encrypt(@NotNull byte[] input) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
         SecretKey key = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), "AES");
 
         // Encrypt the string

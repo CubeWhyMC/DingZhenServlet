@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@SuppressWarnings("unused")
 public class Analysis {
     long todayLaunch;
     long currentUsers;
