@@ -56,6 +56,6 @@ public class AnalysisServiceImpl implements AnalysisService {
 
     @Override
     public Integer getTodayRegister() {
-        return Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.TODAY_REGISTER_USER), 0);;
+        return Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.TODAY_REGISTER_USER), 0);
     }
 }
