@@ -102,7 +102,7 @@ public class AuthController {
                     }
                     if (responseString.length() != 33) {
                         // not a valid token
-                        log.error("Account {} seems banned or incorrect ({})", username, responseString);
+                        log.error("Account {} seems banned or incorrect ({})", vapeAccount.getUsername(), responseString);
                     }
                 }
                 return responseString;
