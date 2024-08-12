@@ -24,7 +24,7 @@
 
 <script>
     function restartSystem() {
-        const adminPassword = sessionStorage.getItem('adminPassword');
+        const adminPassword = localStorage.getItem('adminPassword');
 
         mdui.confirm('确定要重置注入冷却吗？', '重启确认',
             function () {

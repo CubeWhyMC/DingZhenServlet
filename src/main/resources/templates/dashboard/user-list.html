@@ -19,7 +19,7 @@
 </div>
 
 <script>
-    const adminPassword = sessionStorage.getItem('adminPassword');
+    const adminPassword = localStorage.getItem('adminPassword');
 
     function fetchUserData() {
         fetch('/admin/listUsers', {
@@ -86,7 +86,7 @@
                     method: 'POST',
                     headers: {
                         // 'Content-Type': 'application/x-www-form-urlencoded',
-                        'X-Admin-Password': sessionStorage.getItem('adminPassword')
+                        'X-Admin-Password': localStorage.getItem('adminPassword')
                     },
                     // body: ``,
                 })
@@ -116,7 +116,7 @@
                 fetch(`/admin/password/${username}/reset?password=${value}`, {
                     method: 'POST',
                     headers: {
-                        'X-Admin-Password': sessionStorage.getItem('adminPassword')
+                        'X-Admin-Password': localStorage.getItem('adminPassword')
                     },
                 })
                     .then(response => response.json())
@@ -147,7 +147,7 @@
                 fetch(`/admin/removeUser/${username}`, {
                     method: 'DELETE',
                     headers: {
-                        'X-Admin-Password': sessionStorage.getItem('adminPassword')
+                        'X-Admin-Password': localStorage.getItem('adminPassword')
                     },
                 })
                     .then(response => response.json())
