@@ -11,39 +11,39 @@ import java.util.Objects;
 @Service
 public class AnalysisServiceImpl implements AnalysisService {
     @Resource
-    RedisTemplate<String, Long> redisTemplate;
+    RedisTemplate<String, Integer> redisTemplate;
 
     @Override
     public void launchInvoked(String username) {
         // global
-        redisTemplate.opsForValue().increment(Const.TODAY_LAUNCH, 1L);
-        redisTemplate.opsForValue().increment(Const.TOTAL_LAUNCH, 1L);
+        redisTemplate.opsForValue().increment(Const.TODAY_LAUNCH, 1);
+        redisTemplate.opsForValue().increment(Const.TOTAL_LAUNCH, 1);
         // pre user
-        redisTemplate.opsForValue().increment(Const.TOTAL_LAUNCH_PRE_USER + username, 1L);
+        redisTemplate.opsForValue().increment(Const.TOTAL_LAUNCH_PRE_USER + username, 1);
     }
 
     @Override
     public void authRequested(String username) {
-        redisTemplate.opsForValue().increment(Const.TOTAL_REQUEST_AUTH_PRE_USER + username, 1L);
+        redisTemplate.opsForValue().increment(Const.TOTAL_REQUEST_AUTH_PRE_USER + username, 1);
     }
 
     @Override
     public void userRegistered() {
-        redisTemplate.opsForValue().increment(Const.TODAY_REGISTER_USER, 1L);
+        redisTemplate.opsForValue().increment(Const.TODAY_REGISTER_USER, 1);
     }
 
     @Override
-    public long getTodayLaunch() {
-        return Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.TODAY_LAUNCH), 0L);
+    public Integer getTodayLaunch() {
+        return Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.TODAY_LAUNCH), 0);
     }
 
     @Override
-    public long getTotalLaunch() {
-        return Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.TOTAL_LAUNCH), 0L);
+    public Integer getTotalLaunch() {
+        return Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.TOTAL_LAUNCH), 0);
     }
 
     @Override
-    public long getTotalLaunch(String username) {
-        return Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.TOTAL_LAUNCH_PRE_USER + username), 0L);
+    public Integer getTotalLaunch(String username) {
+        return Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.TOTAL_LAUNCH_PRE_USER + username), 0);
     }
 }

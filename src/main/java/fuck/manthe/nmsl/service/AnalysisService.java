@@ -5,7 +5,7 @@ public interface AnalysisService {
     void authRequested(String username);
     void userRegistered();
 
-    long getTodayLaunch();
-    long getTotalLaunch();
-    long getTotalLaunch(String username);
+    Integer getTodayLaunch();
+    Integer getTotalLaunch();
+    Integer getTotalLaunch(String username);
 }
