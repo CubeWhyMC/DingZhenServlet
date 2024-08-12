@@ -27,3 +27,19 @@ management:
   endpoint:
     restart:
       enabled: true
+share:
+  cold-down:
+    # 公共冷却
+    global:
+      enabled: false
+      # 持续时间,取随机数 单位minutes
+      during-min: 3
+      during-max: 5
+      # 持续时间 单位minutes
+    # 每个账户的冷却
+    pre-account:
+      during-min: 3
+      during-max: 5
+  crypt:
+    # AES Key
+    secret-key: powered-by-zzyss

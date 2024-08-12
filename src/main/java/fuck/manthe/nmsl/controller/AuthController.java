@@ -1,29 +1,39 @@
 package fuck.manthe.nmsl.controller;
 
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.SecureUtil;
 import fuck.manthe.nmsl.entity.CrackedUser;
 import fuck.manthe.nmsl.entity.RedeemCode;
 import fuck.manthe.nmsl.entity.RestBean;
+import fuck.manthe.nmsl.entity.VapeAccount;
 import fuck.manthe.nmsl.service.impl.CrackedUserServiceImpl;
 import fuck.manthe.nmsl.service.impl.QueueServiceImpl;
 import fuck.manthe.nmsl.service.impl.RedeemServiceImpl;
+import fuck.manthe.nmsl.service.impl.VapeAccountServiceImpl;
 import fuck.manthe.nmsl.utils.Const;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
-import okhttp3.*;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.time.Duration;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @Log4j2
@@ -38,10 +48,18 @@ public class AuthController {
     @Autowired
     OkHttpClient httpClient;
 
-    String sharedUsername = System.getProperty("username");
-    String sharedPassword = System.getProperty("password");
     @Resource
     private QueueServiceImpl queueService;
+    @Autowired
+    private VapeAccountServiceImpl vapeAccountService;
+
+    @Value("${share.cold-down.global.enabled}")
+    boolean coldDownEnabled;
+    @Value("${share.cold-down.global.during-min}")
+    int coldDownMin;
+
+    @Value("${share.cold-down.global.during-max}")
+    int coldDownMax;
 
     @PostMapping("/auth.php")
     public String auth(HttpServletRequest request) throws Exception {
@@ -56,7 +74,7 @@ public class AuthController {
         if (crackedUserService.hasExpired(username)) {
             return "Expired";
         }
-        if (Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.COLD_DOWN), 0L) > System.currentTimeMillis()) {
+        if (coldDownEnabled && Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.COLD_DOWN), 0L) > System.currentTimeMillis()) {
             return "Somebody is injecting";
         }
         // 排队机制
@@ -64,29 +82,29 @@ public class AuthController {
             return "Not your turn";
         }
         log.info("User {} tried to inject!", username);
+        // Get an account from database
+        VapeAccount vapeAccount = vapeAccountService.getOne();
+        if (vapeAccount == null) {
+            return "No account for you";
+        }
+
         Long todayLaunch = redisTemplate.opsForValue().get(Const.TODAY_LAUNCH);
         Long totalLaunch = redisTemplate.opsForValue().get(Const.TOTAL_LAUNCH);
         if (todayLaunch == null) todayLaunch = 0L;
         if (totalLaunch == null) totalLaunch = 0L;
-        redisTemplate.opsForValue().set(Const.TODAY_LAUNCH, ++todayLaunch, Duration.ofDays(1));
+        redisTemplate.opsForValue().set(Const.TODAY_LAUNCH, ++todayLaunch);
         redisTemplate.opsForValue().set(Const.TOTAL_LAUNCH, ++totalLaunch);
-        try (Response response = httpClient.newCall(new Request.Builder().post(okhttp3.RequestBody.create("email=" + sharedUsername + "&password=" + this.sharedPassword + "&hwid=FUMANTHE&v=v3&t=true", MediaType.parse("application/x-www-form-urlencoded"))).url("https://www.vape.gg/auth.php").header("User-Agent", "Agent_114514").build()).execute()) {
+
+        try (Response response = httpClient.newCall(new Request.Builder().post(okhttp3.RequestBody.create("email=" + vapeAccount.getUsername() + "&password=" + vapeAccount.getPassword() + "&hwid=" + vapeAccount.getHwid() + "&v=v3&t=true", MediaType.parse("application/x-www-form-urlencoded"))).url("https://www.vape.gg/auth.php").header("User-Agent", "Agent_114514").build()).execute()) {
             if (response.body() != null) {
-                if (response.isSuccessful()) {
-                    redisTemplate.opsForValue().set(Const.COLD_DOWN, System.currentTimeMillis() + (long) randomColdDown() * 60 * 1000);
+                if (coldDownEnabled && response.isSuccessful()) {
+                    redisTemplate.opsForValue().set(Const.COLD_DOWN, System.currentTimeMillis() + (long) RandomUtil.randomInt(coldDownMin, coldDownMax, true, true) * 60 * 1000);
                 }
                 return response.body().string();
             }
         }
-        log.error("Vape authorize was expired. (wrong password)");
+        log.error("Vape authorize was expired. ({}, {})", vapeAccount.getUsername(), vapeAccount.getHwid());
         return "1"; // cert expired
-    }
-
-    private int randomColdDown() {
-        Random random = new Random();
-        int min = 3;
-        int max = 6;
-        return random.nextInt(max - min + 1) + min;
     }
 
     @NotNull
@@ -104,7 +122,7 @@ public class AuthController {
     }
 
     @PostMapping("/redeem")
-    public ResponseEntity<RestBean<String>> register(@RequestParam String username, @RequestParam String password, @RequestParam String code, HttpServletResponse response) {
+    public ResponseEntity<RestBean<String>> register(@RequestParam String username, @RequestParam String password, @RequestParam String code) {
         RedeemCode redeemCode = redeemService.infoOrNull(code);
         if (redeemCode == null)
             return new ResponseEntity<>(RestBean.failure(404, "Code not found."), HttpStatus.NOT_FOUND);
