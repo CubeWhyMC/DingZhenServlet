@@ -1,4 +1,4 @@
-package fuck.manthe.nmsl.entity;
+package fuck.manthe.nmsl.entity.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @SuppressWarnings("unused")
-public class Analysis {
+public class AnalysisDTO {
     long todayLaunch;
     long currentUsers;
     long totalLaunch;
