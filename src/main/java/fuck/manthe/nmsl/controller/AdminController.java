@@ -10,10 +10,12 @@ import fuck.manthe.nmsl.service.AnalysisService;
 import fuck.manthe.nmsl.service.CrackedUserService;
 import fuck.manthe.nmsl.service.RedeemService;
 import fuck.manthe.nmsl.utils.Const;
+import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -29,6 +31,8 @@ import java.util.UUID;
 public class AdminController {
     @Resource
     RedisTemplate<String, Long> redisTemplate;
+    @Resource
+    RedisTemplate<String, Integer> integerRedisTemplate;
 
     @Resource
     CrackedUserService crackedUserService;
@@ -36,6 +40,11 @@ public class AdminController {
     RedeemService redeemService;
     @Resource
     AnalysisService analysisService;
+
+    @PostConstruct
+    public void init() {
+        integerRedisTemplate.setValueSerializer(new GenericToStringSerializer<>(Integer.class));
+    }
 
     @RequestMapping("ping")
     public ResponseEntity<String> ping() {
@@ -116,6 +125,7 @@ public class AdminController {
         return AnalysisDTO.builder()
                 .todayLaunch(analysisService.getTodayLaunch())
                 .totalLaunch(analysisService.getTotalLaunch())
+                .todayRegister(analysisService.getTodayRegister())
                 .currentUsers(crackedUserService.count())
                 .build();
     }
@@ -146,6 +156,7 @@ public class AdminController {
 
     @Scheduled(cron = "0 0 0 * * *")
     public void resetAnalysis() {
-        redisTemplate.opsForValue().set(Const.TODAY_LAUNCH, 0L);
+        integerRedisTemplate.opsForValue().set(Const.TODAY_LAUNCH, 0);
+        integerRedisTemplate.opsForValue().set(Const.TODAY_REGISTER_USER, 0);
     }
 }
