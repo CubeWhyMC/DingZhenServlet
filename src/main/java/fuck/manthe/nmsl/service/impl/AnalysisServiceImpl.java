@@ -58,4 +58,10 @@ public class AnalysisServiceImpl implements AnalysisService {
     public Integer getTodayRegister() {
         return Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.TODAY_REGISTER_USER), 0);
     }
+
+    @Override
+    public void reset() {
+        redisTemplate.opsForValue().set(Const.TODAY_LAUNCH, 0);
+        redisTemplate.opsForValue().set(Const.TODAY_REGISTER_USER, 0);
+    }
 }
