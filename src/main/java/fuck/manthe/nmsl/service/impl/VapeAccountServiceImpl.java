@@ -37,11 +37,6 @@ public class VapeAccountServiceImpl implements VapeAccountService {
     @Resource
     CryptUtil cryptUtil;
 
-    @PostConstruct
-    public void init() {
-        redisTemplate.setValueSerializer(new GenericToStringSerializer<>(Long.class));
-    }
-
     @Override
     public VapeAccount getOne() {
         List<VapeAccount> all = vapeAccountRepository.findAll();

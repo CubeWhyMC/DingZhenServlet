@@ -16,11 +16,6 @@ public class AnalysisServiceImpl implements AnalysisService {
     @Resource(shareable = false)
     RedisTemplate<String, Integer> redisTemplate;
 
-    @PostConstruct
-    public void init() {
-        redisTemplate.setValueSerializer(new GenericToStringSerializer<>(Integer.class));
-    }
-
     @Override
     public void launchInvoked(String username) {
         // global
