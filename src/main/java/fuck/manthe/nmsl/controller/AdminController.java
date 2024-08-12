@@ -7,8 +7,8 @@ import fuck.manthe.nmsl.entity.RedeemCode;
 import fuck.manthe.nmsl.entity.RestBean;
 import fuck.manthe.nmsl.repository.RedeemRepository;
 import fuck.manthe.nmsl.repository.UserRepository;
-import fuck.manthe.nmsl.service.impl.CrackedUserServiceImpl;
-import fuck.manthe.nmsl.service.impl.RedeemServiceImpl;
+import fuck.manthe.nmsl.service.CrackedUserService;
+import fuck.manthe.nmsl.service.RedeemService;
 import fuck.manthe.nmsl.utils.Const;
 import jakarta.annotation.Resource;
 import lombok.extern.log4j.Log4j2;
@@ -32,9 +32,9 @@ public class AdminController {
     RedisTemplate<String, Long> redisTemplate;
 
     @Resource
-    CrackedUserServiceImpl crackedUserService;
+    CrackedUserService crackedUserService;
     @Resource
-    RedeemServiceImpl redeemService;
+    RedeemService redeemService;
 
     @Autowired
     private UserRepository userRepository;

@@ -1,8 +1,8 @@
 package fuck.manthe.nmsl.controller;
 
 import fuck.manthe.nmsl.entity.RestBean;
-import fuck.manthe.nmsl.service.impl.CrackedUserServiceImpl;
-import fuck.manthe.nmsl.service.impl.QueueServiceImpl;
+import fuck.manthe.nmsl.service.CrackedUserService;
+import fuck.manthe.nmsl.service.QueueService;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -17,16 +17,17 @@ public class QueueController {
     @Resource
     RedisTemplate<String, String> redisTemplate;
     @Resource
-    CrackedUserServiceImpl crackedUserService;
+    CrackedUserService crackedUserService;
     @Resource
-    QueueServiceImpl queueService;
+    QueueService queueService;
 
     @PostMapping("join")
     public @NotNull ResponseEntity<RestBean<String>> join(@RequestParam String username, @RequestParam String password) {
-        if (!crackedUserService.isValid(username, password)) return new ResponseEntity<>(RestBean.unauthorized("Unauthorized"), HttpStatus.UNAUTHORIZED);
-        if (!queueService.join(username)) {
+        if (!crackedUserService.isValid(username, password))
+            return new ResponseEntity<>(RestBean.unauthorized("Unauthorized"), HttpStatus.UNAUTHORIZED);
+        if (!queueService.join(username))
             return new ResponseEntity<>(RestBean.failure(409, "You're always queued."), HttpStatus.CONFLICT);
-        }
+
         return ResponseEntity.ok(RestBean.success("Added " + username + " to queue."));
     }
 
