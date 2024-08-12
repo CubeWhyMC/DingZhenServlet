@@ -9,6 +9,7 @@ import fuck.manthe.nmsl.utils.CryptUtil;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import jakarta.transaction.Transactional;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericToStringSerializer;
@@ -22,6 +23,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 @Service
+@Log4j2
 public class VapeAccountServiceImpl implements VapeAccountService {
     @Value("${share.cold-down.pre-account.during-max}")
     int coldDownMax;
@@ -45,6 +47,7 @@ public class VapeAccountServiceImpl implements VapeAccountService {
         List<VapeAccount> all = vapeAccountRepository.findAll();
         for (VapeAccount account : all) {
             if (!isColdDown(account)) {
+                log.info("Shared account {} is available", account.getUsername());
                 markColdDown(account);
                 return account;
             }
@@ -59,6 +62,7 @@ public class VapeAccountServiceImpl implements VapeAccountService {
 
     @Override
     public void markColdDown(VapeAccount account) {
+        log.info("Mark shared account {} cold down", account.getUsername());
         redisTemplate.opsForValue().set(Const.ACCOUNT_COLD_DOWN + account.getId(), System.currentTimeMillis() + (long) RandomUtil.randomInt(coldDownMin, coldDownMax, true, true) * 60 * 1000);
     }
 
