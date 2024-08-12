@@ -1,11 +1,10 @@
 package fuck.manthe.nmsl.filter;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.context.restart.RestartEndpoint;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +17,8 @@ import java.util.UUID;
 public class AdminFilter implements Filter {
     String adminPassword = System.getProperty("adminPassword", UUID.randomUUID().toString());
 
-    {
+    @PostConstruct
+    public void init() {
         log.warn("Admin password: {}", adminPassword);
     }
 
@@ -34,7 +34,7 @@ public class AdminFilter implements Filter {
 
         if (requestURI.equals("/admin/logSuper")) {
             log.warn("Admin password (Requested from web): {}", adminPassword);
-          chain.doFilter(request, response);
+            chain.doFilter(request, response);
         } else if (requestURI.startsWith("/admin/")) {
             String adminParam = httpRequest.getHeader("X-Admin-Password");
 
