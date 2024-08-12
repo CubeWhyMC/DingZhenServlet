@@ -39,9 +39,9 @@ public class AdminController {
     @Resource
     AnalysisService analysisService;
 
-    @Autowired
+    @Resource
     private UserRepository userRepository;
-    @Autowired
+    @Resource
     private RedeemRepository redeemRepository;
 
     @RequestMapping("ping")
