@@ -7,6 +7,7 @@ import fuck.manthe.nmsl.entity.RedeemCode;
 import fuck.manthe.nmsl.entity.RestBean;
 import fuck.manthe.nmsl.repository.RedeemRepository;
 import fuck.manthe.nmsl.repository.UserRepository;
+import fuck.manthe.nmsl.service.AnalysisService;
 import fuck.manthe.nmsl.service.CrackedUserService;
 import fuck.manthe.nmsl.service.RedeemService;
 import fuck.manthe.nmsl.utils.Const;
@@ -35,6 +36,8 @@ public class AdminController {
     CrackedUserService crackedUserService;
     @Resource
     RedeemService redeemService;
+    @Resource
+    AnalysisService analysisService;
 
     @Autowired
     private UserRepository userRepository;
@@ -117,13 +120,9 @@ public class AdminController {
 
     @GetMapping("analysis")
     public Analysis analysis() {
-        Long todayLaunch = redisTemplate.opsForValue().get(Const.TODAY_LAUNCH);
-        Long totalLaunch = redisTemplate.opsForValue().get(Const.TOTAL_LAUNCH);
-        if (totalLaunch == null) totalLaunch = 0L;
-        if (todayLaunch == null) todayLaunch = 0L;
         return Analysis.builder()
-                .todayLaunch(todayLaunch)
-                .totalLaunch(totalLaunch)
+                .todayLaunch(analysisService.getTodayLaunch())
+                .totalLaunch(analysisService.getTotalLaunch())
                 .currentUsers(userRepository.count())
                 .build();
     }

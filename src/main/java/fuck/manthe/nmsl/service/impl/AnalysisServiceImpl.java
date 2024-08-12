@@ -6,6 +6,8 @@ import jakarta.annotation.Resource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 public class AnalysisServiceImpl implements AnalysisService {
     @Resource
@@ -28,5 +30,20 @@ public class AnalysisServiceImpl implements AnalysisService {
     @Override
     public void userRegistered() {
         redisTemplate.opsForValue().increment(Const.TODAY_REGISTER_USER, 1L);
+    }
+
+    @Override
+    public long getTodayLaunch() {
+        return Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.TODAY_LAUNCH), 0L);
+    }
+
+    @Override
+    public long getTotalLaunch() {
+        return Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.TOTAL_LAUNCH), 0L);
+    }
+
+    @Override
+    public long getTotalLaunch(String username) {
+        return Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.TOTAL_LAUNCH_PRE_USER + username), 0L);
     }
 }
