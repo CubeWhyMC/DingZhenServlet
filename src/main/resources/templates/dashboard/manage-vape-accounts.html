@@ -108,6 +108,12 @@
                         <div class="mdui-list-item-title">${account.username}</div>
                         <div class="mdui-list-item-text">HWID: ${account.hwid}</div>
                     </div>
+                    <button class="mdui-btn mdui-btn-icon mdui-ripple" onclick="updatePassword('${account.username}')">
+                        <i class="mdui-icon material-icons">vpn_key</i>
+                    </button>
+                    <button class="mdui-btn mdui-btn-icon mdui-ripple" onclick="updateHwid('${account.username}')">
+                        <i class="mdui-icon material-icons">computer</i>
+                    </button>
                     <button class="mdui-btn mdui-btn-icon mdui-ripple" onclick="deleteVapeAccount('${account.username}')">
                         <i class="mdui-icon material-icons">delete</i>
                     </button>
@@ -151,6 +157,62 @@
             },
             {
                 confirmText: '确定删除',
+                cancelText: '取消'
+            }
+        );
+    }
+
+    function updatePassword(username) {
+        mdui.prompt(`请输入共享账户 ${username} 的新密码：`, '修改密码',
+            function (value) {
+                fetch(`/admin/shared/updatePassword?username=${username}&newPassword=${value}`, {
+                    method: 'PUT',
+                    headers: {
+                        'X-Admin-Password': localStorage.getItem('adminPassword')
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        mdui.alert('已为账户 ' + username + ' 设置新的密码');
+                        fetchUserData(); // 重新加载用户列表
+                    })
+                    .catch(error => {
+                        console.error('Error set password:', error);
+                        mdui.alert('设置密码失败');
+                    });
+            },
+            function (value) {
+            },
+            {
+                confirmText: '确认',
+                cancelText: '取消'
+            }
+        );
+    }
+
+    function updateHwid(username) {
+        mdui.prompt(`请输入共享账户 ${username} 的新HWID：`, '修改HWID',
+            function (value) {
+                fetch(`/admin/shared/updateHwid?username=${username}&newHwid=${value}`, {
+                    method: 'PUT',
+                    headers: {
+                        'X-Admin-Password': localStorage.getItem('adminPassword')
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        mdui.alert('已为账户 ' + username + ' 设置新的HWID');
+                        fetchUserData(); // 重新加载用户列表
+                    })
+                    .catch(error => {
+                        console.error('Error set hwid:', error);
+                        mdui.alert('设置HWID失败');
+                    });
+            },
+            function (value) {
+            },
+            {
+                confirmText: '确认',
                 cancelText: '取消'
             }
         );
