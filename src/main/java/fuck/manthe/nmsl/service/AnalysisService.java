@@ -4,4 +4,8 @@ public interface AnalysisService {
     void launchInvoked(String username);
     void authRequested(String username);
     void userRegistered();
+
+    long getTodayLaunch();
+    long getTotalLaunch();
+    long getTotalLaunch(String username);
 }

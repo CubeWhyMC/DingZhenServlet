@@ -29,7 +29,7 @@ public class QueueServiceImpl implements QueueService {
 
     @Override
     public boolean join(String username) {
-        if (Objects.requireNonNullElse(redisTemplate.opsForList().range(Const.QUEUE, 0, -1), List.of()).contains(username)) {
+        if (isInQueue(username)) {
             return false;
         }
         redisTemplate.opsForList().leftPush(Const.QUEUE, username);
