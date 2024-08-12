@@ -1,0 +1,164 @@
+<!-- public/manage-vape-accounts.html -->
+<div class="mdui-typo">
+    <h1>管理 VAPE 账号</h1>
+</div>
+
+<div class="mdui-row">
+    <div class="mdui-col-md-6">
+        <div class="mdui-card">
+            <div class="mdui-card-primary">
+                <div class="mdui-card-primary-title">添加 VAPE 账号</div>
+            </div>
+            <div class="mdui-card-content">
+                <div class="mdui-textfield">
+                    <label class="mdui-textfield-label">用户名</label>
+                    <input class="mdui-textfield-input" type="text" id="username"/>
+                </div>
+                <div class="mdui-textfield">
+                    <label class="mdui-textfield-label">密码</label>
+                    <input class="mdui-textfield-input" type="password" id="password"/>
+                </div>
+                <div class="mdui-textfield">
+                    <label class="mdui-textfield-label">HWID</label>
+                    <input class="mdui-textfield-input" type="text" id="hwid"/>
+                </div>
+            </div>
+            <div class="mdui-card-actions">
+                <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="addVapeAccount()">
+                    添加账号
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="mdui-col-md-6">
+        <div class="mdui-card">
+            <div class="mdui-card-primary">
+                <div class="mdui-card-primary-title">VAPE 账号列表</div>
+            </div>
+            <div class="mdui-card-content">
+                <ul class="mdui-list" id="account-list">
+                    <!-- VAPE 账号将在这里动态添加 -->
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const adminPassword = localStorage.getItem('adminPassword');
+
+    function addVapeAccount() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const hwid = document.getElementById('hwid').value;
+
+        if (!username || !password || !hwid) {
+            mdui.alert('请填写所有字段');
+            return;
+        }
+
+        fetch('/admin/shared/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Admin-Password': adminPassword
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password,
+                hwid: hwid
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.code === 200) {
+                    mdui.alert('VAPE 账号添加成功');
+                    fetchVapeAccounts();
+                    // 清空输入框
+                    document.getElementById('username').value = '';
+                    document.getElementById('password').value = '';
+                    document.getElementById('hwid').value = '';
+                } else {
+                    mdui.alert('添加失败: ' + data.msg);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                mdui.alert('添加请求失败，请稍后再试');
+            });
+    }
+
+    function fetchVapeAccounts() {
+        fetch('/admin/shared/list', {
+            method: 'GET',
+            headers: {
+                'X-Admin-Password': adminPassword
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.code === 200) {
+                    const accountList = document.getElementById('account-list');
+                    accountList.innerHTML = '';
+                    data.data.forEach(account => {
+                        const li = document.createElement('li');
+                        li.className = 'mdui-list-item mdui-ripple';
+                        li.innerHTML = `
+                    <div class="mdui-list-item-content">
+                        <div class="mdui-list-item-title">${account.username}</div>
+                        <div class="mdui-list-item-text">HWID: ${account.hwid}</div>
+                    </div>
+                    <button class="mdui-btn mdui-btn-icon mdui-ripple" onclick="deleteVapeAccount('${account.username}')">
+                        <i class="mdui-icon material-icons">delete</i>
+                    </button>
+                `;
+                        accountList.appendChild(li);
+                    });
+                } else {
+                    mdui.alert('获取 VAPE 账号列表失败: ' + data.msg);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                mdui.alert('获取 VAPE 账号列表失败，请稍后再试');
+            });
+    }
+
+    function deleteVapeAccount(username) {
+        mdui.confirm('确定要删除此 VAPE 账号吗？', '删除确认',
+            function () {
+                fetch('/admin/shared/remove', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Admin-Password': adminPassword
+                    },
+                    body: JSON.stringify({username})
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.code === 200) {
+                            mdui.alert('VAPE 账号删除成功');
+                            fetchVapeAccounts();
+                        } else {
+                            mdui.alert('删除失败: ' + data.msg);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        mdui.alert('删除请求失败，请稍后再试');
+                    });
+            },
+            function () {
+            },
+            {
+                confirmText: '确定删除',
+                cancelText: '取消'
+            }
+        );
+    }
+
+    // 页面加载时获取 VAPE 账号列表
+    document.addEventListener('DOMContentLoaded', fetchVapeAccounts);
+    fetchVapeAccounts()
+</script>

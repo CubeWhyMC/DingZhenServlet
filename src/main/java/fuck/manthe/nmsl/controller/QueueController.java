@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("colddown/queue")
+@RestController
+@RequestMapping("colddown/queue")
 public class QueueController {
     @Resource
     RedisTemplate<String, String> redisTemplate;
