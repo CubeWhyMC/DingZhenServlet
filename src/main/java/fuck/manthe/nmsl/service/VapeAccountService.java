@@ -22,5 +22,5 @@ public interface VapeAccountService {
 
     List<VapeAccount> listAccounts();
 
-    long getColdDown(String username);
+    long getColdDown(VapeAccount account);
 }

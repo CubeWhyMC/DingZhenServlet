@@ -26,7 +26,7 @@ public class VapeAccountAdminController {
         return RestBean.success(vapeAccountService.listAccounts().stream().map(account -> VapeAccountInfoDTO.builder()
                 .hwid(account.getHwid())
                 .username(account.getUsername())
-                .colddown(vapeAccountService.getColdDown(account.getUsername()))
+                .colddown(vapeAccountService.getColdDown(account))
                 .build()).toList());
     }
 
