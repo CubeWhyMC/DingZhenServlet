@@ -13,5 +13,6 @@ import lombok.NoArgsConstructor;
 public class AnalysisDTO {
     int todayLaunch;
     long currentUsers;
+    int todayRegister;
     int totalLaunch;
 }

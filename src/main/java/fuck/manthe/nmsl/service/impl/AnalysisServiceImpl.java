@@ -53,4 +53,9 @@ public class AnalysisServiceImpl implements AnalysisService {
     public Integer getTotalLaunch(String username) {
         return Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.TOTAL_LAUNCH_PRE_USER + username), 0);
     }
+
+    @Override
+    public Integer getTodayRegister() {
+        return Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.TODAY_REGISTER_USER), 0);;
+    }
 }

@@ -8,4 +8,5 @@ public interface AnalysisService {
     Integer getTodayLaunch();
     Integer getTotalLaunch();
     Integer getTotalLaunch(String username);
+    Integer getTodayRegister();
 }
