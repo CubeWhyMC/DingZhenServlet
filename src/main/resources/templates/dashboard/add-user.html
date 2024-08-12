@@ -32,7 +32,7 @@ function addUser() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
     const days = document.getElementById('days').value;
-    const adminPassword = sessionStorage.getItem('adminPassword');
+    const adminPassword = localStorage.getItem('adminPassword');
 
     if (!username || !password || !days) {
         mdui.alert('请填写所有字段');

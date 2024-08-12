@@ -36,7 +36,7 @@ function fetchDashboardData() {
     // 这里应该是实际的API端点
     fetch('/admin/analysis', {
         headers: {
-            'X-Admin-Password': sessionStorage.getItem('adminPassword')
+            'X-Admin-Password': localStorage.getItem('adminPassword')
         }
     })
         .then(response => response.json())

@@ -84,7 +84,7 @@
     <script>
         // 检查是否已登录
         function checkLogin() {
-            const adminPassword = sessionStorage.getItem('adminPassword');
+            const adminPassword = localStorage.getItem('adminPassword');
             fetch('/admin/ping', {
                 method: 'POST',
                 headers: {
@@ -109,7 +109,7 @@
     
         // 登出函数
         function logout() {
-            sessionStorage.removeItem('adminPassword');
+            localStorage.removeItem('adminPassword');
             window.location.href = '/dashboard/login';
         }
     
@@ -118,7 +118,7 @@
         let regDetectJs = /<script(.|\n)*?>(.|\n|\r\n)*?<\/script>/ig;
         // 修改 loadContent 函数以包含管理员密码
         function loadContent(url) {
-            const adminPassword = sessionStorage.getItem('adminPassword');
+            const adminPassword = localStorage.getItem('adminPassword');
             fetch(`dashboard/${url}`, {
                 headers: {
                     'X-Admin-Password': adminPassword
