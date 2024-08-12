@@ -48,7 +48,8 @@ public class QueueServiceImpl implements QueueService {
 
     @Override
     public boolean state() {
-        // TODO
-        return false;
+        Long size = redisTemplate.opsForList().size(Const.QUEUE);
+        if (size == null) return false;
+        return size > 0;
     }
 }
