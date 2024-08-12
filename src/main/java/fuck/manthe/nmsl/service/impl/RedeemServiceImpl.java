@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,5 +33,10 @@ public class RedeemServiceImpl implements RedeemService {
         if (redeemRepository.findByCode(code).isEmpty()) return false;
         redeemRepository.deleteByCode(code);
         return true;
+    }
+
+    @Override
+    public List<RedeemCode> list() {
+        return redeemRepository.findAll();
     }
 }

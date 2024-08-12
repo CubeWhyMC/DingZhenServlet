@@ -8,6 +8,7 @@ import fuck.manthe.nmsl.service.CrackedUserService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -81,5 +82,15 @@ public class CrackedUserServiceImpl implements CrackedUserService {
         user.setPassword(SecureUtil.sha1(newPassword));
         userRepository.save(user);
         return true;
+    }
+
+    @Override
+    public List<CrackedUser> list() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public long count() {
+        return userRepository.count();
     }
 }

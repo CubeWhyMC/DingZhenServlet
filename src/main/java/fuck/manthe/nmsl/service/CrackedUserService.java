@@ -2,6 +2,8 @@ package fuck.manthe.nmsl.service;
 
 import fuck.manthe.nmsl.entity.CrackedUser;
 
+import java.util.List;
+
 public interface CrackedUserService {
     boolean isValid(String username, String password);
     boolean addUser(CrackedUser user);
@@ -12,4 +14,8 @@ public interface CrackedUserService {
     boolean hasExpired(String username);
 
     boolean resetPassword(String username, String newPassword);
+
+    List<CrackedUser> list();
+
+    long count();
 }
