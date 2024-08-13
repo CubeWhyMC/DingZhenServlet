@@ -115,7 +115,7 @@ public class VapeAccountServiceImpl implements VapeAccountService {
         long min = 0L;
         for (VapeAccount account : listAccounts()) {
             if (!isColdDown(account)) {
-                return 0L;
+                return System.currentTimeMillis();
             }
             long coldDown = getColdDown(account);
             if (min == 0) {
