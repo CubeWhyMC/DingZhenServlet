@@ -1,10 +1,31 @@
 package fuck.manthe.nmsl.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import fuck.manthe.nmsl.entity.VapeRestBean;
+import fuck.manthe.nmsl.entity.dto.AuthorizationDTO;
+import fuck.manthe.nmsl.entity.dto.GlobalConfigDTO;
+import fuck.manthe.nmsl.entity.dto.OnlineConfigDTO;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1/{token}")
 public class OnlineConfigController {
-    // todo
+    @GetMapping("authenticated")
+    public VapeRestBean<AuthorizationDTO> onAuthenticated(@PathVariable String token) {
+        // TODO real account info
+        // just return a fake account info
+        return VapeRestBean.success(AuthorizationDTO.builder()
+                .userId(114514)
+                .username("DingZhen")
+                .build());
+    }
+
+    @GetMapping("settings/load/global")
+    public VapeRestBean<GlobalConfigDTO> loadGlobal(@PathVariable String token) {
+        return VapeRestBean.success(GlobalConfigDTO.builder().build());
+    }
+
+//    @GetMapping("settings/load/online")
+//    public VapeRestBean<OnlineConfigDTO> loadOnline(@PathVariable String token) {
+//        return VapeRestBean.success(OnlineConfigDTO.builder().build());
+//    }
 }
