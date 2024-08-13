@@ -2,8 +2,8 @@ package fuck.manthe.nmsl.entity;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
-import jakarta.validation.constraints.NotNull;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 public record RestBean<T>(int code, T data, String message) {
     @Contract("_ -> new")
