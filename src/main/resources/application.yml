@@ -9,17 +9,6 @@ spring:
 #  h2:
 #    console:
 #      enabled: true
-
-  cloud:
-    gateway:
-      mvc:
-        routes:
-          - id: api_route
-            uri: https://online.vape.gg/api
-            predicates:
-              - Path=/api/**
-            filters:
-              - RewritePath=/api/(?<path>.*), /${path}
   jpa:
     hibernate:
       ddl-auto: update
