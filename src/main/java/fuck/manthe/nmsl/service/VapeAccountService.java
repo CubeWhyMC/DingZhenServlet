@@ -23,4 +23,6 @@ public interface VapeAccountService {
     List<VapeAccount> listAccounts();
 
     long getColdDown(VapeAccount account);
+
+    Long nextAvailable();
 }

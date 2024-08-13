@@ -22,6 +22,11 @@ public class WebController {
         return "colddown";
     }
 
+    @GetMapping("queue")
+    public String queue() {
+        return "queue";
+    }
+
     @GetMapping("redeem")
     public String register() {
         return "redeem";
