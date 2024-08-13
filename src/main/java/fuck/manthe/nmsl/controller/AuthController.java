@@ -93,7 +93,7 @@ public class AuthController {
         log.info("User {} tried to inject!", username);
         // 统计启动次数
         analysisService.launchInvoked(username);
-        try (Response response = httpClient.newCall(new Request.Builder().post(okhttp3.RequestBody.create("email=" + vapeAccount.getUsername() + "&password=" + cryptUtil.decryptStringToString(vapeAccount.getPassword()) + "&hwid=" + vapeAccount.getHwid() + "&v=v3&t=true", MediaType.parse("application/x-www-form-urlencoded"))).url("https://www.vape.gg/auth.php").header("User-Agent", "Agent_FUMANTHE").build()).execute()) {
+        try (Response response = httpClient.newCall(new Request.Builder().post(okhttp3.RequestBody.create("email=" + vapeAccount.getUsername() + "&password=" + cryptUtil.decryptStringToString(vapeAccount.getPassword()) + "&hwid=" + vapeAccount.getHwid() + "&v=v3&t=true", MediaType.parse("application/x-www-form-urlencoded"))).url("http://www.vape.gg/auth.php").header("User-Agent", "Agent_a013cc").build()).execute()) {
             if (response.body() != null) {
                 String responseString = response.body().string();
                 if (response.isSuccessful()) {
