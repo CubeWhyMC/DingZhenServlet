@@ -109,4 +109,21 @@ public class VapeAccountServiceImpl implements VapeAccountService {
         }
         return value;
     }
+
+    @Override
+    public Long nextAvailable() {
+        long min = 0L;
+        for (VapeAccount account : listAccounts()) {
+            if (!isColdDown(account)) {
+                return 0L;
+            }
+            long coldDown = getColdDown(account);
+            if (min == 0) {
+                min = coldDown;
+            } else if (coldDown < min) {
+                min = coldDown;
+            }
+        }
+        return min;
+    }
 }

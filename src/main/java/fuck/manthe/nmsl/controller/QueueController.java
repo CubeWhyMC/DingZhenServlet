@@ -1,6 +1,7 @@
 package fuck.manthe.nmsl.controller;
 
 import fuck.manthe.nmsl.entity.RestBean;
+import fuck.manthe.nmsl.entity.dto.LoginDTO;
 import fuck.manthe.nmsl.service.CrackedUserService;
 import fuck.manthe.nmsl.service.QueueService;
 import jakarta.annotation.Resource;
@@ -23,13 +24,13 @@ public class QueueController {
     QueueService queueService;
 
     @PostMapping("join")
-    public @NotNull ResponseEntity<RestBean<String>> join(@RequestParam String username, @RequestParam String password) {
-        if (!crackedUserService.isValid(username, password))
+    public @NotNull ResponseEntity<RestBean<String>> join(@RequestBody LoginDTO login) {
+        if (!crackedUserService.isValid(login.getUsername(), login.getPassword()))
             return new ResponseEntity<>(RestBean.unauthorized("Unauthorized"), HttpStatus.UNAUTHORIZED);
-        if (!queueService.join(username))
+        if (!queueService.join(login.getUsername()))
             return new ResponseEntity<>(RestBean.failure(409, "You're always queued."), HttpStatus.CONFLICT);
 
-        return ResponseEntity.ok(RestBean.success("Added " + username + " to queue."));
+        return ResponseEntity.ok(RestBean.success("Added " + login.getUsername() + " to queue."));
     }
 
     @GetMapping("query")
@@ -37,10 +38,11 @@ public class QueueController {
         return queueService.query();
     }
 
-    @DeleteMapping("remove")
-    public @NotNull RestBean<String> remove(@RequestParam String username, @RequestParam String password) {
+    @DeleteMapping("quit")
+    public @NotNull ResponseEntity<RestBean<String>> quit(@RequestBody LoginDTO login) {
         // 不想玩了可以直接取消名额.
-        queueService.quit(username);
-        return RestBean.success("Removed " + username + " from queue.");
+        if (!crackedUserService.isValid(login.getUsername(), login.getPassword())) return new ResponseEntity<>(RestBean.failure(403, "Unauthorized"), HttpStatus.UNAUTHORIZED);
+        queueService.quit(login.getUsername());
+        return ResponseEntity.ok(RestBean.success("Removed " + login.getUsername() + " from queue."));
     }
 }
