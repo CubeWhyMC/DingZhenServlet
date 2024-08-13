@@ -7,11 +7,13 @@ import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Objects;
 
-@RestController("colddown")
+@RestController()
+@RequestMapping("/colddown")
 public class ColdDownController {
     @Resource
     RedisTemplate<String, Long> redisTemplate;
