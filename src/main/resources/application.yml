@@ -6,16 +6,9 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
-#  h2:
-#    console:
-#      enabled: true
   jpa:
     hibernate:
       ddl-auto: update
-management:
-  endpoint:
-    restart:
-      enabled: true
 share:
   cold-down:
     # 公共冷却
