@@ -5,7 +5,12 @@ import fuck.manthe.nmsl.entity.RestBean;
 import fuck.manthe.nmsl.entity.dto.GatewayDTO;
 import fuck.manthe.nmsl.entity.dto.VapeAuthorizeDTO;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 public interface GatewayService {
@@ -20,7 +25,7 @@ public interface GatewayService {
 
     Gateway getOne();
 
-    VapeAuthorizeDTO use(Gateway gateway) throws IOException;
+    VapeAuthorizeDTO use(Gateway gateway) throws IOException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException;
 
     void markColdDown(Gateway gateway, long expireAt);
 

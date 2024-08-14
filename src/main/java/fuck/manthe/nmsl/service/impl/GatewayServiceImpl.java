@@ -7,6 +7,7 @@ import fuck.manthe.nmsl.entity.dto.VapeAuthorizeDTO;
 import fuck.manthe.nmsl.repository.GatewayRepository;
 import fuck.manthe.nmsl.service.GatewayService;
 import fuck.manthe.nmsl.utils.Const;
+import fuck.manthe.nmsl.utils.CryptUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
@@ -16,8 +17,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
 import java.net.URL;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 @Service
@@ -33,6 +39,8 @@ public class GatewayServiceImpl implements GatewayService {
     GatewayRepository gatewayRepository;
     @Resource
     OkHttpClient httpClient;
+    @Resource
+    CryptUtil cryptUtil;
 
 
     @Override
@@ -67,11 +75,11 @@ public class GatewayServiceImpl implements GatewayService {
     }
 
     @Override
-    public VapeAuthorizeDTO use(Gateway gateway) throws IOException {
+    public VapeAuthorizeDTO use(Gateway gateway) throws IOException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         try (Response response = httpClient.newCall(new Request.Builder()
                 .get()
                 .url(new URL(gateway.getAddress() + "/gateway/token"))
-                .header("X-Gateway-Key", gateway.getKey())
+                .header("X-Gateway-Key", cryptUtil.decryptStringToString(gateway.getKey()))
                 .build()).execute()) {
             if (response.body() != null) {
                 String json = response.body().string();
