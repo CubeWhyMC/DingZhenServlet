@@ -62,6 +62,15 @@ public class VapeAccountServiceImpl implements VapeAccountService {
     }
 
     @Override
+    public void resetColdDown(VapeAccount account) {
+        if (!isColdDown(account)) {
+            return;
+        }
+        log.info("Reset shared account {} cold down", account.getUsername());
+        redisTemplate.opsForValue().set(Const.ACCOUNT_COLD_DOWN + account.getId(), System.currentTimeMillis());
+    }
+
+    @Override
     public boolean addAccount(VapeAccount account) {
         if (vapeAccountRepository.existsByUsername(account.getUsername())) return false;
         vapeAccountRepository.save(account);
