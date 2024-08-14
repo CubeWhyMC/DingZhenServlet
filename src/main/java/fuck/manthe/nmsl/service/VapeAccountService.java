@@ -13,6 +13,7 @@ public interface VapeAccountService {
     VapeAccount getOne();
     boolean isColdDown(VapeAccount account);
     void markColdDown(VapeAccount account);
+    void resetColdDown(VapeAccount account);
 
     boolean addAccount(VapeAccount account);
     boolean removeAccount(String account);
