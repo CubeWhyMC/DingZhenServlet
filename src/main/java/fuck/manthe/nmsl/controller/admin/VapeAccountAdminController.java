@@ -64,4 +64,9 @@ public class VapeAccountAdminController {
         }
         return new ResponseEntity<>(RestBean.failure(404, "Account not Found"), HttpStatus.NOT_FOUND);
     }
+
+    @PostMapping("resetColddown")
+    public RestBean<String> resetColdDown(@RequestParam String username) {
+        vapeAccountService.resetColdDown(vapeAccountService.findByUsername(username));
+    }
 }
