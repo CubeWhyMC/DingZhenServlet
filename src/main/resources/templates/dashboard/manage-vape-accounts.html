@@ -117,6 +117,9 @@
                     <button class="mdui-btn mdui-btn-icon mdui-ripple" onclick="deleteVapeAccount('${account.username}')">
                         <i class="mdui-icon material-icons">delete</i>
                     </button>
+                    <button class="mdui-btn mdui-btn-icon mdui-ripple" onclick="cooldownAccount('${account.username}')">
+                        <i class="mdui-icon material-icons">timer</i>
+                    </button>
                 `;
                         accountList.appendChild(li);
                     });
@@ -217,7 +220,37 @@
             }
         );
     }
-
+    function resetCooldown(username) {
+        mdui.confirm(`确定要重置账户 ${username} 的冷却时间吗？`, '重置确认',
+            function () {
+                fetch(`/admin/shared/resetColddown?username=${username}`, {
+                    method: 'PUT',
+                    headers: {
+                        'X-Admin-Password': localStorage.getItem('adminPassword')
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.code === 200) {
+                            mdui.alert('已为账户 ' + username + ' 重置冷却时间');
+                            fetchVapeAccounts(); // 重新加载用户列表
+                        } else {
+                            mdui.alert('重置失败: ' + data.msg);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error resetting cooldown:', error);
+                        mdui.alert('重置冷却时间失败');
+                    });
+            },
+            function () {
+            },
+            {
+                confirmText: '确认',
+                cancelText: '取消'
+            }
+        );
+    }
     // 页面加载时获取 VAPE 账号列表
     document.addEventListener('DOMContentLoaded', fetchVapeAccounts);
     fetchVapeAccounts()
