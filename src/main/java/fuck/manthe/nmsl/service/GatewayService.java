@@ -1,8 +1,6 @@
 package fuck.manthe.nmsl.service;
 
 import fuck.manthe.nmsl.entity.Gateway;
-import fuck.manthe.nmsl.entity.RestBean;
-import fuck.manthe.nmsl.entity.dto.GatewayDTO;
 import fuck.manthe.nmsl.entity.dto.VapeAuthorizeDTO;
 
 import javax.crypto.BadPaddingException;
@@ -18,6 +16,7 @@ public interface GatewayService {
      * Check mode is gateway
      */
     boolean isPureGateway();
+    boolean canUseGateway();
 
     void addGateway(Gateway gateway);
 
