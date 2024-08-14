@@ -83,14 +83,16 @@ public class AuthController {
         // 统计启动次数
         analysisService.launchInvoked(username);
         // use gateway
-        Gateway gateway = gatewayService.getOne();
-        if (gateway != null) {
-            VapeAuthorizeDTO authorize = gatewayService.use(gateway);
-            if (authorize != null) {
-                log.info("Successfully authed with the gateway {} ({})", gateway.getName(), gateway.getId());
-                return authorize.getToken();
+        if (gatewayService.canUseGateway()) {
+            Gateway gateway = gatewayService.getOne();
+            if (gateway != null) {
+                VapeAuthorizeDTO authorize = gatewayService.use(gateway);
+                if (authorize != null) {
+                    log.info("Successfully authed with the gateway {} ({})", gateway.getName(), gateway.getId());
+                    return authorize.getToken();
+                }
+                log.error("Gateway {} ({}) is not available. Authorizing with this server...", gateway.getName(), gateway.getId());
             }
-            log.error("Gateway {} ({}) is not available. Authorizing with this server...", gateway.getName(), gateway.getId());
         }
         // 没有配置gateway或者所有的gateway都在冷却
         // 在这个服务器处理登录

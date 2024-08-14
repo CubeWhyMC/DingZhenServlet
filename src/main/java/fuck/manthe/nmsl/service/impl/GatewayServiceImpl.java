@@ -8,6 +8,7 @@ import fuck.manthe.nmsl.repository.GatewayRepository;
 import fuck.manthe.nmsl.service.GatewayService;
 import fuck.manthe.nmsl.utils.Const;
 import fuck.manthe.nmsl.utils.CryptUtil;
+import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
@@ -34,6 +35,10 @@ public class GatewayServiceImpl implements GatewayService {
 
     @Value("${service.mode}")
     String mode;
+    @Value("${service.gateway.key}")
+    String gatewayKey;
+    @Value("${service.gateway.always}")
+    boolean alwaysEnableGateway;
 
     @Resource
     GatewayRepository gatewayRepository;
@@ -42,10 +47,29 @@ public class GatewayServiceImpl implements GatewayService {
     @Resource
     CryptUtil cryptUtil;
 
+    @PostConstruct
+    public void init() {
+        if (isPureGateway() || alwaysEnableGateway) {
+            log.info("Servlet is running in gateway mode.");
+            if (alwaysEnableGateway) {
+                log.info("Current servlet mode is {}, but service.gateway.always is true.", mode);
+            }
+            log.warn("Gateway key: {}", gatewayKey);
+            log.warn("DO NOT share your gateway key with anybody, otherwise your account will be hacked");
+        } else if (!canUseGateway()) {
+            log.info("Gateways are disabled via application.yml, no gateways will be used for fetching tokens");
+        }
+    }
+
 
     @Override
     public boolean isPureGateway() {
         return mode.equals("gateway");
+    }
+
+    @Override
+    public boolean canUseGateway() {
+        return mode.equals("full");
     }
 
     @Override
