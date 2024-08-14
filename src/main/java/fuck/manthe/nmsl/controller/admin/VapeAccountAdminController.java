@@ -68,5 +68,6 @@ public class VapeAccountAdminController {
     @PostMapping("resetColddown")
     public RestBean<String> resetColdDown(@RequestParam String username) {
         vapeAccountService.resetColdDown(vapeAccountService.findByUsername(username));
+        return RestBean.success("Success");
     }
 }
