@@ -34,4 +34,6 @@ public interface VapeAccountService {
      * @param account vape account cert
      */
     VapeAuthorizeDTO doAuth(VapeAccount account);
+
+    VapeAccount findByUsername(String username);
 }

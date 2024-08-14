@@ -181,4 +181,9 @@ public class VapeAccountServiceImpl implements VapeAccountService {
                     .build();
         }
     }
+
+    @Override
+    public VapeAccount findByUsername(String username) {
+        return vapeAccountRepository.findByUsername(username);
+    }
 }

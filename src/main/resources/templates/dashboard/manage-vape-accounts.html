@@ -224,7 +224,7 @@
         mdui.confirm(`确定要重置账户 ${username} 的冷却时间吗？`, '重置确认',
             function () {
                 fetch(`/admin/shared/resetColddown?username=${username}`, {
-                    method: 'PUT',
+                    method: 'POST',
                     headers: {
                         'X-Admin-Password': localStorage.getItem('adminPassword')
                     },
