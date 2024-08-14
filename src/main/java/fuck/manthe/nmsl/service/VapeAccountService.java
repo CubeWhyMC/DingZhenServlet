@@ -1,6 +1,7 @@
 package fuck.manthe.nmsl.service;
 
 import fuck.manthe.nmsl.entity.VapeAccount;
+import fuck.manthe.nmsl.entity.dto.VapeAuthorizeDTO;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -26,4 +27,11 @@ public interface VapeAccountService {
     long getColdDown(VapeAccount account);
 
     Long nextAvailable();
+
+    /**
+     * Fetch token from the real auth server
+     *
+     * @param account vape account cert
+     */
+    VapeAuthorizeDTO doAuth(VapeAccount account);
 }

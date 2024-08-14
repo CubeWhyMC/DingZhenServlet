@@ -1,9 +1,9 @@
-package fuck.manthe.nmsl.controller;
+package fuck.manthe.nmsl.controller.admin;
 
 import fuck.manthe.nmsl.entity.RestBean;
 import fuck.manthe.nmsl.entity.VapeAccount;
 import fuck.manthe.nmsl.entity.dto.VapeAccountDTO;
-import fuck.manthe.nmsl.entity.dto.VapeAccountInfoDTO;
+import fuck.manthe.nmsl.entity.vo.VapeAccountVO;
 import fuck.manthe.nmsl.service.VapeAccountService;
 import fuck.manthe.nmsl.utils.CryptUtil;
 import jakarta.annotation.Resource;
@@ -22,8 +22,8 @@ public class VapeAccountAdminController {
     CryptUtil cryptUtil;
 
     @GetMapping("list")
-    public RestBean<List<VapeAccountInfoDTO>> list() {
-        return RestBean.success(vapeAccountService.listAccounts().stream().map(account -> VapeAccountInfoDTO.builder()
+    public RestBean<List<VapeAccountVO>> list() {
+        return RestBean.success(vapeAccountService.listAccounts().stream().map(account -> VapeAccountVO.builder()
                 .hwid(account.getHwid())
                 .username(account.getUsername())
                 .colddown(vapeAccountService.getColdDown(account))
