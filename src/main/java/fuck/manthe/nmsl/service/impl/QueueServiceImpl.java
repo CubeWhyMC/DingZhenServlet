@@ -4,6 +4,7 @@ import fuck.manthe.nmsl.entity.RestBean;
 import fuck.manthe.nmsl.service.QueueService;
 import fuck.manthe.nmsl.utils.Const;
 import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,9 @@ import java.util.Objects;
 public class QueueServiceImpl implements QueueService {
     @Resource
     RedisTemplate<String, String> redisTemplate;
+
+    @Value("${share.cold-down.queue.state}")
+    boolean queueState;
     
     @Override
     public List<String> query() {
@@ -48,6 +52,7 @@ public class QueueServiceImpl implements QueueService {
 
     @Override
     public boolean state() {
+        if (!queueState) return false;
         Long size = redisTemplate.opsForList().size(Const.QUEUE);
         if (size == null) return false;
         return size > 0;
