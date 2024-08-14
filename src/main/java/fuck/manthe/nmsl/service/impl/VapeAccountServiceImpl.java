@@ -35,6 +35,11 @@ public class VapeAccountServiceImpl implements VapeAccountService {
     @Value("${share.cold-down.pre-account.during-min}")
     int coldDownMin;
 
+    @Value("${share.cold-down.global.during-max}")
+    int globalMaxColdDown;
+    @Value("${share.cold-down.global.during-min}")
+    int globalMinColdDown;
+
     @Resource
     RedisTemplate<String, Long> redisTemplate;
     @Resource
@@ -153,7 +158,7 @@ public class VapeAccountServiceImpl implements VapeAccountService {
                 String responseString = response.body().string();
                 if (response.isSuccessful()) {
                     if (coldDownEnabled) {
-                        redisTemplate.opsForValue().set(Const.COLD_DOWN, System.currentTimeMillis() + (long) RandomUtil.randomInt(coldDownMin, coldDownMax, true, true) * 60 * 1000);
+                        redisTemplate.opsForValue().set(Const.COLD_DOWN, System.currentTimeMillis() + (long) RandomUtil.randomInt(globalMinColdDown, globalMaxColdDown, true, true) * 60 * 1000);
                     }
                     if (responseString.length() != 33) {
                         // not a valid token
