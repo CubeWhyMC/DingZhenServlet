@@ -1,6 +1,6 @@
 package fuck.manthe.nmsl.controller;
 
-import fuck.manthe.nmsl.entity.ColdDown;
+import fuck.manthe.nmsl.entity.dto.ColdDownDTO;
 import fuck.manthe.nmsl.service.VapeAccountService;
 import fuck.manthe.nmsl.utils.Const;
 import jakarta.annotation.Resource;
@@ -24,7 +24,7 @@ public class ColdDownController {
     boolean globalColdDownEnabled;
 
     @GetMapping("json")
-    public ColdDown coldDownJson() {
+    public ColdDownDTO coldDownJson() {
         Long next = vapeAccountService.nextAvailable();
         if (globalColdDownEnabled) {
             long globalColdDown = Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.COLD_DOWN), 0L);
@@ -32,6 +32,6 @@ public class ColdDownController {
                 next = globalColdDown;
             }
         }
-        return new ColdDown(next);
+        return new ColdDownDTO(next);
     }
 }

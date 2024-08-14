@@ -1,4 +1,4 @@
-package fuck.manthe.nmsl.controller;
+package fuck.manthe.nmsl.controller.admin;
 
 import cn.hutool.crypto.SecureUtil;
 import fuck.manthe.nmsl.entity.CrackedUser;
@@ -10,12 +10,10 @@ import fuck.manthe.nmsl.service.AnalysisService;
 import fuck.manthe.nmsl.service.CrackedUserService;
 import fuck.manthe.nmsl.service.RedeemService;
 import fuck.manthe.nmsl.utils.Const;
-import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;

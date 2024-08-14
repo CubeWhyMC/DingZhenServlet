@@ -2,6 +2,7 @@ package fuck.manthe.nmsl.service.impl;
 
 import cn.hutool.core.util.RandomUtil;
 import fuck.manthe.nmsl.entity.VapeAccount;
+import fuck.manthe.nmsl.entity.dto.VapeAuthorizeDTO;
 import fuck.manthe.nmsl.repository.VapeAccountRepository;
 import fuck.manthe.nmsl.service.VapeAccountService;
 import fuck.manthe.nmsl.utils.Const;
@@ -10,6 +11,10 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericToStringSerializer;
@@ -30,12 +35,17 @@ public class VapeAccountServiceImpl implements VapeAccountService {
     @Value("${share.cold-down.pre-account.during-min}")
     int coldDownMin;
 
-    @Resource(shareable = false)
+    @Resource
     RedisTemplate<String, Long> redisTemplate;
     @Resource
     VapeAccountRepository vapeAccountRepository;
     @Resource
     CryptUtil cryptUtil;
+
+    @Resource
+    OkHttpClient httpClient;
+    @Value("${share.cold-down.global.enabled}")
+    boolean coldDownEnabled;
 
     @Override
     public VapeAccount getOne() {
@@ -134,5 +144,41 @@ public class VapeAccountServiceImpl implements VapeAccountService {
             }
         }
         return min;
+    }
+
+    @Override
+    public VapeAuthorizeDTO doAuth(VapeAccount vapeAccount) {
+        try (Response response = httpClient.newCall(new Request.Builder().post(okhttp3.RequestBody.create("email=" + vapeAccount.getUsername() + "&password=" + cryptUtil.decryptStringToString(vapeAccount.getPassword()) + "&hwid=" + vapeAccount.getHwid() + "&v=v3&t=true", MediaType.parse("application/x-www-form-urlencoded"))).url("http://www.vape.gg/auth.php").header("User-Agent", "Agent_" + vapeAccount.getHwid()).build()).execute()) {
+            if (response.body() != null) {
+                String responseString = response.body().string();
+                if (response.isSuccessful()) {
+                    if (coldDownEnabled) {
+                        redisTemplate.opsForValue().set(Const.COLD_DOWN, System.currentTimeMillis() + (long) RandomUtil.randomInt(coldDownMin, coldDownMax, true, true) * 60 * 1000);
+                    }
+                    if (responseString.length() != 33) {
+                        // not a valid token
+                        log.error("Account {} seems banned or incorrect ({})", vapeAccount.getUsername(), responseString);
+                        return VapeAuthorizeDTO.builder()
+                                .token(responseString)
+                                .status(VapeAuthorizeDTO.Status.BANNED_OR_INCORRECT)
+                                .build();
+                    }
+                }
+                return VapeAuthorizeDTO.builder()
+                        .token(responseString)
+                        .status(VapeAuthorizeDTO.Status.OK)
+                        .build();
+            } else {
+                return VapeAuthorizeDTO.builder()
+                        .token("Empty auth data")
+                        .status(VapeAuthorizeDTO.Status.SERVLET_ERROR)
+                        .build();
+            }
+        } catch (Exception e) {
+            return VapeAuthorizeDTO.builder()
+                    .token(e.getMessage())
+                    .status(VapeAuthorizeDTO.Status.SERVLET_ERROR)
+                    .build();
+        }
     }
 }

@@ -24,4 +24,18 @@ share:
       during-max: 5
   crypt:
     # AES Key
+    # 用于加密一些数据,实际部署请修改这个
     secret-key: powered-by-zzyss
+service:
+  # 服务端工作模式
+  # full 可以刷新VapeToken 也可以作为验证服务
+  # gateway 专门用来刷新Vape token用
+  mode: full
+
+  gateway:
+    # 安全设定: 是否在验证服务开启的时候也启用gateway服务
+    # 建议保持关闭,否则可能会被偷token
+    always: false
+    # gateway 验证密钥
+    # 请务必修改这个值,否则token会被盗刷
+    key: zzyss-please-modify-this
