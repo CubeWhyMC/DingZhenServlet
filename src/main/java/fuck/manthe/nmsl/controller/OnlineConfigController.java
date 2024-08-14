@@ -24,8 +24,14 @@ public class OnlineConfigController {
         return VapeRestBean.success(GlobalConfigDTO.builder().build());
     }
 
-//    @GetMapping("settings/load/online")
-//    public VapeRestBean<OnlineConfigDTO> loadOnline(@PathVariable String token) {
-//        return VapeRestBean.success(OnlineConfigDTO.builder().build());
-//    }
+    @GetMapping("settings/load/online")
+    public VapeRestBean<OnlineConfigDTO> loadOnline(@PathVariable String token) {
+        return VapeRestBean.success(OnlineConfigDTO.builder().build());
+    }
+
+    @PostMapping("settings/save/online")
+    public VapeRestBean<OnlineConfigDTO> saveOnline(@PathVariable String token, @RequestBody OnlineConfigDTO onlineConfig) {
+        // todo save config
+        return VapeRestBean.success(onlineConfig);
+    }
 }

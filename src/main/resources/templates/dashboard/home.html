@@ -21,6 +21,14 @@
         </div>
     </div>
     <div class="mdui-col-sm-4">
+        <div class="mdui-card mdui-color-green-900">
+            <div class="mdui-card-primary">
+                <div class="mdui-card-primary-title" style="color: white;">今天注册人数</div>
+                <div class="mdui-card-primary-subtitle" style="color: white;" id="today-register">加载中...</div>
+            </div>
+        </div>
+    </div>
+    <div class="mdui-col-sm-4">
         <div class="mdui-card mdui-color-orange-900">
             <div class="mdui-card-primary">
                 <div class="mdui-card-primary-title" style="color: white;">总启动次数</div>
@@ -42,12 +50,14 @@ function fetchDashboardData() {
         .then(response => response.json())
         .then(data => {
             document.getElementById('today-starts').textContent = data.todayLaunch;
+            document.getElementById('today-register').textContent = data.todayRegister;
             document.getElementById('current-users').textContent = data.currentUsers;
             document.getElementById('total-starts').textContent = data.totalLaunch;
         })
         .catch(error => {
             console.error('Error fetching dashboard data:', error);
             document.getElementById('today-starts').textContent = 'Error (请尝试重新登录)';
+            document.getElementById('today-register').textContent = "Error";
             document.getElementById('current-users').textContent = 'Error';
             document.getElementById('total-starts').textContent = 'Error';
         });
