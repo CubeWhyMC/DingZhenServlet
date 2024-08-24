@@ -1,6 +1,7 @@
 <!-- public/user-list.html -->
 <div class="mdui-typo">
     <h1>用户列表</h1>
+    <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-red" onclick="removeExpiredUsers()">一键清除过期用户</button>
 </div>
 <div class="mdui-table-fluid">
     <table class="mdui-table mdui-table-hoverable">
@@ -27,11 +28,11 @@
                 'X-Admin-Password': adminPassword
             }
         })
-            .then(response => response.json())
-            .then(users => {
+            。then(response => response.json())
+            。then(users => {
                 renderUserList(users);
             })
-            .catch(error => {
+            。catch(error => {
                 console.error('Error fetching user data:', error);
                 document.getElementById('user-table-body').innerHTML = '<tr><td colspan="5">Error loading user data</td></tr>';
             });
@@ -72,6 +73,34 @@
         });
     }
 
+    function removeExpiredUsers() {
+        mdui.confirm('确定要清除所有过期用户吗？', '清除过期用户',
+            function () {
+                fetch('/admin/removeExpired', {
+                    method: 'DELETE',
+                    headers: {
+                        'X-Admin-Password': adminPassword
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        mdui.alert('已清除所有过期用户');
+                        fetchUserData();
+                    })
+                    .catch(error => {
+                        console.error('Error removing expired users:', error);
+                        mdui.alert('清除过期用户失败');
+                    });
+            },
+            function () {
+            },
+            {
+                confirmText: '确认',
+                cancelText: '取消'
+            }
+        );
+    }
+    
     // 增加天数函数（示例）
     function addDays(username) {
         mdui.prompt('请输入要增加的天数：', '增加天数',
