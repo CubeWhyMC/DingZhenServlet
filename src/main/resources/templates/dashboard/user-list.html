@@ -28,11 +28,11 @@
                 'X-Admin-Password': adminPassword
             }
         })
-            。then(response => response.json())
-            。then(users => {
+            .then(response => response.json())
+            .then(users => {
                 renderUserList(users);
             })
-            。catch(error => {
+            .catch(error => {
                 console.error('Error fetching user data:', error);
                 document.getElementById('user-table-body').innerHTML = '<tr><td colspan="5">Error loading user data</td></tr>';
             });
@@ -50,12 +50,12 @@
             else if (user.expire < Date.now()) expire = `已过期 ${Math.abs(parseFloat(expire))} 天`;
             // 到期时间
             let date = new Date(user.expire)
-            var year = date.getFullYear();
-            var month = (date.getMonth() + 1).toString().padStart(2, '0');
-            var day = date.getDate().toString().padStart(2, '0');
-            var hours = date.getHours().toString().padStart(2, '0');
-            var minutes = date.getMinutes().toString().padStart(2, '0');
-            var seconds = date.getSeconds().toString().padStart(2, '0');
+            let year = date.getFullYear();
+            let month = (date.getMonth() + 1).toString().padStart(2, '0');
+            let day = date.getDate().toString().padStart(2, '0');
+            let hours = date.getHours().toString().padStart(2, '0');
+            let minutes = date.getMinutes().toString().padStart(2, '0');
+            let seconds = date.getSeconds().toString().padStart(2, '0');
 
             let expire1 = `${year}年${month}月${day}日 ${hours}:${minutes}:${seconds}`;
             if (user.expire === -1) expire1 = "好像到期不了";
