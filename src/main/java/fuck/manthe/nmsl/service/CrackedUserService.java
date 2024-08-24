@@ -6,8 +6,12 @@ import java.util.List;
 
 public interface CrackedUserService {
     boolean isValid(String username, String password);
+
     boolean addUser(CrackedUser user);
+
     void removeUser(String username);
+
+    void removeUser(CrackedUser user);
 
     boolean renewUser(String username, int day);
 
@@ -18,4 +22,5 @@ public interface CrackedUserService {
     List<CrackedUser> list();
 
     long count();
+
 }

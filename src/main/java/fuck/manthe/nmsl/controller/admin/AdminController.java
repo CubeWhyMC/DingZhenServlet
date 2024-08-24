@@ -11,6 +11,7 @@ import fuck.manthe.nmsl.service.CrackedUserService;
 import fuck.manthe.nmsl.service.RedeemService;
 import fuck.manthe.nmsl.utils.Const;
 import jakarta.annotation.Resource;
+import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -148,5 +149,14 @@ public class AdminController {
     @Scheduled(cron = "0 0 0 * * *")
     public void resetAnalysis() {
         analysisService.reset();
+    }
+
+    @DeleteMapping("removeExpired")
+    @Transactional
+    public RestBean<String> removeExpired() {
+        crackedUserService.list().stream().filter((user) -> (user.getExpire() < System.currentTimeMillis() && user.getExpire() != -1)).forEach((user) -> {
+            crackedUserService.removeUser(user);
+        });
+        return RestBean.success("Success");
     }
 }
