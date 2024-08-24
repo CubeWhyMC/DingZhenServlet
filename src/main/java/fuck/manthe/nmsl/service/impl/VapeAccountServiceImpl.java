@@ -153,7 +153,7 @@ public class VapeAccountServiceImpl implements VapeAccountService {
 
     @Override
     public VapeAuthorizeDTO doAuth(VapeAccount vapeAccount) {
-        try (Response response = httpClient.newCall(new Request.Builder().post(okhttp3.RequestBody.create("email=" + vapeAccount.getUsername() + "&password=" + cryptUtil.decryptStringToString(vapeAccount.getPassword()) + "&hwid=" + vapeAccount.getHwid() + "&v=v3&t=true", MediaType.parse("application/x-www-form-urlencoded"))).url("http://www.vape.gg/auth.php").header("User-Agent", "Agent_" + vapeAccount.getHwid()).build()).execute()) {
+        try (Response response = httpClient.newCall(new Request.Builder().post(okhttp3.RequestBody.create("email=" + vapeAccount.getUsername() + "&password=" + vapeAccount.getPassword() + "&hwid=" + vapeAccount.getHwid() + "&v=v3&t=true", MediaType.parse("application/x-www-form-urlencoded"))).url("http://www.vape.gg/auth.php").header("User-Agent", "Agent_" + vapeAccount.getHwid()).build()).execute()) {
             if (response.body() != null) {
                 String responseString = response.body().string();
                 if (response.isSuccessful()) {

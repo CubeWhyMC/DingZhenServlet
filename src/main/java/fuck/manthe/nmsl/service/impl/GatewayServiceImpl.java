@@ -103,7 +103,7 @@ public class GatewayServiceImpl implements GatewayService {
         try (Response response = httpClient.newCall(new Request.Builder()
                 .get()
                 .url(new URL(gateway.getAddress() + "/gateway/token"))
-                .header("X-Gateway-Key", cryptUtil.decryptStringToString(gateway.getKey()))
+                .header("X-Gateway-Key", gateway.getKey())
                 .build()).execute()) {
             if (response.body() != null) {
                 String json = response.body().string();

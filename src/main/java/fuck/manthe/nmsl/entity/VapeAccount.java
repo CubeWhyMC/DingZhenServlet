@@ -1,9 +1,7 @@
 package fuck.manthe.nmsl.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import fuck.manthe.nmsl.conventer.CryptConverter;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +18,7 @@ public class VapeAccount {
     private Long id;
 
     private String username;
-    private String password; // encrypt it later
+    @Convert(converter = CryptConverter.class)
+    private String password;
     private String hwid;
 }
