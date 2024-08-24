@@ -34,7 +34,7 @@ public class VapeAccountAdminController {
     public ResponseEntity<RestBean<String>> add(@RequestBody VapeAccountDTO vapeAccount) throws Exception {
         if (vapeAccountService.addAccount(VapeAccount.builder()
                 .username(vapeAccount.getUsername())
-                .password(cryptUtil.encryptString(vapeAccount.getPassword()))
+                .password(vapeAccount.getPassword())
                 .hwid(vapeAccount.getHwid()).build())) {
             return ResponseEntity.ok(RestBean.success("OK"));
         }

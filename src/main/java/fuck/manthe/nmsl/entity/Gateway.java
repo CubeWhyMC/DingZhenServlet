@@ -1,5 +1,6 @@
 package fuck.manthe.nmsl.entity;
 
+import fuck.manthe.nmsl.conventer.CryptConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,5 +20,6 @@ public class Gateway {
     private String name;
     private String address;
     @Column(name = "gateway_key")
+    @Convert(converter = CryptConverter.class)
     private String key;
 }

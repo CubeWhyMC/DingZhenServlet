@@ -26,7 +26,7 @@ public class GatewayAdminController {
         gatewayService.addGateway(Gateway.builder()
                         .name(gateway.getName())
                 .address(gateway.getAddress())
-                .key(cryptUtil.encryptString(gateway.getKey()))
+                .key(gateway.getKey())
                 .build());
         return RestBean.success("Success");
     }
