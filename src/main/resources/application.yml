@@ -29,6 +29,9 @@ share:
     # AES Key
     # 用于加密一些数据,实际部署请修改这个
     secret-key: powered-by-zzyss
+  user:
+    # 每日自动清理失效用户
+    auto-delete-expired: true
 service:
   # 服务端工作模式
   # full 可以刷新VapeToken 也可以作为验证服务 默认使用gateway

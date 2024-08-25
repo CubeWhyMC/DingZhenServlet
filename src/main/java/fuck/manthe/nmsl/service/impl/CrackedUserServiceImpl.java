@@ -96,4 +96,9 @@ public class CrackedUserServiceImpl implements CrackedUserService {
     public long count() {
         return userRepository.count();
     }
+
+    @Override
+    public void removeExpired() {
+        list().stream().filter((user) -> (user.getExpire() < System.currentTimeMillis() && user.getExpire() != -1)).forEach(this::removeUser);
+    }
 }

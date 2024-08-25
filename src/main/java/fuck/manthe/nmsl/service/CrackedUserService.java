@@ -23,4 +23,6 @@ public interface CrackedUserService {
 
     long count();
 
+    void removeExpired();
+
 }
