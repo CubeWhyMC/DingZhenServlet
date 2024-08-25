@@ -14,6 +14,7 @@ import jakarta.annotation.Resource;
 import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,10 +34,15 @@ public class AdminController {
 
     @Resource
     CrackedUserService crackedUserService;
+
     @Resource
     RedeemService redeemService;
+
     @Resource
     AnalysisService analysisService;
+
+    @Value("${share.user.auto-delete-expired}")
+    boolean autoDeleteExpired;
 
     @RequestMapping("ping")
     public ResponseEntity<String> ping() {
@@ -147,16 +153,17 @@ public class AdminController {
     }
 
     @Scheduled(cron = "0 0 0 * * *")
-    public void resetAnalysis() {
+    public void autoJob() {
+        if (autoDeleteExpired) {
+            crackedUserService.removeExpired();
+        }
         analysisService.reset();
     }
 
     @DeleteMapping("removeExpired")
     @Transactional
     public RestBean<String> removeExpired() {
-        crackedUserService.list().stream().filter((user) -> (user.getExpire() < System.currentTimeMillis() && user.getExpire() != -1)).forEach((user) -> {
-            crackedUserService.removeUser(user);
-        });
+        crackedUserService.removeExpired();
         return RestBean.success("Success");
     }
 }
