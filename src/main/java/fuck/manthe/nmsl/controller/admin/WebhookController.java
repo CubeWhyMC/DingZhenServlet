@@ -1,11 +1,9 @@
 package fuck.manthe.nmsl.controller.admin;
 
+import com.alibaba.fastjson2.JSON;
 import fuck.manthe.nmsl.entity.RestBean;
 import fuck.manthe.nmsl.entity.WebhookEndpoint;
-import fuck.manthe.nmsl.entity.dto.AddWebhookDTO;
-import fuck.manthe.nmsl.entity.dto.RenameWebhookDTO;
-import fuck.manthe.nmsl.entity.dto.UpdateWebhookSecretDTO;
-import fuck.manthe.nmsl.entity.dto.UpdateWebhookUrlDTO;
+import fuck.manthe.nmsl.entity.dto.*;
 import fuck.manthe.nmsl.entity.vo.WebhookEndpointVO;
 import fuck.manthe.nmsl.service.WebhookService;
 import jakarta.annotation.Resource;
@@ -54,6 +52,13 @@ public class WebhookController {
         entity.setUrl(dto.getUrl());
         webhookService.update(entity);
         return ResponseEntity.ok(RestBean.success(entity.asViewObject(WebhookEndpointVO.class)));
+    }
+
+    @PostMapping("{id}/test")
+    public ResponseEntity<RestBean<String>> test(@PathVariable String id, @RequestBody TestWebhookDTO dto) throws Exception {
+        WebhookEndpoint endpoint = webhookService.find(Long.parseLong(id));
+        webhookService.push(endpoint, "test", JSON.toJSONString(dto));
+        return ResponseEntity.ok(RestBean.success("Success"));
     }
 
     @GetMapping("list")

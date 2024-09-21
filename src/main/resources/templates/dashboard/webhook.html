@@ -95,6 +95,7 @@
             <button class="mdui-btn mdui-btn-raised mdui-ripple" onclick="renameWebhook(${webhook.id})">重命名</button>
             <button class="mdui-btn mdui-btn-raised mdui-ripple" onclick="updateSecret(${webhook.id})">更新 Secret</button>
             <button class="mdui-btn mdui-btn-raised mdui-ripple" onclick="updateUrl(${webhook.id})">更新 URL</button>
+            <button class="mdui-btn mdui-btn-raised mdui-ripple" onclick="testWebhook(${webhook.id})">发送测试消息</button>
             <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-red" onclick="removeWebhook(${webhook.id})">删除</button>
         </div>
     `;
@@ -230,6 +231,40 @@
             },
             {
                 confirmText: '确认删除',
+                cancelText: '取消'
+            }
+        );
+    }
+
+    function testWebhook(id) {
+        mdui.prompt('输入信息', '测试Webhook',
+            function (value) {
+                fetch(`/admin/webhook/${id}/test`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Admin-Password': adminPassword
+                    },
+                    body: JSON.stringify({content: value})
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.code === 200) {
+                            mdui.alert('推送成功');
+                            fetchWebhooks();
+                        } else {
+                            mdui.alert('推送失败: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        mdui.alert('请求失败，请稍后再试');
+                    });
+            },
+            function (value) {
+            },
+            {
+                confirmText: '确认',
                 cancelText: '取消'
             }
         );
