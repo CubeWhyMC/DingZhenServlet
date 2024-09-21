@@ -111,6 +111,14 @@
         const password = document.getElementById('password').value;
         const code = document.getElementById('code').value;
         const errorMessage = document.getElementById('error-message');
+        
+        const specialCharPattern = /[^a-zA-Z0-9]/;
+
+        if (specialCharPattern.test(username) || specialCharPattern.test(password)) {
+            errorMessage.textContent = '请不要在账户名或密码中填写特殊字符，例如中文，$%;等';
+            errorMessage.classList.remove('hidden');
+            return;
+        }
 
         if (username === '' || password === '' || code === '') {
             errorMessage.textContent = '请填写所有字段';
