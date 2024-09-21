@@ -141,7 +141,7 @@ public class AuthController {
             expire = System.currentTimeMillis() + (long) redeemCode.getDate() * 24 * 60 * 60 * 1000;
         }
         if (crackedUserService.addUser(CrackedUser.builder().password(SecureUtil.sha1(password)).username(username).expire(expire).build())) {
-            redeemService.removeCode(redeemCode.getCode());
+            redeemService.useCode(redeemCode.getCode(), username);
             // push to webhooks
             UserRegisterMessage message = new UserRegisterMessage();
             message.setRedeemUsername(username);
@@ -153,7 +153,7 @@ public class AuthController {
 
             return ResponseEntity.ok(RestBean.success("Registered."));
         } else if (crackedUserService.isValid(username, password) && crackedUserService.renewUser(username, redeemCode.getDate())) {
-            redeemService.removeCode(redeemCode.getCode());
+            redeemService.useCode(redeemCode.getCode(), username);
             // Push to webhooks
             UserRenewMessage message = new UserRenewMessage();
             message.setRedeemUsername(username);
