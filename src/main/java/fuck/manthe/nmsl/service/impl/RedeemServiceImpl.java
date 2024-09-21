@@ -29,7 +29,7 @@ public class RedeemServiceImpl implements RedeemService {
 
     @Override
     public boolean useCode(String code, String username) {
-        Optional<RedeemCode> redeemCode1 = redeemRepository.findByCode(code);
+        Optional<RedeemCode> redeemCode1 = redeemRepository.findByAvailableAndCode(true, code);
         if (redeemCode1.isEmpty()) return false;
         RedeemCode redeemCode = redeemCode1.get();
         redeemCode.setAvailable(false);

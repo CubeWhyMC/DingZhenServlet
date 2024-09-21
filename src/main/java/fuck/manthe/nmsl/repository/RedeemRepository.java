@@ -10,6 +10,9 @@ import java.util.Optional;
 @Repository
 public interface RedeemRepository extends JpaRepository<RedeemCode, Long> {
     Optional<RedeemCode> findByCode(String code);
+
+    Optional<RedeemCode> findByAvailableAndCode(boolean available, String code);
+
     void deleteByCode(String code);
 
     List<RedeemCode> findAllByAvailable(boolean state);
