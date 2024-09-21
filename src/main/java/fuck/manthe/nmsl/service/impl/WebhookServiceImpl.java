@@ -7,9 +7,11 @@ import fuck.manthe.nmsl.entity.BaseWebhookMessage;
 import fuck.manthe.nmsl.entity.WebhookEndpoint;
 import fuck.manthe.nmsl.repository.WebhookEndpointRepository;
 import fuck.manthe.nmsl.service.WebhookService;
+import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +24,18 @@ public class WebhookServiceImpl implements WebhookService {
 
     @Resource
     WebhookEndpointRepository webhookEndpointRepository;
+
+    @Value("${share.webhook.state}")
+    boolean webhookState;
+
+    @PostConstruct
+    public void init() {
+        if (webhookState) {
+            log.info("Webhooks are enabled.");
+        } else {
+            log.info("Webhooks are disabled.");
+        }
+    }
 
     @Override
     public WebhookEndpoint add(String name, String url, String secret) {
@@ -54,6 +68,9 @@ public class WebhookServiceImpl implements WebhookService {
 
     @Override
     public boolean push(WebhookEndpoint endpoint, String msgId, String payload) throws WebhookSigningException {
+        if (!webhookState) {
+            return false;
+        }
         log.info("Pushing event {} to webhook {}", msgId, endpoint.getName());
         Webhook webhook = new Webhook(endpoint.getSecret());
         // sign payload
