@@ -10,6 +10,9 @@ spring:
     hibernate:
       ddl-auto: update
 share:
+  webhook:
+    # 是否启用webhook
+    state: true
   cold-down:
     # 公共冷却
     global:
