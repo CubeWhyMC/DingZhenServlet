@@ -8,7 +8,13 @@ public interface RedeemService {
     RedeemCode infoOrNull(String code);
     void addCode(RedeemCode code);
 
+    boolean useCode(String code, String username);
+
     boolean removeCode(String code);
 
     List<RedeemCode> list();
+
+    List<RedeemCode> listAvailable();
+
+    List<RedeemCode> listSold();
 }

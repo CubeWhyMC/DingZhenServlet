@@ -6,6 +6,7 @@ import fuck.manthe.nmsl.entity.RedeemCode;
 import fuck.manthe.nmsl.entity.RestBean;
 import fuck.manthe.nmsl.entity.dto.AnalysisDTO;
 import fuck.manthe.nmsl.entity.dto.CrackedUserDTO;
+import fuck.manthe.nmsl.entity.vo.RedeemCodeVO;
 import fuck.manthe.nmsl.service.AnalysisService;
 import fuck.manthe.nmsl.service.CrackedUserService;
 import fuck.manthe.nmsl.service.RedeemService;
@@ -70,10 +71,10 @@ public class AdminController {
     }
 
     @PostMapping("redeem/gen")
-    public ResponseEntity<RestBean<List<RedeemCode>>> generateRedeemCode(@RequestParam int count, @RequestParam int day) {
+    public ResponseEntity<RestBean<List<RedeemCode>>> generateRedeemCode(@RequestParam int count, @RequestParam int day, @RequestParam(required = false) String reseller) {
         List<RedeemCode> result = new ArrayList<>();
         for (int i = 0; i < count; i++) {
-            RedeemCode code = generateOne(day);
+            RedeemCode code = generateOne(day, reseller);
             redeemService.addCode(code);
             result.add(code);
         }
@@ -81,8 +82,18 @@ public class AdminController {
     }
 
     @GetMapping("redeem/list")
-    public ResponseEntity<RestBean<List<RedeemCode>>> redeemCodeList() {
-        return ResponseEntity.ok(RestBean.success(redeemService.list()));
+    public ResponseEntity<RestBean<List<RedeemCodeVO>>> redeemCodeList() {
+        return ResponseEntity.ok(RestBean.success(redeemService.list().stream().map(code -> code.asViewObject(RedeemCodeVO.class)).toList()));
+    }
+
+    @GetMapping("redeem/available")
+    public ResponseEntity<RestBean<List<RedeemCodeVO>>> availableRedeemCode() {
+        return ResponseEntity.ok(RestBean.success(redeemService.listAvailable().stream().map(code -> code.asViewObject(RedeemCodeVO.class)).toList()));
+    }
+
+    @GetMapping("redeem/sold")
+    public ResponseEntity<RestBean<List<RedeemCodeVO>>> listSold() {
+        return ResponseEntity.ok(RestBean.success(redeemService.listSold().stream().map(code -> code.asViewObject(RedeemCodeVO.class)).toList()));
     }
 
     @DeleteMapping("redeem/destroy")
@@ -145,9 +156,10 @@ public class AdminController {
     }
 
     @NotNull
-    private RedeemCode generateOne(int day) {
+    private RedeemCode generateOne(int day, String reseller) {
         RedeemCode redeemCode = new RedeemCode();
         redeemCode.setDate(day);
+        redeemCode.setReseller((reseller != null) ? reseller : "DingZhen");
         redeemCode.setCode(UUID.randomUUID().toString());
         return redeemCode;
     }

@@ -28,6 +28,17 @@ public class RedeemServiceImpl implements RedeemService {
     }
 
     @Override
+    public boolean useCode(String code, String username) {
+        Optional<RedeemCode> redeemCode1 = redeemRepository.findByCode(code);
+        if (redeemCode1.isEmpty()) return false;
+        RedeemCode redeemCode = redeemCode1.get();
+        redeemCode.setAvailable(false);
+        redeemCode.setRedeemer(username);
+        redeemRepository.save(redeemCode);
+        return true;
+    }
+
+    @Override
     @Transactional
     public boolean removeCode(String code) {
         if (redeemRepository.findByCode(code).isEmpty()) return false;
@@ -38,5 +49,15 @@ public class RedeemServiceImpl implements RedeemService {
     @Override
     public List<RedeemCode> list() {
         return redeemRepository.findAll();
+    }
+
+    @Override
+    public List<RedeemCode> listAvailable() {
+        return redeemRepository.findAllByAvailable(true);
+    }
+
+    @Override
+    public List<RedeemCode> listSold() {
+        return redeemRepository.findAllByAvailable(false);
     }
 }

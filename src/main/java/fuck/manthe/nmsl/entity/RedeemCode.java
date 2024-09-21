@@ -14,11 +14,15 @@ import lombok.NoArgsConstructor;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class RedeemCode {
+public class RedeemCode implements BaseData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String code;
     private Integer date;
+
+    private String reseller;
+    private String redeemer;
+    private boolean available;
 }
