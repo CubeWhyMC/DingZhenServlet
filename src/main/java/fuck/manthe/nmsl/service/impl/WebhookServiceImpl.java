@@ -51,7 +51,7 @@ public class WebhookServiceImpl implements WebhookService {
     }
 
     @Override
-    public void push(WebhookEndpoint endpoint, String msgId, String payload) throws WebhookSigningException {
+    public boolean push(WebhookEndpoint endpoint, String msgId, String payload) throws WebhookSigningException {
         log.info("Pushing event {} to webhook {}", msgId, endpoint.getName());
         Webhook webhook = new Webhook(endpoint.getSecret());
         // sign payload
@@ -69,10 +69,13 @@ public class WebhookServiceImpl implements WebhookService {
                 if (execute.body() != null) {
                     log.debug(execute.body().string());
                 }
+                return true;
             }
         } catch (Exception e) {
             log.error("Failed to push event {} to webhook {}", msgId, endpoint.getName());
             log.error(e.getMessage(), e);
+            return false;
         }
+        return false;
     }
 }
