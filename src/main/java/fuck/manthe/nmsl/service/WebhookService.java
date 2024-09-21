@@ -1,6 +1,7 @@
 package fuck.manthe.nmsl.service;
 
 import com.standardwebhooks.exceptions.WebhookSigningException;
+import fuck.manthe.nmsl.entity.BaseWebhookMessage;
 import fuck.manthe.nmsl.entity.WebhookEndpoint;
 
 import java.util.List;
@@ -31,4 +32,9 @@ public interface WebhookService {
      * @param payload payload data
      * */
     boolean push(WebhookEndpoint endpoint, String msgId, String payload) throws WebhookSigningException;
+
+    /**
+     * Push a message to all webhooks
+     */
+    void pushAll(String msgId, BaseWebhookMessage payload) throws WebhookSigningException;
 }

@@ -101,4 +101,9 @@ public class CrackedUserServiceImpl implements CrackedUserService {
     public void removeExpired() {
         list().stream().filter((user) -> (user.getExpire() < System.currentTimeMillis() && user.getExpire() != -1)).forEach(this::removeUser);
     }
+
+    @Override
+    public CrackedUser findByUsername(String username) {
+        return userRepository.findByUsername(username).orElse(null);
+    }
 }

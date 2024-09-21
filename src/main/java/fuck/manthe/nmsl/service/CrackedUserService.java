@@ -25,4 +25,5 @@ public interface CrackedUserService {
 
     void removeExpired();
 
+    CrackedUser findByUsername(String username);
 }
