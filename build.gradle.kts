@@ -19,7 +19,7 @@ repositories {
 }
 
 dependencies {
-    implementation("cn.hutool:hutool-all:5.8.25")
+    implementation("cn.hutool:hutool-crypto:5.8.29")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.alibaba.fastjson2:fastjson2:2.0.52")
     implementation("com.alibaba.fastjson2:fastjson2-extension-spring6:2.0.52")
