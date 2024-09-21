@@ -1,7 +1,9 @@
 package fuck.manthe.nmsl.service.impl;
 
+import com.alibaba.fastjson2.JSON;
 import com.standardwebhooks.Webhook;
 import com.standardwebhooks.exceptions.WebhookSigningException;
+import fuck.manthe.nmsl.entity.BaseWebhookMessage;
 import fuck.manthe.nmsl.entity.WebhookEndpoint;
 import fuck.manthe.nmsl.repository.WebhookEndpointRepository;
 import fuck.manthe.nmsl.service.WebhookService;
@@ -77,5 +79,13 @@ public class WebhookServiceImpl implements WebhookService {
             return false;
         }
         return false;
+    }
+
+    @Override
+    public void pushAll(String msgId, BaseWebhookMessage payload) throws WebhookSigningException {
+        List<WebhookEndpoint> endpoints = list();
+        for (WebhookEndpoint endpoint : endpoints) {
+            push(endpoint, msgId, JSON.toJSONString(payload));
+        }
     }
 }

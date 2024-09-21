@@ -1,17 +1,19 @@
 package fuck.manthe.nmsl.controller;
 
 import cn.hutool.crypto.SecureUtil;
+import com.standardwebhooks.Webhook;
+import com.standardwebhooks.exceptions.WebhookSigningException;
 import fuck.manthe.nmsl.entity.*;
 import fuck.manthe.nmsl.entity.dto.VapeAuthorizeDTO;
+import fuck.manthe.nmsl.entity.webhook.UserInjectMessage;
+import fuck.manthe.nmsl.entity.webhook.UserRegisterMessage;
+import fuck.manthe.nmsl.entity.webhook.UserRenewMessage;
 import fuck.manthe.nmsl.service.*;
-import fuck.manthe.nmsl.service.impl.GatewayServiceImpl;
 import fuck.manthe.nmsl.utils.Const;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.log4j.Log4j2;
-import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -32,22 +34,28 @@ import java.util.Objects;
 public class AuthController {
     @Resource
     RedisTemplate<String, Long> redisTemplate;
+
     @Resource
     CrackedUserService crackedUserService;
+
     @Resource
     RedeemService redeemService;
 
     @Resource
-    OkHttpClient httpClient;
+    QueueService queueService;
 
     @Resource
-    QueueService queueService;
-    @Resource
     AnalysisService analysisService;
+
     @Resource
     VapeAccountService vapeAccountService;
+
+    @Resource
+    WebhookService webhookService;
+
     @Value("${share.cold-down.global.enabled}")
     boolean coldDownEnabled;
+
     @Resource
     private GatewayService gatewayService;
 
@@ -57,7 +65,6 @@ public class AuthController {
             // This servlet only response for gateway auth requests
             return "It's not you, it's us.";
         }
-
         String bodyParam = new String(request.getInputStream().readAllBytes());
         Map<String, String> map = decodeParam(bodyParam);
         String username = map.get("email");
@@ -101,6 +108,12 @@ public class AuthController {
             return "No account for you";
         }
         VapeAuthorizeDTO authorize = vapeAccountService.doAuth(vapeAccount);
+        // Push to webhook
+        UserInjectMessage message = new UserInjectMessage();
+        message.setContent("User %s inject".formatted(username));
+        message.setUsername(username);
+        message.setTimestamp(System.currentTimeMillis() / Webhook.SECOND_IN_MS);
+        webhookService.pushAll("inject", message);
         return authorize.getToken();
     }
 
@@ -118,8 +131,8 @@ public class AuthController {
         return map;
     }
 
-    @PostMapping("/redeem")
-    public ResponseEntity<RestBean<String>> register(@RequestParam String username, @RequestParam String password, @RequestParam String code) {
+    @PostMapping("redeem")
+    public ResponseEntity<RestBean<String>> register(@RequestParam String username, @RequestParam String password, @RequestParam String code) throws WebhookSigningException {
         RedeemCode redeemCode = redeemService.infoOrNull(code);
         if (redeemCode == null)
             return new ResponseEntity<>(RestBean.failure(404, "Code not found."), HttpStatus.NOT_FOUND);
@@ -129,9 +142,26 @@ public class AuthController {
         }
         if (crackedUserService.addUser(CrackedUser.builder().password(SecureUtil.sha1(password)).username(username).expire(expire).build())) {
             redeemService.removeCode(redeemCode.getCode());
+            // push to webhooks
+            UserRegisterMessage message = new UserRegisterMessage();
+            message.setRedeemUsername(username);
+            message.setTimestamp(System.currentTimeMillis() / Webhook.SECOND_IN_MS);
+            message.setCode(redeemCode.getCode());
+            message.setExpireAt(expire);
+            message.setContent("用户 %s 使用一个%s天兑换码 %s 注册了账户".formatted(username, redeemCode.getDate(), redeemCode.getCode()));
+            webhookService.pushAll("renew", message);
+
             return ResponseEntity.ok(RestBean.success("Registered."));
         } else if (crackedUserService.isValid(username, password) && crackedUserService.renewUser(username, redeemCode.getDate())) {
             redeemService.removeCode(redeemCode.getCode());
+            // Push to webhooks
+            UserRenewMessage message = new UserRenewMessage();
+            message.setRedeemUsername(username);
+            message.setTimestamp(System.currentTimeMillis() / Webhook.SECOND_IN_MS);
+            message.setCode(redeemCode.getCode());
+            message.setExpireAt(crackedUserService.findByUsername(username).getExpire());
+            message.setContent("用户 %s 使用%s 兑换了%s 天订阅".formatted(username, redeemCode.getCode(), redeemCode.getDate()));
+            webhookService.pushAll("renew", message);
             return ResponseEntity.ok(RestBean.success("Renewed."));
         }
         return new ResponseEntity<>(RestBean.failure(409, "User exists or wrong password"), HttpStatus.CONFLICT);
