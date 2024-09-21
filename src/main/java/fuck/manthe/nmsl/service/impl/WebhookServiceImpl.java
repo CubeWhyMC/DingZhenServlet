@@ -102,7 +102,11 @@ public class WebhookServiceImpl implements WebhookService {
     public void pushAll(String msgId, BaseWebhookMessage payload) throws WebhookSigningException {
         List<WebhookEndpoint> endpoints = list();
         for (WebhookEndpoint endpoint : endpoints) {
-            push(endpoint, msgId, JSON.toJSONString(payload));
+            try {
+                push(endpoint, msgId, JSON.toJSONString(payload));
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
         }
     }
 }
