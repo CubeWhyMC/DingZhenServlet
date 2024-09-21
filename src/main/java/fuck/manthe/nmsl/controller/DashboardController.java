@@ -48,4 +48,9 @@ public class DashboardController {
     public String vapeAccount() {
         return "dashboard/manage-vape-accounts";
     }
+
+    @GetMapping("webhook")
+    public String webhook() {
+        return "dashboard/webhook";
+    }
 }
