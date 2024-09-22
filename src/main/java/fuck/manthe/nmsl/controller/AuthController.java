@@ -140,6 +140,10 @@ public class AuthController {
         if (redeemCode.getDate() != -1) {
             expire = System.currentTimeMillis() + (long) redeemCode.getDate() * 24 * 60 * 60 * 1000;
         }
+        if (!redeemCode.isAvailable()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(RestBean.failure(401, "Code was redeemed"));
+        }
+
         if (crackedUserService.addUser(CrackedUser.builder().password(SecureUtil.sha1(password)).username(username).expire(expire).build())) {
             redeemService.useCode(redeemCode.getCode(), username);
             // push to webhooks
