@@ -7,7 +7,6 @@ import fuck.manthe.nmsl.entity.dto.*;
 import fuck.manthe.nmsl.entity.vo.WebhookEndpointVO;
 import fuck.manthe.nmsl.service.WebhookService;
 import jakarta.annotation.Resource;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,10 +57,8 @@ public class WebhookController {
     @PostMapping("{id}/test")
     public ResponseEntity<RestBean<String>> test(@PathVariable String id, @RequestBody TestWebhookDTO dto) throws Exception {
         WebhookEndpoint endpoint = webhookService.find(Long.parseLong(id));
-        if (webhookService.push(endpoint, "test", JSON.toJSONString(dto))) {
-            return ResponseEntity.ok(RestBean.success("Success"));
-        }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(RestBean.failure(500, "Internal Server Error"));
+        webhookService.push(endpoint, "test", JSON.toJSONString(dto));
+        return ResponseEntity.ok(RestBean.success("Pushed"));
     }
 
     @GetMapping("list")
