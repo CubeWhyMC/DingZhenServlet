@@ -18,6 +18,10 @@
                     <label class="mdui-textfield-label">数量</label>
                     <input class="mdui-textfield-input" type="number" id="count" min="1"/>
                 </div>
+                <div class="mdui-textfield">
+                    <label class="mdui-textfield-label">分销商</label>
+                    <input class="mdui-textfield-input" id="reseller" min="1" type="number"/>
+                </div>
             </div>
             <div class="mdui-card-actions">
                 <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="generateCodes()">生成激活码</button>
@@ -45,6 +49,7 @@ const adminPassword = localStorage.getItem('adminPassword');
 function generateCodes() {
     const days = parseInt(document.getElementById('days').value);
     const count = parseInt(document.getElementById('count').value);
+    const reseller = document.getElementById('reseller').value;
 
     if (days <= 0) {
         mdui.alert('天数必须大于 0');
@@ -56,7 +61,7 @@ function generateCodes() {
         return;
     }
 
-    fetch(`/admin/redeem/gen?count=${count}&day=${days}`, {
+    fetch(`/admin/redeem/gen?count=${count}&day=${days}&reseller=${reseller}`, {
         method: 'POST',
         headers: {
             'X-Admin-Password': adminPassword
@@ -78,7 +83,7 @@ function generateCodes() {
 }
 
 function fetchCodes() {
-    fetch('/admin/redeem/list', {
+    fetch('/admin/redeem/available', {
         method: 'GET',
         headers: {
             'X-Admin-Password': adminPassword
@@ -97,7 +102,7 @@ function fetchCodes() {
                         <input type="checkbox" value="${code.code}"/>
                         <i class="mdui-checkbox-icon"></i>
                     </label>
-                    <div class="mdui-list-item-content">${code.code} (${code.date}天)</div>
+                    <div class="mdui-list-item-content">${code.code} (${code.date}天, ${code.reseller})</div>
                     <button class="mdui-btn mdui-btn-icon mdui-ripple" onclick="confirmDeleteCode('${code.code}')">
                         <i class="mdui-icon material-icons">delete</i>
                     </button>

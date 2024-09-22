@@ -160,6 +160,7 @@ public class AdminController {
         RedeemCode redeemCode = new RedeemCode();
         redeemCode.setDate(day);
         redeemCode.setReseller((reseller != null) ? reseller : "DingZhen");
+        redeemCode.setAvailable(true);
         redeemCode.setCode(UUID.randomUUID().toString());
         return redeemCode;
     }
