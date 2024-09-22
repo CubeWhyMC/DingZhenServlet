@@ -19,6 +19,7 @@ public class RedeemCode implements BaseData {
     private String code;
     private Integer date;
 
+    @Builder.Default
     private String reseller = "DingZhen";
     private String redeemer;
     @Column(name = "IS_AVAILABLE")
