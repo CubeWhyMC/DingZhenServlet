@@ -9,6 +9,8 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<CrackedUser, Long> {
     Optional<CrackedUser> findByUsername(String username);
+
     boolean existsByUsername(String username);
+
     void deleteByUsername(String username);
 }

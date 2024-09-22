@@ -17,4 +17,6 @@ public interface RedeemService {
     List<RedeemCode> listAvailable();
 
     List<RedeemCode> listSold();
+
+    void deleteByRedeemer(String username);
 }

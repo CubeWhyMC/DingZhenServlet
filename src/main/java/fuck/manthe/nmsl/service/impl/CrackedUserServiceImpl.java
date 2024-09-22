@@ -5,6 +5,7 @@ import fuck.manthe.nmsl.entity.CrackedUser;
 import fuck.manthe.nmsl.repository.UserRepository;
 import fuck.manthe.nmsl.service.AnalysisService;
 import fuck.manthe.nmsl.service.CrackedUserService;
+import fuck.manthe.nmsl.service.RedeemService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +15,13 @@ import java.util.Optional;
 @Service
 public class CrackedUserServiceImpl implements CrackedUserService {
     @Resource
-    private UserRepository userRepository;
+    UserRepository userRepository;
+
     @Resource
-    private AnalysisService analysisService;
+    AnalysisService analysisService;
+
+    @Resource
+    RedeemService redeemService;
 
     @Override
     public boolean isValid(String username, String password) {
@@ -40,7 +45,10 @@ public class CrackedUserServiceImpl implements CrackedUserService {
 
     @Override
     public void removeUser(String username) {
+        // delete user
         userRepository.deleteByUsername(username);
+        // delete redeemed codes
+        redeemService.deleteByRedeemer(username);
     }
 
     @Override

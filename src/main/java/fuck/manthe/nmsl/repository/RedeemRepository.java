@@ -16,4 +16,6 @@ public interface RedeemRepository extends JpaRepository<RedeemCode, Long> {
     void deleteByCode(String code);
 
     List<RedeemCode> findAllByAvailable(boolean state);
+
+    void deleteAllByRedeemer(String redeemer);
 }
