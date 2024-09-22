@@ -31,7 +31,7 @@ public interface WebhookService {
      * @param msgId event name
      * @param payload payload data
      * */
-    boolean push(WebhookEndpoint endpoint, String msgId, String payload) throws WebhookSigningException;
+    void push(WebhookEndpoint endpoint, String msgId, String payload) throws WebhookSigningException;
 
     /**
      * Push a message to all webhooks

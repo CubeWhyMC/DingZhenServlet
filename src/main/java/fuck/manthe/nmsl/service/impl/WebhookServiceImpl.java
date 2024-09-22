@@ -11,9 +11,11 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.*;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -67,35 +69,38 @@ public class WebhookServiceImpl implements WebhookService {
     }
 
     @Override
-    public boolean push(WebhookEndpoint endpoint, String msgId, String payload) throws WebhookSigningException {
+    public void push(WebhookEndpoint endpoint, String msgId, String payload) throws WebhookSigningException {
         if (!webhookState) {
-            return false;
+            return;
         }
         log.info("Pushing event {} to webhook {}", msgId, endpoint.getName());
         Webhook webhook = new Webhook(endpoint.getSecret());
         // sign payload
         long now = System.currentTimeMillis() / Webhook.SECOND_IN_MS;
         String sign = webhook.sign(msgId, now, payload);
-        try (Response execute = okHttpClient.newCall(new Request.Builder()
+        okHttpClient.newCall(new Request.Builder()
                 .url(endpoint.getUrl())
                 .post(RequestBody.create(payload, MediaType.parse("application/json")))
                 .header("webhook-id", msgId)
                 .header("webhook-signature", sign)
                 .header("webhook-timestamp", String.valueOf(now))
-                .build()).execute()) {
-            if (execute.isSuccessful()) {
-                log.info("Successfully pushed event {} to webhook {}", msgId, endpoint.getName());
-                if (execute.body() != null) {
-                    log.debug(execute.body().string());
+                .build()).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    log.info("Successfully pushed event {} to webhook {}", msgId, endpoint.getName());
+                    if (response.body() != null) {
+                        log.debug(response.body().string());
+                    }
                 }
-                return true;
             }
-        } catch (Exception e) {
-            log.error("Failed to push event {} to webhook {}", msgId, endpoint.getName());
-            log.error(e.getMessage(), e);
-            return false;
-        }
-        return false;
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                log.error("Failed to push event {} to webhook {}", msgId, endpoint.getName());
+                log.error(e.getMessage(), e);
+            }
+        });
     }
 
     @Override
