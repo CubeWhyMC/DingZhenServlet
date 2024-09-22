@@ -60,4 +60,10 @@ public class RedeemServiceImpl implements RedeemService {
     public List<RedeemCode> listSold() {
         return redeemRepository.findAllByAvailable(false);
     }
+
+    @Override
+    @Transactional
+    public void deleteByRedeemer(String username) {
+        redeemRepository.deleteAllByRedeemer(username);
+    }
 }
