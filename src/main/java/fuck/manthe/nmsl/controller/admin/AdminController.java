@@ -2,11 +2,9 @@ package fuck.manthe.nmsl.controller.admin;
 
 import cn.hutool.crypto.SecureUtil;
 import fuck.manthe.nmsl.entity.CrackedUser;
-import fuck.manthe.nmsl.entity.RedeemCode;
 import fuck.manthe.nmsl.entity.RestBean;
 import fuck.manthe.nmsl.entity.dto.AnalysisDTO;
 import fuck.manthe.nmsl.entity.dto.CrackedUserDTO;
-import fuck.manthe.nmsl.entity.vo.RedeemCodeVO;
 import fuck.manthe.nmsl.service.AnalysisService;
 import fuck.manthe.nmsl.service.CrackedUserService;
 import fuck.manthe.nmsl.service.RedeemService;
@@ -14,7 +12,6 @@ import fuck.manthe.nmsl.utils.Const;
 import jakarta.annotation.Resource;
 import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -22,9 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @RequestMapping("/admin")
 @RestController
@@ -68,40 +63,6 @@ public class AdminController {
         log.info("Inject cold down was reset.");
         redisTemplate.opsForValue().set(Const.COLD_DOWN, System.currentTimeMillis());
         return ResponseEntity.ok(RestBean.success("Reset CD."));
-    }
-
-    @PostMapping("redeem/gen")
-    public ResponseEntity<RestBean<List<RedeemCode>>> generateRedeemCode(@RequestParam int count, @RequestParam int day, @RequestParam(required = false) String reseller) {
-        List<RedeemCode> result = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            RedeemCode code = generateOne(day, reseller);
-            redeemService.addCode(code);
-            result.add(code);
-        }
-        return ResponseEntity.ok(RestBean.success(result));
-    }
-
-    @GetMapping("redeem/list")
-    public ResponseEntity<RestBean<List<RedeemCodeVO>>> redeemCodeList() {
-        return ResponseEntity.ok(RestBean.success(redeemService.list().stream().map(code -> code.asViewObject(RedeemCodeVO.class)).toList()));
-    }
-
-    @GetMapping("redeem/available")
-    public ResponseEntity<RestBean<List<RedeemCodeVO>>> availableRedeemCode() {
-        return ResponseEntity.ok(RestBean.success(redeemService.listAvailable().stream().map(code -> code.asViewObject(RedeemCodeVO.class)).toList()));
-    }
-
-    @GetMapping("redeem/sold")
-    public ResponseEntity<RestBean<List<RedeemCodeVO>>> listSold() {
-        return ResponseEntity.ok(RestBean.success(redeemService.listSold().stream().map(code -> code.asViewObject(RedeemCodeVO.class)).toList()));
-    }
-
-    @DeleteMapping("redeem/destroy")
-    public ResponseEntity<RestBean<String>> destroyRedeemCode(@RequestParam String code) {
-        if (redeemService.removeCode(code)) {
-            return ResponseEntity.ok(RestBean.success("Success"));
-        }
-        return new ResponseEntity<>(RestBean.failure(404, "Code not found"), HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("renew/{username}")
@@ -154,16 +115,6 @@ public class AdminController {
     public String logSuper() {
         // code is in Filter
         return "Logged super-admin password in console.";
-    }
-
-    @NotNull
-    private RedeemCode generateOne(int day, String reseller) {
-        RedeemCode redeemCode = new RedeemCode();
-        redeemCode.setDate(day);
-        redeemCode.setReseller((reseller != null) ? reseller : "DingZhen");
-        redeemCode.setAvailable(true);
-        redeemCode.setCode(UUID.randomUUID().toString());
-        return redeemCode;
     }
 
     @Scheduled(cron = "0 0 0 * * *")
