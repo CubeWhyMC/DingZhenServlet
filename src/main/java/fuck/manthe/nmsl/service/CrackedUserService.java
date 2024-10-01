@@ -7,6 +7,8 @@ import java.util.List;
 public interface CrackedUserService {
     boolean isValid(String username, String password);
 
+    boolean isValidHash(String username, String password);
+
     boolean addUser(CrackedUser user);
 
     void removeUser(String username);

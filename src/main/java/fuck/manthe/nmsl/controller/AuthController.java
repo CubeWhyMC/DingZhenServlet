@@ -4,6 +4,7 @@ import cn.hutool.crypto.SecureUtil;
 import com.standardwebhooks.exceptions.WebhookSigningException;
 import fuck.manthe.nmsl.entity.*;
 import fuck.manthe.nmsl.entity.dto.VapeAuthorizeDTO;
+import fuck.manthe.nmsl.entity.dto.VerifyLoginDTO;
 import fuck.manthe.nmsl.entity.webhook.UserInjectMessage;
 import fuck.manthe.nmsl.entity.webhook.UserRegisterMessage;
 import fuck.manthe.nmsl.entity.webhook.UserRenewMessage;
@@ -17,10 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -180,8 +178,8 @@ public class AuthController {
     }
 
     @GetMapping("/verify")
-    public ResponseEntity<String> verify(@RequestParam String username, @RequestParam String password) {
-        if (!crackedUserService.isValid(username, password) || crackedUserService.hasExpired(username)) {
+    public ResponseEntity<String> verify(@RequestBody VerifyLoginDTO dto) {
+        if (!crackedUserService.isValidHash(dto.getUsername(), dto.getHashedPassword()) || crackedUserService.hasExpired(dto.getUsername())) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         return ResponseEntity.ok("Valid user");

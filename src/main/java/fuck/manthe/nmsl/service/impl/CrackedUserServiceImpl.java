@@ -25,10 +25,15 @@ public class CrackedUserServiceImpl implements CrackedUserService {
 
     @Override
     public boolean isValid(String username, String password) {
+        return isValidHash(username, SecureUtil.sha1(password));
+    }
+
+    @Override
+    public boolean isValidHash(String username, String password) {
         Optional<CrackedUser> optional = userRepository.findByUsername(username);
         if (optional.isPresent()) {
             CrackedUser user = optional.get();
-            return user.getPassword().equals(SecureUtil.sha1(password));
+            return user.getPassword().equals(password);
         }
         return false;
     }
