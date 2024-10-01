@@ -8,6 +8,6 @@ public enum ErrorCode {
     QUEUE; // 排队
 
     public String formatError(String message) {
-        return this.name().substring(0, 1).toUpperCase() + ") " + message;
+        return this.name().substring(0, 1).toUpperCase() + "-" + message;
     }
 }
