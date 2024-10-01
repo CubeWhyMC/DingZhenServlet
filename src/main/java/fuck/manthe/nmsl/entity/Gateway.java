@@ -1,7 +1,6 @@
 package fuck.manthe.nmsl.entity;
 
 import fuck.manthe.nmsl.annotation.Encrypted;
-import fuck.manthe.nmsl.conventer.CryptConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

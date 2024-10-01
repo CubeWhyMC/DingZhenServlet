@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface RedeemService {
     RedeemCode infoOrNull(String code);
+
     void addCode(RedeemCode code);
 
     boolean useCode(String code, String username);

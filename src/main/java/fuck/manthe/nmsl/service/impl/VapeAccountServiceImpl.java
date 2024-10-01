@@ -7,7 +7,6 @@ import fuck.manthe.nmsl.repository.VapeAccountRepository;
 import fuck.manthe.nmsl.service.VapeAccountService;
 import fuck.manthe.nmsl.utils.Const;
 import fuck.manthe.nmsl.utils.CryptUtil;
-import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
@@ -17,7 +16,6 @@ import okhttp3.Request;
 import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.BadPaddingException;

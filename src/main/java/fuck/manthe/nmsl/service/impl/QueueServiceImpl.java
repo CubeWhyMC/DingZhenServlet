@@ -1,13 +1,10 @@
 package fuck.manthe.nmsl.service.impl;
 
-import fuck.manthe.nmsl.entity.RestBean;
 import fuck.manthe.nmsl.service.QueueService;
 import fuck.manthe.nmsl.utils.Const;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +17,7 @@ public class QueueServiceImpl implements QueueService {
 
     @Value("${share.cold-down.queue.state}")
     boolean queueState;
-    
+
     @Override
     public List<String> query() {
         return redisTemplate.opsForList().range(Const.QUEUE, 0, -1);
@@ -47,7 +44,7 @@ public class QueueServiceImpl implements QueueService {
 
     @Override
     public boolean isNext(String username) {
-        return Objects.requireNonNull(redisTemplate.opsForList().range(Const.QUEUE, -1, -1)).equals(username);
+        return Objects.requireNonNull(redisTemplate.opsForList().range(Const.QUEUE, -1, -1)).get(0).equals(username);
     }
 
     @Override

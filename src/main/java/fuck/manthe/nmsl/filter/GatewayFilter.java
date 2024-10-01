@@ -1,7 +1,6 @@
 package fuck.manthe.nmsl.filter;
 
 import fuck.manthe.nmsl.service.GatewayService;
-import fuck.manthe.nmsl.service.impl.GatewayServiceImpl;
 import jakarta.annotation.Resource;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,6 +18,7 @@ import java.io.IOException;
 public class GatewayFilter implements Filter {
     @Value("${service.gateway.key}")
     String gatewayKey;
+
     @Value("${service.gateway.always}")
     boolean alwaysEnableGateway;
 
