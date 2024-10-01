@@ -1,25 +1,31 @@
 package fuck.manthe.nmsl.controller.admin;
 
+import com.standardwebhooks.exceptions.WebhookSigningException;
 import fuck.manthe.nmsl.entity.RestBean;
 import fuck.manthe.nmsl.entity.VapeAccount;
+import fuck.manthe.nmsl.entity.dto.PauseInjectDTO;
 import fuck.manthe.nmsl.entity.dto.VapeAccountDTO;
 import fuck.manthe.nmsl.entity.vo.VapeAccountVO;
+import fuck.manthe.nmsl.entity.webhook.PauseInjectMessage;
 import fuck.manthe.nmsl.service.VapeAccountService;
-import fuck.manthe.nmsl.utils.CryptUtil;
+import fuck.manthe.nmsl.service.WebhookService;
 import jakarta.annotation.Resource;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Log4j2
 @RestController
 @RequestMapping("/admin/shared")
 public class VapeAccountAdminController {
     @Resource
     VapeAccountService vapeAccountService;
+
     @Resource
-    CryptUtil cryptUtil;
+    WebhookService webhookService;
 
     @GetMapping("list")
     public RestBean<List<VapeAccountVO>> list() {
@@ -68,6 +74,24 @@ public class VapeAccountAdminController {
     @PostMapping("resetColddown")
     public RestBean<String> resetColdDown(@RequestParam String username) {
         vapeAccountService.resetColdDown(vapeAccountService.findByUsername(username));
+        return RestBean.success("Success");
+    }
+
+    @PostMapping("pauseInject")
+    public RestBean<String> pauseLogin(@RequestBody PauseInjectDTO dto) throws WebhookSigningException {
+        // Push to webhooks
+        PauseInjectMessage message = new PauseInjectMessage(dto.isInjectEnabled());
+        message.setTimestamp(System.currentTimeMillis() / 1000L);
+        message.setState(dto.isInjectEnabled());
+        webhookService.pushAll("pause-inject", message);
+
+        vapeAccountService.pauseInject(dto.isInjectEnabled());
+        if (!dto.isInjectEnabled()) {
+            log.info("Injecting vape was limited to lifetime users only.");
+        } else {
+            log.info("Unlimited injecting.");
+        }
+
         return RestBean.success("Success");
     }
 }

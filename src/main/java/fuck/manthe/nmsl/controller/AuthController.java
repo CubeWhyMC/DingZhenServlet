@@ -56,11 +56,17 @@ public class AuthController {
     @Resource
     private GatewayService gatewayService;
 
-    @PostMapping("/auth.php")
+    @GetMapping("paused")
+    public RestBean<Boolean> paused() {
+        return RestBean.success(vapeAccountService.isPaused());
+    }
+
+    @PostMapping("auth.php")
     public String auth(HttpServletRequest request) throws Exception {
+        // Error message format: ERR CODE) MESSAGE
         if (gatewayService.isPureGateway()) {
             // This servlet only response for gateway auth requests
-            return "It's not you, it's us.";
+            return ErrorCode.SERVER.formatError("It's not you, it's us.");
         }
         String bodyParam = new String(request.getInputStream().readAllBytes());
         Map<String, String> map = decodeParam(bodyParam);
@@ -70,17 +76,26 @@ public class AuthController {
         // 统计请求次数
         analysisService.authRequested(username);
         if (!crackedUserService.isValid(username, password)) {
-            return "Unauthorized";
+            // 凭证错误
+            return ErrorCode.ACCOUNT.formatError("Unauthorized");
         }
         if (crackedUserService.hasExpired(username)) {
-            return "Expired";
+            // 账户失效
+            return ErrorCode.ACCOUNT.formatError("Expired");
         }
         if (coldDownEnabled && Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.COLD_DOWN), 0L) > System.currentTimeMillis()) {
-            return "G) Inject colddown";
+            // 公共冷却
+            return ErrorCode.GLOBAL_COLD_DOWN.formatError("Inject colddown");
         }
         // 排队机制
         if (queueService.state() && !queueService.isNext(username)) {
-            return "Not your turn";
+            // 排队
+            return ErrorCode.QUEUE.formatError("Not your turn");
+        }
+        CrackedUser crackedUser = crackedUserService.findByUsername(username);
+        if (vapeAccountService.isPaused() && crackedUser.getExpire() != -1) {
+            // 暂停注入
+            return ErrorCode.SERVER.formatError("Paused");
         }
         // Get an account from database
         log.info("User {} tried to inject!", username);
@@ -102,7 +117,8 @@ public class AuthController {
         // 在这个服务器处理登录
         VapeAccount vapeAccount = vapeAccountService.getOne();
         if (vapeAccount == null) {
-            return "P) Inject colddown";
+            // 每个账户的冷却
+            return ErrorCode.PRE_ACCOUNT_COLD_DOWN.formatError("Inject cold down");
         }
         VapeAuthorizeDTO authorize = vapeAccountService.doAuth(vapeAccount);
         // Push to webhook
@@ -129,7 +145,7 @@ public class AuthController {
     }
 
     @PostMapping("redeem")
-    public ResponseEntity<RestBean<String>> register(@RequestParam String username, @RequestParam String password, @RequestParam String code) throws WebhookSigningException {
+    public ResponseEntity<RestBean<String>> redeem(@RequestParam String username, @RequestParam String password, @RequestParam String code) throws WebhookSigningException {
         RedeemCode redeemCode = redeemService.infoOrNull(code);
         if (redeemCode == null)
             return new ResponseEntity<>(RestBean.failure(404, "Code not found."), HttpStatus.NOT_FOUND);
@@ -172,12 +188,20 @@ public class AuthController {
         return new ResponseEntity<>(RestBean.failure(409, "User exists or wrong password"), HttpStatus.CONFLICT);
     }
 
-    @GetMapping("/check")
+    @GetMapping("check")
     public String checkConnection() {
         return "OK";
     }
 
-    @GetMapping("/verify")
+    @GetMapping("verify")
+    public ResponseEntity<String> verify(@RequestParam String username, @RequestParam String password) {
+        if (!crackedUserService.isValid(username, password) || crackedUserService.hasExpired(username)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        return ResponseEntity.ok("Valid user");
+    }
+
+    @PostMapping("verify")
     public ResponseEntity<String> verify(@RequestBody VerifyLoginDTO dto) {
         if (!crackedUserService.isValidHash(dto.getUsername(), dto.getHashedPassword()) || crackedUserService.hasExpired(dto.getUsername())) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
