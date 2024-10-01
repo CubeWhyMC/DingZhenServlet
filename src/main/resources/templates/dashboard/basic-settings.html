@@ -14,8 +14,23 @@
                 <p>点击下方按钮重置注入冷却。</p>
             </div>
             <div class="mdui-card-actions">
-                <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="restartSystem()">
+                <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent"
+                        onclick="resetGlobalColdDown()">
                     重置
+                </button>
+            </div>
+        </div>
+        <div class="mdui-card">
+            <div class="mdui-card-primary">
+                <div class="mdui-card-primary-title">暂停注入</div>
+                <div class="mdui-card-primary-subtitle">操作后只有永久用户可以注入</div>
+            </div>
+            <div class="mdui-card-content">
+                <p>点击下方按钮<span id="injectState" style="color: red">加载中... (如果卡住请重新登录)</span>注入</p>
+            </div>
+            <div class="mdui-card-actions">
+                <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="toggleInject()">
+                    操作
                 </button>
             </div>
         </div>
@@ -23,10 +38,12 @@
 </div>
 
 <script>
-    function restartSystem() {
+    let injectState = true;
+
+    function resetGlobalColdDown() {
         const adminPassword = localStorage.getItem('adminPassword');
 
-        mdui.confirm('确定要重置注入冷却吗？', '重启确认',
+        mdui.confirm('确定要重置注入冷却吗？', '重置确认',
             function () {
                 fetch('/admin/colddown/reset', {
                     method: 'POST',
@@ -36,7 +53,7 @@
                 })
                     .then(response => response.json())
                     .then(data => {
-                        if (data.success) {
+                        if (data.code === 200) {
                             mdui.alert('CD重置成功');
                         } else {
                             mdui.alert('CD重置失败: ' + data.message);
@@ -55,4 +72,64 @@
             }
         );
     }
+
+    function pauseInjectText() {
+        if (injectState) {
+            return "暂停";
+        }
+        return "允许";
+    }
+
+    function loadInjectState() {
+        fetch("/paused", {
+            method: 'GET',
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.code === 200) {
+                    injectState = data.data
+                    document.getElementById("injectState").innerText = pauseInjectText()
+                }
+            });
+    }
+
+    function toggleInject() {
+        const adminPassword = localStorage.getItem('adminPassword');
+
+        mdui.confirm(`确定要${pauseInjectText()}注入吗?`, '确认',
+            function () {
+                fetch('/admin/shared/pauseInject', {
+                    method: 'POST',
+                    headers: {
+                        'X-Admin-Password': adminPassword,
+                        'Content-Type': "application/json"
+                    },
+                    body: JSON.stringify({
+                        injectEnabled: !injectState
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.code === 200) {
+                            loadInjectState()
+                            mdui.alert('切换成功');
+                        } else {
+                            mdui.alert('切换失败: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        mdui.alert('请求失败，请稍后再试');
+                    });
+            },
+            function () {
+            },
+            {
+                confirmText: '确定切换',
+                cancelText: '取消'
+            }
+        );
+    }
+
+    loadInjectState();
 </script>

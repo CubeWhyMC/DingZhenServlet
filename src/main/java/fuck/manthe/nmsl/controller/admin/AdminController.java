@@ -7,7 +7,6 @@ import fuck.manthe.nmsl.entity.dto.AnalysisDTO;
 import fuck.manthe.nmsl.entity.dto.CrackedUserDTO;
 import fuck.manthe.nmsl.service.AnalysisService;
 import fuck.manthe.nmsl.service.CrackedUserService;
-import fuck.manthe.nmsl.service.RedeemService;
 import fuck.manthe.nmsl.utils.Const;
 import jakarta.annotation.Resource;
 import jakarta.transaction.Transactional;
@@ -30,9 +29,6 @@ public class AdminController {
 
     @Resource
     CrackedUserService crackedUserService;
-
-    @Resource
-    RedeemService redeemService;
 
     @Resource
     AnalysisService analysisService;

@@ -19,6 +19,15 @@ public interface VapeAccountService {
 
     void resetColdDown(VapeAccount account);
 
+    /**
+     * 只允许永久用户注入
+     * 普通用户注入会直接报错
+     *
+     * @param state new state
+     */
+    void pauseInject(boolean state);
+
+    boolean isPaused();
 
     boolean addAccount(VapeAccount account);
 
@@ -38,6 +47,8 @@ public interface VapeAccountService {
      * Fetch token from the real auth server
      *
      * @param account vape account cert
+     *
+     * @return Vape authorize data
      */
     VapeAuthorizeDTO doAuth(VapeAccount account);
 

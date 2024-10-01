@@ -30,23 +30,32 @@ import java.util.List;
 public class VapeAccountServiceImpl implements VapeAccountService {
     @Value("${share.cold-down.pre-account.during-max}")
     int coldDownMax;
+
     @Value("${share.cold-down.pre-account.during-min}")
     int coldDownMin;
 
     @Value("${share.cold-down.global.during-max}")
     int globalMaxColdDown;
+
     @Value("${share.cold-down.global.during-min}")
     int globalMinColdDown;
 
+
     @Resource
     RedisTemplate<String, Long> redisTemplate;
+
+    @Resource
+    RedisTemplate<String, Boolean> booleanRedisTemplate;
+
     @Resource
     VapeAccountRepository vapeAccountRepository;
+
     @Resource
     CryptUtil cryptUtil;
 
     @Resource
     OkHttpClient httpClient;
+
     @Value("${share.cold-down.global.enabled}")
     boolean coldDownEnabled;
 
@@ -81,6 +90,16 @@ public class VapeAccountServiceImpl implements VapeAccountService {
         }
         log.info("Reset shared account {} cold down", account.getUsername());
         redisTemplate.opsForValue().set(Const.ACCOUNT_COLD_DOWN + account.getId(), System.currentTimeMillis());
+    }
+
+    @Override
+    public void pauseInject(boolean state) {
+        booleanRedisTemplate.opsForValue().set(Const.PAUSE_INJECT, state);
+    }
+
+    @Override
+    public boolean isPaused() {
+        return Boolean.TRUE.equals(booleanRedisTemplate.opsForValue().get(Const.PAUSE_INJECT));
     }
 
     @Override
