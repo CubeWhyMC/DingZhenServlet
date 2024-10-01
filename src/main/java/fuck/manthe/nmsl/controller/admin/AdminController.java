@@ -146,6 +146,7 @@ public class AdminController {
                 .username(user.getUsername())
                 .expire(user.getExpire())
                 .totalLaunch(analysisService.getTotalLaunch(user.getUsername()))
+                .lastLaunch(analysisService.getLastLaunch(user.getUsername()))
                 .build()).toList();
     }
 

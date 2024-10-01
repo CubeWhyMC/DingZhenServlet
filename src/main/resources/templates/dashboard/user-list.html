@@ -10,6 +10,7 @@
             <th>用户名</th>
             <th>剩余天数</th>
             <th>失效时间</th>
+            <th>上次注入时间</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -38,6 +39,18 @@
             });
     }
 
+    function formatDate(timestamp) {
+        let date = new Date(timestamp)
+        let year = date.getFullYear();
+        let month = (date.getMonth() + 1).toString().padStart(2, '0');
+        let day = date.getDate().toString().padStart(2, '0');
+        let hours = date.getHours().toString().padStart(2, '0');
+        let minutes = date.getMinutes().toString().padStart(2, '0');
+        let seconds = date.getSeconds().toString().padStart(2, '0');
+
+        return `${year}年${month}月${day}日 ${hours}:${minutes}:${seconds}`;
+    }
+
     // 渲染用户列表
     function renderUserList(users) {
         const tableBody = document.getElementById('user-table-body');
@@ -49,20 +62,17 @@
             if (user.expire === -1) expire = "无限时长";
             else if (user.expire < Date.now()) expire = `已过期 ${Math.abs(parseFloat(expire))} 天`;
             // 到期时间
-            let date = new Date(user.expire)
-            let year = date.getFullYear();
-            let month = (date.getMonth() + 1).toString().padStart(2, '0');
-            let day = date.getDate().toString().padStart(2, '0');
-            let hours = date.getHours().toString().padStart(2, '0');
-            let minutes = date.getMinutes().toString().padStart(2, '0');
-            let seconds = date.getSeconds().toString().padStart(2, '0');
+            let expire1 = formatDate(user.expire);
+            let lastInject = formatDate(user.lastLaunch);
 
-            let expire1 = `${year}年${month}月${day}日 ${hours}:${minutes}:${seconds}`;
             if (user.expire === -1) expire1 = "好像到期不了";
+            if (user.lastLaunch === -1) lastInject = "没用过";
+
             row.innerHTML = `
                 <td>${user.username}</td>
                 <td>${expire}</td>
                 <td>${expire1}</td>
+                <td>${lastInject}</td>
                 <td>
                     <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-blue" onclick="changePassword('${user.username}')">修改密码</button>
                     <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="addDays('${user.username}')" ${user.expire === -1 ? 'hidden' : ''}>增加天数</button>
