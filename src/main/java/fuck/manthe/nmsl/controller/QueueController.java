@@ -6,7 +6,6 @@ import fuck.manthe.nmsl.service.CrackedUserService;
 import fuck.manthe.nmsl.service.QueueService;
 import jakarta.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +16,8 @@ import java.util.List;
 @RequestMapping("colddown/queue")
 public class QueueController {
     @Resource
-    RedisTemplate<String, String> redisTemplate;
-    @Resource
     CrackedUserService crackedUserService;
+
     @Resource
     QueueService queueService;
 
@@ -41,7 +39,8 @@ public class QueueController {
     @DeleteMapping("quit")
     public @NotNull ResponseEntity<RestBean<String>> quit(@RequestBody LoginDTO login) {
         // 不想玩了可以直接取消名额.
-        if (!crackedUserService.isValid(login.getUsername(), login.getPassword())) return new ResponseEntity<>(RestBean.failure(403, "Unauthorized"), HttpStatus.UNAUTHORIZED);
+        if (!crackedUserService.isValid(login.getUsername(), login.getPassword()))
+            return new ResponseEntity<>(RestBean.failure(403, "Unauthorized"), HttpStatus.UNAUTHORIZED);
         queueService.quit(login.getUsername());
         return ResponseEntity.ok(RestBean.success("Removed " + login.getUsername() + " from queue."));
     }

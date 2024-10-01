@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 public interface VapeAccountRepository extends JpaRepository<VapeAccount, Long> {
 
     boolean existsByUsername(String username);
+
     VapeAccount findByUsername(String username);
+
     void deleteByUsername(String username);
 }

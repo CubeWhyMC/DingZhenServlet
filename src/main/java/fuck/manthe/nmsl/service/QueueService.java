@@ -4,10 +4,15 @@ import java.util.List;
 
 public interface QueueService {
     List<String> query();
+
     void quit(String username);
+
     boolean join(String username);
+
     boolean isInQueue(String username);
+
     boolean isNext(String username);
+
 
     boolean state();
 }

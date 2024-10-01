@@ -19,7 +19,7 @@ public class DashboardController {
         return "dashboard/add-user";
     }
 
-    @GetMapping(path = {"", "/","index"})
+    @GetMapping(path = {"", "/", "index"})
     public String index() {
         return "dashboard/index";
     }

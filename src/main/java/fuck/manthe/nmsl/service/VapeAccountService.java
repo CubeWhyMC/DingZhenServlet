@@ -12,14 +12,20 @@ import java.util.List;
 
 public interface VapeAccountService {
     VapeAccount getOne();
+
     boolean isColdDown(VapeAccount account);
+
     void markColdDown(VapeAccount account);
+
     void resetColdDown(VapeAccount account);
 
+
     boolean addAccount(VapeAccount account);
+
     boolean removeAccount(String account);
 
     boolean updatePassword(String username, String newPassword) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException;
+
     boolean updateHwid(String username, String newHwid);
 
     List<VapeAccount> listAccounts();

@@ -16,6 +16,7 @@ public interface GatewayService {
      * Check mode is gateway
      */
     boolean isPureGateway();
+
     boolean canUseGateway();
 
     void addGateway(Gateway gateway);

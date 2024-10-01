@@ -1,7 +1,6 @@
 package fuck.manthe.nmsl.config;
 
 import okhttp3.OkHttpClient;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

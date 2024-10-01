@@ -144,7 +144,9 @@ public class AuthController {
         }
 
         if (crackedUserService.addUser(CrackedUser.builder().password(SecureUtil.sha1(password)).username(username).expire(expire).build())) {
-            redeemService.useCode(redeemCode.getCode(), username);
+            if (redeemService.useCode(redeemCode.getCode(), username)) {
+                log.info("User {} registered it's account with the code {} ({}d).", username, redeemCode.getCode(), redeemCode.getDate());
+            }
             // push to webhooks
             UserRegisterMessage message = new UserRegisterMessage();
             message.setRedeemUsername(username);
@@ -156,7 +158,9 @@ public class AuthController {
 
             return ResponseEntity.ok(RestBean.success("Registered."));
         } else if (crackedUserService.isValid(username, password) && crackedUserService.renewUser(username, redeemCode.getDate())) {
-            redeemService.useCode(redeemCode.getCode(), username);
+            if (redeemService.useCode(redeemCode.getCode(), username)) {
+                log.info("User {} renewed it's account with the code {} ({}d).", username, redeemCode.getCode(), redeemCode.getDate());
+            }
             // Push to webhooks
             UserRenewMessage message = new UserRenewMessage();
             message.setRedeemUsername(username);
