@@ -10,8 +10,11 @@ import java.util.Objects;
 
 @Service
 public class AnalysisServiceImpl implements AnalysisService {
-    @Resource(shareable = false)
-    RedisTemplate<String, Long> redisTemplate;
+    @Resource
+    RedisTemplate<String, Integer> redisTemplate;
+
+    @Resource
+    RedisTemplate<String, Long> longRedisTemplate;
 
     @Override
     public void launchInvoked(String username) {
@@ -20,7 +23,7 @@ public class AnalysisServiceImpl implements AnalysisService {
         redisTemplate.opsForValue().increment(Const.TOTAL_LAUNCH);
         // pre user
         redisTemplate.opsForValue().increment(Const.TOTAL_LAUNCH_PRE_USER + username);
-        redisTemplate.opsForValue().set(Const.LAST_INJECT_TIME + username, System.currentTimeMillis());
+        longRedisTemplate.opsForValue().set(Const.LAST_INJECT_TIME + username, System.currentTimeMillis());
     }
 
     @Override
@@ -34,33 +37,33 @@ public class AnalysisServiceImpl implements AnalysisService {
     }
 
     @Override
-    public long getTodayLaunch() {
-        return Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.TODAY_LAUNCH), 0L);
+    public int getTodayLaunch() {
+        return Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.TODAY_LAUNCH), 0);
     }
 
     @Override
-    public long getTotalLaunch() {
-        return Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.TOTAL_LAUNCH), 0L);
+    public int getTotalLaunch() {
+        return Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.TOTAL_LAUNCH), 0);
     }
 
     @Override
-    public long getTotalLaunch(String username) {
-        return Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.TOTAL_LAUNCH_PRE_USER + username), 0L);
+    public int getTotalLaunch(String username) {
+        return Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.TOTAL_LAUNCH_PRE_USER + username), 0);
     }
 
     @Override
-    public long getTodayRegister() {
-        return Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.TODAY_REGISTER_USER), 0L);
+    public int getTodayRegister() {
+        return Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.TODAY_REGISTER_USER), 0);
     }
 
     @Override
     public void reset() {
-        redisTemplate.opsForValue().set(Const.TODAY_LAUNCH, 0L);
-        redisTemplate.opsForValue().set(Const.TODAY_REGISTER_USER, 0L);
+        redisTemplate.opsForValue().set(Const.TODAY_LAUNCH, 0);
+        redisTemplate.opsForValue().set(Const.TODAY_REGISTER_USER, 0);
     }
 
     @Override
     public long getLastLaunch(String username) {
-        return Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.LAST_INJECT_TIME + username), -1L);
+        return Objects.requireNonNullElse(longRedisTemplate.opsForValue().get(Const.LAST_INJECT_TIME + username), -1L);
     }
 }

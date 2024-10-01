@@ -7,8 +7,8 @@ import lombok.Data;
 @Builder
 @SuppressWarnings("unused")
 public class AnalysisDTO {
-    long todayLaunch;
+    int todayLaunch;
     long currentUsers;
-    long todayRegister;
-    long totalLaunch;
+    int todayRegister;
+    int totalLaunch;
 }

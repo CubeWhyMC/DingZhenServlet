@@ -7,13 +7,13 @@ public interface AnalysisService {
 
     void userRegistered();
 
-    long getTodayLaunch();
+    int getTodayLaunch();
 
-    long getTotalLaunch();
+    int getTotalLaunch();
 
-    long getTotalLaunch(String username);
+    int getTotalLaunch(String username);
 
-    long getTodayRegister();
+    int getTodayRegister();
 
     void reset();
 
