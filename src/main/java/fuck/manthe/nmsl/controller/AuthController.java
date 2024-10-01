@@ -72,8 +72,14 @@ public class AuthController {
         Map<String, String> map = decodeParam(bodyParam);
         String username = map.get("email");
         String password = map.get("password");
-        log.info("User {} login", username);
         // 统计请求次数
+        log.info("User {} login", username);
+        CrackedUser crackedUser = crackedUserService.findByUsername(username);
+        if (vapeAccountService.isPaused() && crackedUser.getExpire() != -1) {
+            // 暂停注入
+            log.info("Blocked user {} to inject. Injections are only open to lifetime users.", username);
+            return ErrorCode.SERVER.formatError("Paused");
+        }
         analysisService.authRequested(username);
         if (!crackedUserService.isValid(username, password)) {
             // 凭证错误
@@ -91,11 +97,6 @@ public class AuthController {
         if (queueService.state() && !queueService.isNext(username)) {
             // 排队
             return ErrorCode.QUEUE.formatError("Not your turn");
-        }
-        CrackedUser crackedUser = crackedUserService.findByUsername(username);
-        if (vapeAccountService.isPaused() && crackedUser.getExpire() != -1) {
-            // 暂停注入
-            return ErrorCode.SERVER.formatError("Paused");
         }
         // Get an account from database
         log.info("User {} tried to inject!", username);
