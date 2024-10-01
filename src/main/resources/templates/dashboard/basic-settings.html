@@ -105,7 +105,7 @@
                         'Content-Type': "application/json"
                     },
                     body: JSON.stringify({
-                        injectEnabled: !injectState
+                        injectEnabled: injectState
                     })
                 })
                     .then(response => response.json())
