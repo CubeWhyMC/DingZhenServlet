@@ -79,18 +79,19 @@ public class VapeAccountAdminController {
 
     @PostMapping("pauseInject")
     public RestBean<String> pauseLogin(@RequestBody PauseInjectDTO dto) throws WebhookSigningException {
-        // Push to webhooks
         PauseInjectMessage message = new PauseInjectMessage(dto.isInjectEnabled());
         message.setTimestamp(System.currentTimeMillis() / 1000L);
         message.setState(dto.isInjectEnabled());
-        webhookService.pushAll("pause-inject", message);
 
         vapeAccountService.pauseInject(dto.isInjectEnabled());
         if (!dto.isInjectEnabled()) {
+            message.setContent("已暂停注入,现在只有永久用户可以注入");
             log.info("Injecting vape was limited to lifetime users only.");
         } else {
+            message.setContent("已允许注入,现在所有人都可以注入");
             log.info("Unlimited injecting.");
         }
+        webhookService.pushAll("pause-inject", message); // push to webhooks
 
         return RestBean.success("Success");
     }
