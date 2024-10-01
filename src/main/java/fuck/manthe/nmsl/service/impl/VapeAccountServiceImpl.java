@@ -94,7 +94,7 @@ public class VapeAccountServiceImpl implements VapeAccountService {
 
     @Override
     public void pauseInject(boolean state) {
-        booleanRedisTemplate.opsForValue().set(Const.PAUSE_INJECT, state);
+        booleanRedisTemplate.opsForValue().set(Const.PAUSE_INJECT, !state);
     }
 
     @Override

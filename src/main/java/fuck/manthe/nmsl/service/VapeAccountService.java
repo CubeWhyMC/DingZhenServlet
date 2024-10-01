@@ -23,7 +23,7 @@ public interface VapeAccountService {
      * 只允许永久用户注入
      * 普通用户注入会直接报错
      *
-     * @param state new state
+     * @param state 是否允许注入
      */
     void pauseInject(boolean state);
 
