@@ -1,7 +1,6 @@
 package fuck.manthe.nmsl.controller;
 
 import cn.hutool.crypto.SecureUtil;
-import com.standardwebhooks.Webhook;
 import com.standardwebhooks.exceptions.WebhookSigningException;
 import fuck.manthe.nmsl.entity.*;
 import fuck.manthe.nmsl.entity.dto.VapeAuthorizeDTO;
@@ -79,7 +78,7 @@ public class AuthController {
             return "Expired";
         }
         if (coldDownEnabled && Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.COLD_DOWN), 0L) > System.currentTimeMillis()) {
-            return "Somebody is injecting";
+            return "G) Inject colddown";
         }
         // 排队机制
         if (queueService.state() && !queueService.isNext(username)) {
@@ -105,14 +104,14 @@ public class AuthController {
         // 在这个服务器处理登录
         VapeAccount vapeAccount = vapeAccountService.getOne();
         if (vapeAccount == null) {
-            return "No account for you";
+            return "P) Inject colddown";
         }
         VapeAuthorizeDTO authorize = vapeAccountService.doAuth(vapeAccount);
         // Push to webhook
         UserInjectMessage message = new UserInjectMessage();
         message.setContent("User %s inject".formatted(username));
         message.setUsername(username);
-        message.setTimestamp(System.currentTimeMillis() / Webhook.SECOND_IN_MS);
+        message.setTimestamp(System.currentTimeMillis() / 1000L);
         webhookService.pushAll("inject", message);
         return authorize.getToken();
     }
@@ -149,7 +148,7 @@ public class AuthController {
             // push to webhooks
             UserRegisterMessage message = new UserRegisterMessage();
             message.setRedeemUsername(username);
-            message.setTimestamp(System.currentTimeMillis() / Webhook.SECOND_IN_MS);
+            message.setTimestamp(System.currentTimeMillis() / 1000L);
             message.setCode(redeemCode.getCode());
             message.setExpireAt(expire);
             message.setContent("用户 %s 使用一个%s天兑换码 %s 注册了账户".formatted(username, redeemCode.getDate(), redeemCode.getCode()));
@@ -161,7 +160,7 @@ public class AuthController {
             // Push to webhooks
             UserRenewMessage message = new UserRenewMessage();
             message.setRedeemUsername(username);
-            message.setTimestamp(System.currentTimeMillis() / Webhook.SECOND_IN_MS);
+            message.setTimestamp(System.currentTimeMillis() / 1000L);
             message.setCode(redeemCode.getCode());
             message.setExpireAt(crackedUserService.findByUsername(username).getExpire());
             message.setContent("用户 %s 使用%s 兑换了%s 天订阅".formatted(username, redeemCode.getCode(), redeemCode.getDate()));
