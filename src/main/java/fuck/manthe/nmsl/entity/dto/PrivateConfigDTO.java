@@ -11,4 +11,6 @@ import java.util.Map;
 public class PrivateConfigDTO {
     List<String> friends;
     Map<String, CheatProfileDTO> profiles;
+    Object publicProfiles;
+    List<Object> otherData;
 }

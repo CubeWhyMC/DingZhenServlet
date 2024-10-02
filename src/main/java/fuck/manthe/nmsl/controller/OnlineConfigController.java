@@ -4,12 +4,13 @@ import fuck.manthe.nmsl.entity.VapeRestBean;
 import fuck.manthe.nmsl.entity.dto.AuthorizationDTO;
 import fuck.manthe.nmsl.entity.dto.GlobalConfigDTO;
 import fuck.manthe.nmsl.entity.dto.OnlineConfigDTO;
-import fuck.manthe.nmsl.entity.dto.PrivateConfigDTO;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/v1/{token}")
@@ -52,10 +53,13 @@ public class OnlineConfigController {
      * Private config
      */
     @GetMapping("profile/private/all")
-    public VapeRestBean<PrivateConfigDTO> privateConfig(@PathVariable String token) {
-        return VapeRestBean.success(PrivateConfigDTO.builder()
-                .friends(new ArrayList<>())
-                .profiles(new HashMap<>())
-                .build());
+    public void /*VapeRestBean<PrivateConfigDTO>*/ privateConfig(@PathVariable String token, HttpServletResponse response) throws IOException {
+//        return VapeRestBean.success(PrivateConfigDTO.builder()
+//                .friends(new ArrayList<>())
+//                .profiles(new HashMap<>())
+//                .build());
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getOutputStream().write(Objects.requireNonNull(this.getClass().getResourceAsStream("/fake-private-config.json")).readAllBytes());
     }
 }
