@@ -1,0 +1,3142 @@
+{
+  "data": {
+    "friends": [],
+    "profiles": {
+      "67f67036-5c4d-48f4-8bb1-b2b8f8a68431": {
+        "uuid": "1ca277ea-f8f0-4f9f-b811-441deabfecf2",
+        "profileId": "67f67036-5c4d-48f4-8bb1-b2b8f8a68431",
+        "ownerId": 300954,
+        "name": "default",
+        "vapeVersion": "4.15",
+        "data": {
+          "modules": [
+            {
+              "name": "AutoClicker",
+              "keybinds_2": [
+                82
+              ],
+              "values": [
+                {
+                  "id": "Break blocks",
+                  "value": "true"
+                },
+                {
+                  "id": "Break blocks-Break blocks whitelist-autoclicker-blockbreak-items",
+                  "value": [
+                    {
+                      "item-id": "b64:cGlja2F4ZXM=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:c2hvdmVscw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:cGlja2F4ZXM=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:c2hvdmVscw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    }
+                  ]
+                },
+                {
+                  "id": "CPS",
+                  "minimum": 20,
+                  "maximum": 20
+                },
+                {
+                  "id": "Limit items-autoclicker-allowed-items",
+                  "value": [
+                    {
+                      "item-id": "b64:c3dvcmRz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:c3dvcmRz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "RightClicker",
+              "values": [
+                {
+                  "id": "Use Item Whitelist-autoclicker-allowed-items",
+                  "value": [
+                    {
+                      "item-id": "b64:YmxvY2tz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:YmxvY2tz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Velocity",
+              "values": [
+                {
+                  "id": "Mode-Normal-Horizontal",
+                  "value": "50.0"
+                },
+                {
+                  "id": "Mode-Jump Reset-Accuracy",
+                  "minimum": 60,
+                  "maximum": 80
+                },
+                {
+                  "id": "Mode",
+                  "value": "Jump Reset"
+                },
+                {
+                  "id": "Chance",
+                  "value": "100.0"
+                }
+              ]
+            },
+            {
+              "name": "NameTags",
+              "values": [
+                {
+                  "id": "Render Players-Health",
+                  "value": "true"
+                },
+                {
+                  "id": "Render Players-Distance",
+                  "value": "true"
+                },
+                {
+                  "id": "Render Players-Max Distance",
+                  "value": "250.0"
+                }
+              ]
+            },
+            {
+              "name": "ESP",
+              "values": [
+                {
+                  "id": "Player Color",
+                  "hue2": 80.38,
+                  "saturation2": 255,
+                  "brightness2": 255
+                },
+                {
+                  "id": "Invisibles",
+                  "value": "true"
+                },
+                {
+                  "id": "Hide Bots",
+                  "value": "true"
+                }
+              ]
+            },
+            {
+              "name": "FastPlace",
+              "keybinds_2": [
+                66
+              ],
+              "values": [
+                {
+                  "id": "Delay",
+                  "value": "0.0"
+                }
+              ]
+            },
+            {
+              "name": "Scaffold",
+              "keybinds_2": [
+                66
+              ],
+              "values": [
+                {
+                  "id": "Mode-Legit-Sneak delay",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                {
+                  "id": "Block count",
+                  "value": "true"
+                },
+                {
+                  "id": "Pitch check",
+                  "value": "true"
+                },
+                {
+                  "id": "Blacklist-scaffold-blacklist",
+                  "value": [
+                    {
+                      "item-id": "b64:RGlzcGVuc2Vy",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Tm90ZSBCbG9jaw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q29id2Vi",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:VE5U",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TW9uc3RlciBTcGF3bmVy",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RW5jaGFudG1lbnQgVGFibGU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:T2FrIEZlbmNl",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:SnVrZWJveA==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TWVsb24=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q29tbWFuZCBCbG9jaw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QW52aWw=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:R2xhc3MgUGFuZQ==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:V2hpdGUgU3RhaW5lZCBHbGFzcyBQYW5l",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:SXJvbiBCYXJz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:SWNl",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UGFja2VkIEljZQ==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QW52aWw=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QmxvY2sgb2YgUmVkc3RvbmU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:R29sZCBPcmU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:SXJvbiBPcmU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q29hbCBPcmU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TGFwaXMgTGF6dWxpIE9yZQ==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UmVkc3RvbmUgT3Jl",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QWNhY2lhIFdvb2QgU3RhaXJz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:V29vZGVuIFByZXNzdXJlIFBsYXRl",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:U3RvbmUgUHJlc3N1cmUgUGxhdGU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QmVhY29u",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:T2FrIFNhcGxpbmc=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UG93ZXJlZCBSYWls",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RGV0ZWN0b3IgUmFpbA==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:U2hydWI=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RGVhZCBCdXNo",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RGFuZGVsaW9u",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UG9wcHk=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TXVzaHJvb20=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TGFkZGVy",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UmFpbA==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:V29vZGVuIFRyYXBkb29y",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TGlseSBQYWQ=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:VHJpcHdpcmUgSG9vaw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q2FycGV0",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:U25vdw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:VHJhcHBlZCBDaGVzdA==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RGF5bGlnaHQgU2Vuc29y",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:SG9wcGVy",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q2hlc3Q=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:VG9yY2g=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TGV2ZXI=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UmVkc3RvbmUgVG9yY2g=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QnV0dG9u",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q2FjdHVz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RGlzcGVuc2Vy",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Tm90ZSBCbG9jaw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q29id2Vi",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:VE5U",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TW9uc3RlciBTcGF3bmVy",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RW5jaGFudG1lbnQgVGFibGU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:T2FrIEZlbmNl",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:SnVrZWJveA==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TWVsb24=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q29tbWFuZCBCbG9jaw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QW52aWw=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:R2xhc3MgUGFuZQ==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:V2hpdGUgU3RhaW5lZCBHbGFzcyBQYW5l",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:SXJvbiBCYXJz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:SWNl",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UGFja2VkIEljZQ==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QW52aWw=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QmxvY2sgb2YgUmVkc3RvbmU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:R29sZCBPcmU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:SXJvbiBPcmU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q29hbCBPcmU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TGFwaXMgTGF6dWxpIE9yZQ==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UmVkc3RvbmUgT3Jl",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QWNhY2lhIFdvb2QgU3RhaXJz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:V29vZGVuIFByZXNzdXJlIFBsYXRl",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:U3RvbmUgUHJlc3N1cmUgUGxhdGU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QmVhY29u",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:T2FrIFNhcGxpbmc=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UG93ZXJlZCBSYWls",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RGV0ZWN0b3IgUmFpbA==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:U2hydWI=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RGVhZCBCdXNo",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RGFuZGVsaW9u",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UG9wcHk=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TXVzaHJvb20=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TGFkZGVy",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UmFpbA==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:V29vZGVuIFRyYXBkb29y",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TGlseSBQYWQ=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:VHJpcHdpcmUgSG9vaw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q2FycGV0",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:U25vdw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:VHJhcHBlZCBDaGVzdA==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RGF5bGlnaHQgU2Vuc29y",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:SG9wcGVy",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q2hlc3Q=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:VG9yY2g=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TGV2ZXI=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UmVkc3RvbmUgVG9yY2g=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QnV0dG9u",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q2FjdHVz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    }
+                  ]
+                },
+                {
+                  "id": "Whitelist-scaffold-allowedblocks",
+                  "value": [
+                    {
+                      "item-id": "b64:YmxvY2tz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:YmxvY2tz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "FakeLag",
+              "values": [
+                {
+                  "id": "Mode",
+                  "value": "Dynamic"
+                }
+              ]
+            },
+            {
+              "name": "InvCleaner",
+              "values": [
+                {
+                  "id": "invcleaner-blacklisted",
+                  "value": [
+                    {
+                      "item-id": "b64:Mjgw",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Mjg3",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:MzE4",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:MzQ1",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Mjg4",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Mzc0",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:MTE2",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:NTQ=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:MTQ1",
+                      "total-stacks": -1,
+                      "enabled": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "AutoTool",
+              "keybinds_2": [
+                89
+              ],
+              "values": [
+                {
+                  "id": "Swap weapon",
+                  "value": "true"
+                },
+                {
+                  "id": "Swap back",
+                  "value": "true"
+                },
+                {
+                  "id": "Tool hover check",
+                  "value": "true"
+                }
+              ]
+            },
+            {
+              "name": "AimAssist",
+              "keybinds_2": [
+                82
+              ],
+              "values": [
+                {
+                  "id": "Check block break",
+                  "value": "true"
+                },
+                {
+                  "id": "Check block break-Break blocks whitelist-aimassist-blockbreak-items",
+                  "value": [
+                    {
+                      "item-id": "b64:cGlja2F4ZXM=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:c2hvdmVscw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:cGlja2F4ZXM=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:c2hvdmVscw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    }
+                  ]
+                },
+                {
+                  "id": "Horizontal speed",
+                  "value": "10.0"
+                },
+                {
+                  "id": "Max angle",
+                  "value": "360.0"
+                },
+                {
+                  "id": "Limit to items-aimassist-alloweditems",
+                  "value": [
+                    {
+                      "item-id": "b64:c3dvcmRz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:c3dvcmRz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "ItemESP",
+              "values": [
+                {
+                  "id": "Distance",
+                  "value": "true"
+                },
+                {
+                  "id": "Group Items",
+                  "value": "true"
+                }
+              ]
+            },
+            {
+              "name": "AutoHotbar",
+              "values": [
+                {
+                  "selected": 0,
+                  "panels": [
+                    {
+                      "hotbars": [
+                        {
+                          "item-id": 0,
+                          "meta": 0,
+                          "anyMeta": true,
+                          "anyMaterial": false,
+                          "onlyBest": false
+                        },
+                        {
+                          "item-id": 0,
+                          "meta": 0,
+                          "anyMeta": true,
+                          "anyMaterial": false,
+                          "onlyBest": false
+                        },
+                        {
+                          "item-id": 0,
+                          "meta": 0,
+                          "anyMeta": true,
+                          "anyMaterial": false,
+                          "onlyBest": false
+                        },
+                        {
+                          "item-id": 0,
+                          "meta": 0,
+                          "anyMeta": true,
+                          "anyMaterial": false,
+                          "onlyBest": false
+                        },
+                        {
+                          "item-id": 0,
+                          "meta": 0,
+                          "anyMeta": true,
+                          "anyMaterial": false,
+                          "onlyBest": false
+                        },
+                        {
+                          "item-id": 0,
+                          "meta": 0,
+                          "anyMeta": true,
+                          "anyMaterial": false,
+                          "onlyBest": false
+                        },
+                        {
+                          "item-id": 0,
+                          "meta": 0,
+                          "anyMeta": true,
+                          "anyMaterial": false,
+                          "onlyBest": false
+                        },
+                        {
+                          "item-id": 0,
+                          "meta": 0,
+                          "anyMeta": true,
+                          "anyMaterial": false,
+                          "onlyBest": false
+                        },
+                        {
+                          "item-id": 0,
+                          "meta": 0,
+                          "anyMeta": true,
+                          "anyMaterial": false,
+                          "onlyBest": false
+                        }
+                      ]
+                    }
+                  ],
+                  "id": "hotbar"
+                }
+              ]
+            },
+            {
+              "name": "AutoHeal",
+              "values": [
+                {
+                  "id": "Use Custom Items-autoheal-customitems",
+                  "value": [
+                    {
+                      "item-id": "b64:Mzk3OjM=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Mzk3OjM=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "MurdererFinder",
+              "values": [
+                {
+                  "id": "Callout-murder-messages",
+                  "value": [
+                    {
+                      "item-id": "b64:JXMgaXMgdGhlIG11cmRlcmVyIQ==",
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:aSBzYXcgdGhhdCAlcyE=",
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:JHMgaXMgc3VzIQ==",
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:JXMgSVMgVEhFIElNUE9TVEVSIFJVTiE=",
+                      "enabled": true
+                    }
+                  ]
+                },
+                {
+                  "id": "murderer-items",
+                  "value": [
+                    {
+                      "item-id": "b64:c3dvcmRz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:c2hvdmVscw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:YXhlcw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:cGlja2F4ZXM=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Mjg4",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Mzk2",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:NDIx",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Mzk4",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:MzY5",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:NzU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:NTA=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:MzUy",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:c3dvcmRz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:c2hvdmVscw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:YXhlcw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:cGlja2F4ZXM=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Mjg4",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Mzk2",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:NDIx",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Mzk4",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:MzY5",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:NzU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:NTA=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:MzUy",
+                      "total-stacks": -1,
+                      "enabled": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "AntiFireball",
+              "values": [
+                {
+                  "id": "Angle limit",
+                  "value": "180.0"
+                },
+                {
+                  "id": "Aim speed",
+                  "value": "10.0"
+                },
+                {
+                  "id": "Stop movement",
+                  "value": "true"
+                },
+                {
+                  "id": "Stop movement-Move on finish",
+                  "value": "true"
+                },
+                {
+                  "id": "Silent aim",
+                  "value": "true"
+                }
+              ]
+            },
+            {
+              "name": "Indicators",
+              "values": [
+                {
+                  "id": "Show Distance",
+                  "value": "true"
+                }
+              ]
+            },
+            {
+              "name": "NoSlowdown",
+              "values": [
+                {
+                  "id": "Limit Items-noslowdown-whitelist",
+                  "value": [
+                    {
+                      "item-id": "b64:c3dvcmRz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:c3dvcmRz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Chams",
+              "values": [
+                {
+                  "id": "Hide Bots",
+                  "value": "true"
+                }
+              ]
+            },
+            {
+              "name": "Clutch",
+              "values": [
+                {
+                  "id": "Blacklist-clutch-blacklist",
+                  "value": [
+                    {
+                      "item-id": "b64:RGlzcGVuc2Vy",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Tm90ZSBCbG9jaw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q29id2Vi",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:VE5U",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TW9uc3RlciBTcGF3bmVy",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RW5jaGFudG1lbnQgVGFibGU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:T2FrIEZlbmNl",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:SnVrZWJveA==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TWVsb24=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q29tbWFuZCBCbG9jaw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QW52aWw=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:R2xhc3MgUGFuZQ==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:V2hpdGUgU3RhaW5lZCBHbGFzcyBQYW5l",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:SXJvbiBCYXJz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:SWNl",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UGFja2VkIEljZQ==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QW52aWw=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QmxvY2sgb2YgUmVkc3RvbmU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:R29sZCBPcmU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:SXJvbiBPcmU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q29hbCBPcmU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TGFwaXMgTGF6dWxpIE9yZQ==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UmVkc3RvbmUgT3Jl",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QWNhY2lhIFdvb2QgU3RhaXJz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:V29vZGVuIFByZXNzdXJlIFBsYXRl",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:U3RvbmUgUHJlc3N1cmUgUGxhdGU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QmVhY29u",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:T2FrIFNhcGxpbmc=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UG93ZXJlZCBSYWls",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RGV0ZWN0b3IgUmFpbA==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:U2hydWI=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RGVhZCBCdXNo",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RGFuZGVsaW9u",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UG9wcHk=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TXVzaHJvb20=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TGFkZGVy",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UmFpbA==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:V29vZGVuIFRyYXBkb29y",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TGlseSBQYWQ=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:VHJpcHdpcmUgSG9vaw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q2FycGV0",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:U25vdw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:VHJhcHBlZCBDaGVzdA==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RGF5bGlnaHQgU2Vuc29y",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:SG9wcGVy",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q2hlc3Q=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:VG9yY2g=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TGV2ZXI=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UmVkc3RvbmUgVG9yY2g=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QnV0dG9u",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q2FjdHVz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RGlzcGVuc2Vy",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Tm90ZSBCbG9jaw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q29id2Vi",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:VE5U",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TW9uc3RlciBTcGF3bmVy",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RW5jaGFudG1lbnQgVGFibGU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:T2FrIEZlbmNl",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:SnVrZWJveA==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TWVsb24=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q29tbWFuZCBCbG9jaw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QW52aWw=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:R2xhc3MgUGFuZQ==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:V2hpdGUgU3RhaW5lZCBHbGFzcyBQYW5l",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:SXJvbiBCYXJz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:SWNl",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UGFja2VkIEljZQ==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QW52aWw=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QmxvY2sgb2YgUmVkc3RvbmU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:R29sZCBPcmU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:SXJvbiBPcmU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q29hbCBPcmU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TGFwaXMgTGF6dWxpIE9yZQ==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UmVkc3RvbmUgT3Jl",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QWNhY2lhIFdvb2QgU3RhaXJz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:V29vZGVuIFByZXNzdXJlIFBsYXRl",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:U3RvbmUgUHJlc3N1cmUgUGxhdGU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QmVhY29u",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:T2FrIFNhcGxpbmc=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UG93ZXJlZCBSYWls",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RGV0ZWN0b3IgUmFpbA==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:U2hydWI=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RGVhZCBCdXNo",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RGFuZGVsaW9u",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UG9wcHk=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TXVzaHJvb20=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TGFkZGVy",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UmFpbA==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:V29vZGVuIFRyYXBkb29y",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TGlseSBQYWQ=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:VHJpcHdpcmUgSG9vaw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q2FycGV0",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:U25vdw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:VHJhcHBlZCBDaGVzdA==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RGF5bGlnaHQgU2Vuc29y",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:SG9wcGVy",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q2hlc3Q=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:VG9yY2g=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TGV2ZXI=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UmVkc3RvbmUgVG9yY2g=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QnV0dG9u",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q2FjdHVz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    }
+                  ]
+                },
+                {
+                  "id": "Held whitelist-clutch-allowedblocks",
+                  "value": [
+                    {
+                      "item-id": "b64:YmxvY2tz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:YmxvY2tz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "BlockHit",
+              "keybinds_2": [
+                82
+              ],
+              "values": [
+                {
+                  "id": "Mode-Manual-Chance",
+                  "minimum": 100,
+                  "maximum": 100
+                },
+                {
+                  "id": "Mode",
+                  "value": "Predict"
+                }
+              ]
+            },
+            {
+              "name": "BackTrack",
+              "values": [
+                {
+                  "id": "Mode-Lag Based-Latency",
+                  "minimum": 200,
+                  "maximum": 300
+                }
+              ]
+            },
+            {
+              "name": "AntiBot",
+              "values": [
+                {
+                  "id": "Remove Bots",
+                  "value": "true"
+                }
+              ]
+            },
+            {
+              "name": "HitSelect",
+              "keybinds_2": [
+                82
+              ],
+              "values": [
+                {
+                  "id": "Mode",
+                  "value": "Active"
+                },
+                {
+                  "id": "Chance",
+                  "value": "100.0"
+                }
+              ]
+            },
+            {
+              "name": "SilentAura",
+              "keybinds_2": [
+                86
+              ],
+              "values": [
+                {
+                  "id": "Aim speed",
+                  "value": "10.0"
+                },
+                {
+                  "id": "Attacks per Second",
+                  "minimum": 14,
+                  "maximum": 16
+                },
+                {
+                  "id": "Max angle",
+                  "value": "360.0"
+                },
+                {
+                  "id": "Break blocks",
+                  "value": "true"
+                },
+                {
+                  "id": "Break blocks-Break blocks whitelist-SilentBlockBreakingItems",
+                  "value": [
+                    {
+                      "item-id": "b64:cGlja2F4ZXM=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:c2hvdmVscw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:cGlja2F4ZXM=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:c2hvdmVscw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    }
+                  ]
+                },
+                {
+                  "id": "Show target",
+                  "value": "true"
+                }
+              ]
+            },
+            {
+              "name": "Block-In",
+              "keybinds_2": [
+                78
+              ],
+              "values": [
+                {
+                  "id": "Aim speed",
+                  "value": "10.0"
+                },
+                {
+                  "id": "Place delay",
+                  "maximum": 25
+                },
+                {
+                  "id": "Silent aim",
+                  "value": "true"
+                },
+                {
+                  "id": "Use blacklist-blockin-blacklist",
+                  "value": [
+                    {
+                      "item-id": "b64:RGlzcGVuc2Vy",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Tm90ZSBCbG9jaw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q29id2Vi",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:VE5U",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TW9uc3RlciBTcGF3bmVy",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RW5jaGFudG1lbnQgVGFibGU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:T2FrIEZlbmNl",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:SnVrZWJveA==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TWVsb24=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q29tbWFuZCBCbG9jaw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QW52aWw=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:R2xhc3MgUGFuZQ==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:V2hpdGUgU3RhaW5lZCBHbGFzcyBQYW5l",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:SXJvbiBCYXJz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:SWNl",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UGFja2VkIEljZQ==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QW52aWw=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QmxvY2sgb2YgUmVkc3RvbmU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:R29sZCBPcmU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:SXJvbiBPcmU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q29hbCBPcmU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TGFwaXMgTGF6dWxpIE9yZQ==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UmVkc3RvbmUgT3Jl",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QWNhY2lhIFdvb2QgU3RhaXJz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:V29vZGVuIFByZXNzdXJlIFBsYXRl",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:U3RvbmUgUHJlc3N1cmUgUGxhdGU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QmVhY29u",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:T2FrIFNhcGxpbmc=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UG93ZXJlZCBSYWls",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RGV0ZWN0b3IgUmFpbA==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:U2hydWI=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RGVhZCBCdXNo",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RGFuZGVsaW9u",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UG9wcHk=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TXVzaHJvb20=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TGFkZGVy",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UmFpbA==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:V29vZGVuIFRyYXBkb29y",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TGlseSBQYWQ=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:VHJpcHdpcmUgSG9vaw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q2FycGV0",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:U25vdw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:VHJhcHBlZCBDaGVzdA==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RGF5bGlnaHQgU2Vuc29y",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:SG9wcGVy",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q2hlc3Q=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:VG9yY2g=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TGV2ZXI=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UmVkc3RvbmUgVG9yY2g=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QnV0dG9u",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q2FjdHVz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RGlzcGVuc2Vy",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Tm90ZSBCbG9jaw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q29id2Vi",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:VE5U",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TW9uc3RlciBTcGF3bmVy",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RW5jaGFudG1lbnQgVGFibGU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:T2FrIEZlbmNl",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:SnVrZWJveA==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TWVsb24=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q29tbWFuZCBCbG9jaw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QW52aWw=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:R2xhc3MgUGFuZQ==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:V2hpdGUgU3RhaW5lZCBHbGFzcyBQYW5l",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:SXJvbiBCYXJz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:SWNl",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UGFja2VkIEljZQ==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QW52aWw=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QmxvY2sgb2YgUmVkc3RvbmU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:R29sZCBPcmU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:SXJvbiBPcmU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q29hbCBPcmU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TGFwaXMgTGF6dWxpIE9yZQ==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UmVkc3RvbmUgT3Jl",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QWNhY2lhIFdvb2QgU3RhaXJz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:V29vZGVuIFByZXNzdXJlIFBsYXRl",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:U3RvbmUgUHJlc3N1cmUgUGxhdGU=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QmVhY29u",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:T2FrIFNhcGxpbmc=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UG93ZXJlZCBSYWls",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RGV0ZWN0b3IgUmFpbA==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:U2hydWI=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RGVhZCBCdXNo",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RGFuZGVsaW9u",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UG9wcHk=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TXVzaHJvb20=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TGFkZGVy",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UmFpbA==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:V29vZGVuIFRyYXBkb29y",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TGlseSBQYWQ=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:VHJpcHdpcmUgSG9vaw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q2FycGV0",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:U25vdw==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:VHJhcHBlZCBDaGVzdA==",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:RGF5bGlnaHQgU2Vuc29y",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:SG9wcGVy",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q2hlc3Q=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:VG9yY2g=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:TGV2ZXI=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:UmVkc3RvbmUgVG9yY2g=",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:QnV0dG9u",
+                      "total-stacks": -1,
+                      "enabled": true
+                    },
+                    {
+                      "item-id": "b64:Q2FjdHVz",
+                      "total-stacks": -1,
+                      "enabled": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Text GUI",
+              "values": [
+                {
+                  "id": "Sort",
+                  "value": "Length"
+                },
+                {
+                  "id": "Color Mode",
+                  "value": "Custom color"
+                },
+                {
+                  "id": "Color Mode-Text GUI color",
+                  "hue2": 80.38,
+                  "saturation2": 0,
+                  "brightness2": 255
+                },
+                {
+                  "id": "Hide modules",
+                  "value": "true"
+                },
+                {
+                  "id": "Hide modules-module-show-blacklist",
+                  "value": []
+                },
+                {
+                  "id": "Scale",
+                  "value": "1.2"
+                }
+              ]
+            },
+            {
+              "name": "Freelook",
+              "keybinds_2": [
+                192
+              ]
+            }
+          ],
+          "favorites": {
+            "modules": [
+              "AutoClicker",
+              "AimAssist",
+              "Reach",
+              "Velocity"
+            ]
+          },
+          "values": [
+            {
+              "id": "3rd person aim view",
+              "value": "true"
+            },
+            {
+              "id": "Team Color",
+              "hue2": 84.55,
+              "saturation2": 192.51,
+              "brightness2": 253
+            }
+          ],
+          "macros": [],
+          "search": [],
+          "frames": [
+            {
+              "title": "CompassFrame",
+              "x": 59,
+              "y": 38,
+              "visible": false,
+              "pinned": true,
+              "width": 308,
+              "height": 30
+            },
+            {
+              "title": "KeystrokesFrame",
+              "x": 40,
+              "y": 40,
+              "visible": false,
+              "pinned": true,
+              "width": 54,
+              "height": 86
+            },
+            {
+              "title": "ArmorStatusFrame",
+              "x": 40,
+              "y": 150,
+              "visible": false,
+              "pinned": true,
+              "width": 54,
+              "height": 84
+            },
+            {
+              "title": "ClockFrame",
+              "x": 337,
+              "y": 10,
+              "visible": false,
+              "pinned": true,
+              "width": 70,
+              "height": 65
+            },
+            {
+              "title": "PotionStatusFrame",
+              "x": 100,
+              "y": 150,
+              "visible": false,
+              "pinned": true,
+              "width": 40,
+              "height": 20
+            },
+            {
+              "title": "FpsFrame",
+              "x": 140,
+              "y": 40,
+              "visible": false,
+              "pinned": true,
+              "width": 50,
+              "height": 20
+            },
+            {
+              "title": "CoordinateFrame",
+              "x": 140,
+              "y": 70,
+              "visible": false,
+              "pinned": true,
+              "width": 12,
+              "height": 35
+            },
+            {
+              "title": "ReachDisplayFrame",
+              "x": 140,
+              "y": 110,
+              "visible": false,
+              "pinned": true,
+              "width": 50,
+              "height": 20
+            },
+            {
+              "title": "Scoreboard",
+              "x": 30,
+              "y": 10,
+              "visible": false,
+              "pinned": true,
+              "width": 50,
+              "height": 30
+            },
+            {
+              "title": "CenterScreenManager",
+              "x": 0,
+              "y": 0,
+              "visible": false,
+              "pinned": true
+            },
+            {
+              "title": "ModuleSearch",
+              "x": 425,
+              "y": 7,
+              "visible": true,
+              "pinned": false
+            },
+            {
+              "title": "GUI",
+              "x": 32,
+              "y": 32,
+              "visible": true,
+              "pinned": false
+            },
+            {
+              "title": "Settings",
+              "x": 32,
+              "y": 32,
+              "visible": false,
+              "pinned": false
+            },
+            {
+              "title": "Settings",
+              "x": 32,
+              "y": 32,
+              "visible": false,
+              "pinned": false
+            },
+            {
+              "title": "Combat",
+              "x": 256,
+              "y": 32,
+              "visible": true,
+              "pinned": false
+            },
+            {
+              "title": "Other",
+              "x": 30,
+              "y": 336,
+              "visible": true,
+              "pinned": false
+            },
+            {
+              "title": "Render",
+              "x": 145,
+              "y": 32,
+              "visible": true,
+              "pinned": false
+            },
+            {
+              "title": "Utility",
+              "x": 705,
+              "y": 32,
+              "visible": true,
+              "pinned": false
+            },
+            {
+              "title": "World",
+              "x": 368,
+              "y": 32,
+              "visible": true,
+              "pinned": false
+            },
+            {
+              "title": "Inventory",
+              "x": 704,
+              "y": 214,
+              "visible": true,
+              "pinned": false
+            },
+            {
+              "title": "Minigames",
+              "x": 142,
+              "y": 336,
+              "visible": true,
+              "pinned": false
+            },
+            {
+              "title": "Favorite",
+              "x": 257,
+              "y": 256,
+              "visible": true,
+              "pinned": false
+            },
+            {
+              "title": "Profiles",
+              "x": 482,
+              "y": 32,
+              "visible": true,
+              "pinned": false
+            },
+            {
+              "title": "Macros",
+              "x": 366,
+              "y": 336,
+              "visible": true,
+              "pinned": false
+            },
+            {
+              "title": "Friends",
+              "x": 592,
+              "y": 32,
+              "visible": true,
+              "pinned": false
+            },
+            {
+              "title": "Overlays",
+              "x": 32,
+              "y": 274,
+              "visible": false,
+              "pinned": false
+            },
+            {
+              "title": "Rearview",
+              "x": 824,
+              "y": 336,
+              "visible": false,
+              "pinned": false,
+              "width": 110,
+              "height": 18
+            },
+            {
+              "title": "Text GUI",
+              "x": 761,
+              "y": 3,
+              "visible": true,
+              "pinned": true,
+              "width": 110,
+              "height": 18
+            },
+            {
+              "title": "Duel Info",
+              "x": 366,
+              "y": 336,
+              "visible": false,
+              "pinned": false,
+              "width": 110,
+              "height": 98
+            },
+            {
+              "title": "Radar",
+              "x": 146,
+              "y": 438,
+              "visible": false,
+              "pinned": false,
+              "width": 110,
+              "height": 18
+            },
+            {
+              "title": "Target Info",
+              "x": 528,
+              "y": 226,
+              "visible": true,
+              "pinned": true,
+              "width": 120,
+              "height": 18
+            },
+            {
+              "title": "Party Overlay",
+              "x": 609,
+              "y": 202,
+              "visible": false,
+              "pinned": false,
+              "width": 114,
+              "height": 18
+            },
+            {
+              "title": "Enemies",
+              "x": 300,
+              "y": 100,
+              "visible": false,
+              "pinned": false
+            },
+            {
+              "title": "hotbarshell",
+              "x": 47,
+              "y": 12,
+              "visible": true,
+              "pinned": false
+            },
+            {
+              "title": "hotbarbrowser",
+              "x": 145,
+              "y": 0,
+              "visible": true,
+              "pinned": false
+            },
+            {
+              "title": "Public Profiles",
+              "x": 35,
+              "y": 13,
+              "visible": true,
+              "pinned": false
+            },
+            {
+              "title": "LegitMenuFrame",
+              "x": 38,
+              "y": 27,
+              "visible": true,
+              "pinned": false
+            },
+            {
+              "title": "LegitModuleFrame",
+              "x": 276,
+              "y": 184,
+              "visible": true,
+              "pinned": false
+            },
+            {
+              "title": "LegitMinModuleFrame",
+              "x": 144,
+              "y": 95,
+              "visible": false,
+              "pinned": false
+            },
+            {
+              "title": "LegitMinModuleFrame",
+              "x": 367,
+              "y": 231,
+              "visible": false,
+              "pinned": false
+            },
+            {
+              "title": "LegitToggleFrame",
+              "x": 425,
+              "y": 7,
+              "visible": true,
+              "pinned": false
+            },
+            {
+              "title": "LegitSettingFrame",
+              "x": 0,
+              "y": 0,
+              "visible": false,
+              "pinned": false
+            },
+            {
+              "title": "alts",
+              "x": 138,
+              "y": 92,
+              "visible": true,
+              "pinned": false
+            },
+            {
+              "title": "profileEditor",
+              "x": 45,
+              "y": 25,
+              "visible": true,
+              "pinned": false
+            }
+          ],
+          "enabled": {
+            "GUI": true,
+            "Arrows": true,
+            "Chams": true,
+            "auraClicker": true
+          },
+          "legit_enabled": {
+            "NoClickDelay": true,
+            "MouseDelayFix": true,
+            "Blockhit Animation": true,
+            "NoJumpDelay": true
+          },
+          "keybinds": [],
+          "sortOrder": 1
+        },
+        "created": "2024-08-12T02:43:00.692+00:00",
+        "lastUpdated": "2024-08-13T09:51:45.259+00:00",
+        "metadata": null
+      }
+    },
+    "publicProfiles": {
+    },
+    "otherData": [
+      {
+        "id": "selectedprofile_uuid",
+        "value": "b64:NjdmNjcwMzYtNWM0ZC00OGY0LThiYjEtYjJiOGY4YTY4NDMx"
+      },
+      {
+        "id": "Language",
+        "value": "Chinese"
+      },
+      {
+        "id": "GUI Bind",
+        "binds": [
+          161
+        ]
+      },
+      {
+        "enemies": []
+      },
+      {
+        "frames": [
+          {
+            "title": "CompassFrame",
+            "x": 59,
+            "y": 38,
+            "visible": false,
+            "pinned": true,
+            "width": 308,
+            "height": 30
+          },
+          {
+            "title": "KeystrokesFrame",
+            "x": 40,
+            "y": 40,
+            "visible": false,
+            "pinned": true,
+            "width": 54,
+            "height": 86
+          },
+          {
+            "title": "ArmorStatusFrame",
+            "x": 40,
+            "y": 150,
+            "visible": false,
+            "pinned": true,
+            "width": 54,
+            "height": 84
+          },
+          {
+            "title": "ClockFrame",
+            "x": 337,
+            "y": 10,
+            "visible": false,
+            "pinned": true,
+            "width": 70,
+            "height": 65
+          },
+          {
+            "title": "PotionStatusFrame",
+            "x": 100,
+            "y": 150,
+            "visible": false,
+            "pinned": true,
+            "width": 40,
+            "height": 0
+          },
+          {
+            "title": "FpsFrame",
+            "x": 140,
+            "y": 40,
+            "visible": false,
+            "pinned": true,
+            "width": 50,
+            "height": 20
+          },
+          {
+            "title": "CoordinateFrame",
+            "x": 140,
+            "y": 70,
+            "visible": false,
+            "pinned": true,
+            "width": 12,
+            "height": 35
+          },
+          {
+            "title": "ReachDisplayFrame",
+            "x": 140,
+            "y": 110,
+            "visible": false,
+            "pinned": true,
+            "width": 50,
+            "height": 20
+          },
+          {
+            "title": "Scoreboard",
+            "x": 30,
+            "y": 10,
+            "visible": false,
+            "pinned": true,
+            "width": 50,
+            "height": 30
+          },
+          {
+            "title": "CenterScreenManager",
+            "x": 0,
+            "y": 0,
+            "visible": false,
+            "pinned": true
+          },
+          {
+            "title": "ModuleSearch",
+            "x": 478,
+            "y": 7,
+            "visible": true,
+            "pinned": false
+          },
+          {
+            "title": "GUI",
+            "x": 20,
+            "y": 29,
+            "visible": true,
+            "pinned": false
+          },
+          {
+            "title": "Settings",
+            "x": 20,
+            "y": 29,
+            "visible": false,
+            "pinned": false
+          },
+          {
+            "title": "GUI",
+            "x": 20,
+            "y": 29,
+            "visible": false,
+            "pinned": false
+          },
+          {
+            "title": "Combat",
+            "x": 678,
+            "y": 213,
+            "visible": true,
+            "pinned": false
+          },
+          {
+            "title": "Other",
+            "x": 6,
+            "y": 305,
+            "visible": true,
+            "pinned": false
+          },
+          {
+            "title": "Render",
+            "x": 150,
+            "y": 26,
+            "visible": true,
+            "pinned": false
+          },
+          {
+            "title": "Utility",
+            "x": 416,
+            "y": 269,
+            "visible": true,
+            "pinned": false
+          },
+          {
+            "title": "World",
+            "x": 368,
+            "y": 32,
+            "visible": true,
+            "pinned": false
+          },
+          {
+            "title": "Inventory",
+            "x": 731,
+            "y": 15,
+            "visible": true,
+            "pinned": false
+          },
+          {
+            "title": "Minigames",
+            "x": 142,
+            "y": 336,
+            "visible": true,
+            "pinned": false
+          },
+          {
+            "title": "Favorite",
+            "x": 266,
+            "y": 256,
+            "visible": true,
+            "pinned": false
+          },
+          {
+            "title": "Profiles",
+            "x": 482,
+            "y": 32,
+            "visible": true,
+            "pinned": false
+          },
+          {
+            "title": "Macros",
+            "x": 389,
+            "y": 329,
+            "visible": true,
+            "pinned": false
+          },
+          {
+            "title": "Friends",
+            "x": 592,
+            "y": 32,
+            "visible": true,
+            "pinned": false
+          },
+          {
+            "title": "Overlays",
+            "x": 32,
+            "y": 274,
+            "visible": false,
+            "pinned": false
+          },
+          {
+            "title": "Rearview",
+            "x": 824,
+            "y": 336,
+            "visible": false,
+            "pinned": false,
+            "width": 110,
+            "height": 18
+          },
+          {
+            "title": "Text GUI",
+            "x": 955,
+            "y": 8,
+            "visible": true,
+            "pinned": true,
+            "width": 110,
+            "height": 18
+          },
+          {
+            "title": "Duel Info",
+            "x": 366,
+            "y": 336,
+            "visible": false,
+            "pinned": false,
+            "width": 110,
+            "height": 98
+          },
+          {
+            "title": "Radar",
+            "x": 146,
+            "y": 438,
+            "visible": false,
+            "pinned": false,
+            "width": 110,
+            "height": 18
+          },
+          {
+            "title": "Target Info",
+            "x": 528,
+            "y": 226,
+            "visible": true,
+            "pinned": true,
+            "width": 120,
+            "height": 18
+          },
+          {
+            "title": "Party Overlay",
+            "x": 609,
+            "y": 202,
+            "visible": false,
+            "pinned": false,
+            "width": 114,
+            "height": 18
+          },
+          {
+            "title": "Enemies",
+            "x": 300,
+            "y": 100,
+            "visible": false,
+            "pinned": false
+          },
+          {
+            "title": "hotbarshell",
+            "x": 314,
+            "y": 146,
+            "visible": false,
+            "pinned": false
+          },
+          {
+            "title": "hotbarbrowser",
+            "x": 389,
+            "y": 204,
+            "visible": false,
+            "pinned": false
+          },
+          {
+            "title": "Public Profiles",
+            "x": 302,
+            "y": 147,
+            "visible": false,
+            "pinned": false
+          },
+          {
+            "title": "LegitMenuFrame",
+            "x": 305,
+            "y": 161,
+            "visible": true,
+            "pinned": false
+          },
+          {
+            "title": "LegitModuleFrame",
+            "x": 286,
+            "y": 184,
+            "visible": true,
+            "pinned": false
+          },
+          {
+            "title": "LegitMinModuleFrame",
+            "x": 411,
+            "y": 229,
+            "visible": false,
+            "pinned": false
+          },
+          {
+            "title": "LegitMinModuleFrame",
+            "x": 367,
+            "y": 231,
+            "visible": false,
+            "pinned": false
+          },
+          {
+            "title": "LegitToggleFrame",
+            "x": 469,
+            "y": 7,
+            "visible": true,
+            "pinned": false
+          },
+          {
+            "title": "LegitSettingFrame",
+            "x": 0,
+            "y": 0,
+            "visible": false,
+            "pinned": false
+          },
+          {
+            "title": "alts",
+            "x": 405,
+            "y": 226,
+            "visible": true,
+            "pinned": false
+          },
+          {
+            "title": "profileEditor",
+            "x": 312,
+            "y": 159,
+            "visible": true,
+            "pinned": false
+          }
+        ]
+      }
+    ]
+  },
+  "error": null,
+  "successful": true
+}
