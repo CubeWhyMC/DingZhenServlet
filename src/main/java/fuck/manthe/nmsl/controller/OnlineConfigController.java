@@ -8,6 +8,7 @@ import fuck.manthe.nmsl.entity.dto.PrivateConfigDTO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -48,10 +49,13 @@ public class OnlineConfigController {
     }
 
     /**
-     * Private profiles
+     * Private config
      */
     @GetMapping("profile/private/all")
     public VapeRestBean<PrivateConfigDTO> privateConfig(@PathVariable String token) {
-        return VapeRestBean.success(PrivateConfigDTO.builder().build());
+        return VapeRestBean.success(PrivateConfigDTO.builder()
+                .friends(new ArrayList<>())
+                .profiles(new HashMap<>())
+                .build());
     }
 }
