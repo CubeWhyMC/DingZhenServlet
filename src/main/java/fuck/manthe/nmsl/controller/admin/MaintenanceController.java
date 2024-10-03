@@ -33,7 +33,7 @@ public class MaintenanceController {
     public RestBean<Boolean> switchState(@RequestBody SwitchMaintenanceDTO dto) throws WebhookSigningException {
         MaintenanceMessage message = new MaintenanceMessage(dto.isMaintaining());
         message.setTimestamp(System.currentTimeMillis() / 1000L);
-        if (!dto.isMaintaining()) {
+        if (dto.isMaintaining()) {
             message.setContent("已开启维护模式,现在只有永久用户可以注入");
             log.info("Injecting vape was limited to lifetime users only.");
         } else {
