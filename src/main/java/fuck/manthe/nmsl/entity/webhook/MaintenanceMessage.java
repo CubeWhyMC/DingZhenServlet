@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class PauseInjectMessage extends BaseWebhookMessage {
+public class MaintenanceMessage extends BaseWebhookMessage {
     private boolean state;
 }

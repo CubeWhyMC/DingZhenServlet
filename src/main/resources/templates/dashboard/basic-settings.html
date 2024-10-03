@@ -22,11 +22,12 @@
         </div>
         <div class="mdui-card">
             <div class="mdui-card-primary">
-                <div class="mdui-card-primary-title">暂停注入</div>
-                <div class="mdui-card-primary-subtitle">操作后只有永久用户可以注入</div>
+                <div class="mdui-card-primary-title">维护模式</div>
+                <div class="mdui-card-primary-subtitle">操作后只有永久用户可以注入,网页会显示维护</div>
             </div>
             <div class="mdui-card-content">
-                <p>点击下方按钮<span id="injectState" style="color: red">加载中... (如果卡住请重新登录)</span>注入</p>
+                <p>点击下方按钮<span id="injectState" style="color: red">加载中... (如果卡住请重新登录)</span>维护模式
+                </p>
             </div>
             <div class="mdui-card-actions">
                 <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="toggleInject()">
@@ -38,7 +39,7 @@
 </div>
 
 <script>
-    let injectState = true;
+    let maintenanceModeState = true;
 
     function resetGlobalColdDown() {
         const adminPassword = localStorage.getItem('adminPassword');
@@ -73,22 +74,28 @@
         );
     }
 
-    function pauseInjectText() {
-        if (!injectState) {
-            return "暂停";
+    function maintenanceText() {
+        if (maintenanceModeState) {
+            return "关闭";
         }
-        return "允许";
+        return "开启";
     }
 
-    function loadInjectState() {
-        fetch("/paused", {
+    function loadMaintenanceState() {
+        const adminPassword = localStorage.getItem('adminPassword');
+
+        fetch("/admin/maintenance/state", {
             method: 'GET',
+            headers: {
+                'X-Admin-Password': adminPassword,
+                'Content-Type': "application/json"
+            }
         })
             .then(response => response.json())
             .then(data => {
                 if (data.code === 200) {
-                    injectState = data.data
-                    document.getElementById("injectState").innerText = pauseInjectText()
+                    maintenanceModeState = data.data.state
+                    document.getElementById("injectState").innerText = maintenanceText()
                 }
             });
     }
@@ -96,22 +103,23 @@
     function toggleInject() {
         const adminPassword = localStorage.getItem('adminPassword');
 
-        mdui.confirm(`确定要${pauseInjectText()}注入吗?`, '确认',
+        mdui.confirm(`确定要${maintenanceText()}维护模式吗?`, '确认',
             function () {
-                fetch('/admin/shared/pauseInject', {
+                fetch('/admin/maintenance/state', {
                     method: 'POST',
                     headers: {
                         'X-Admin-Password': adminPassword,
                         'Content-Type': "application/json"
                     },
                     body: JSON.stringify({
-                        injectEnabled: injectState
+                        maintaining: !maintenanceModeState
                     })
                 })
                     .then(response => response.json())
                     .then(data => {
+                        console.log(data);
                         if (data.code === 200) {
-                            loadInjectState()
+                            loadMaintenanceState()
                             mdui.alert('切换成功');
                         } else {
                             mdui.alert('切换失败: ' + data.message);
@@ -131,5 +139,5 @@
         );
     }
 
-    loadInjectState();
+    loadMaintenanceState();
 </script>

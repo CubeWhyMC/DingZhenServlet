@@ -50,15 +50,18 @@ public class AuthController {
     @Resource
     WebhookService webhookService;
 
+    @Resource
+    GatewayService gatewayService;
+
+    @Resource
+    MaintenanceService maintenanceService;
+
     @Value("${share.cold-down.global.enabled}")
     boolean coldDownEnabled;
 
-    @Resource
-    private GatewayService gatewayService;
-
     @GetMapping("paused")
     public RestBean<Boolean> paused() {
-        return RestBean.success(vapeAccountService.isPaused());
+        return RestBean.success(maintenanceService.isMaintaining());
     }
 
     @PostMapping("auth.php")
@@ -75,10 +78,10 @@ public class AuthController {
         // 统计请求次数
         log.info("User {} login", username);
         CrackedUser crackedUser = crackedUserService.findByUsername(username);
-        if (vapeAccountService.isPaused() && crackedUser.getExpire() != -1) {
+        if (maintenanceService.isMaintaining() && crackedUser.getExpire() != -1) {
             // 暂停注入
-            log.info("Blocked user {} to inject. Injections are only open to lifetime users.", username);
-            return ErrorCode.SERVER.formatError("Paused");
+            log.info("Blocked user {} to inject. Injections are only open to lifetime users. (Maintaining)", username);
+            return ErrorCode.SERVER.formatError("Maintaining");
         }
         analysisService.authRequested(username);
         if (!crackedUserService.isValid(username, password)) {

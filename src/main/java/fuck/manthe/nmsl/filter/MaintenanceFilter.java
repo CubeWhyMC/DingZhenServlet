@@ -25,8 +25,8 @@ public class MaintenanceFilter implements Filter {
         if (maintenanceService.isMaintaining()) {
             String path = request.getRequestURI();
 
-            if (!path.equals("/auth.php") && !path.startsWith("/dashboard") && !path.startsWith("/admin")) {
-                response.sendRedirect("/maintain");
+            if (path.equals("/") || path.equals("/redeem")) {
+                response.sendRedirect("/maintain?redirect=" + request.getRequestURI());
                 return;
             }
         }

@@ -19,16 +19,6 @@ public interface VapeAccountService {
 
     void resetColdDown(VapeAccount account);
 
-    /**
-     * 只允许永久用户注入
-     * 普通用户注入会直接报错
-     *
-     * @param state 是否允许注入
-     */
-    void pauseInject(boolean state);
-
-    boolean isPaused();
-
     boolean addAccount(VapeAccount account);
 
     boolean removeAccount(String account);

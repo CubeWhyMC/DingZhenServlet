@@ -4,6 +4,7 @@ import fuck.manthe.nmsl.service.MaintenanceService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class WebController {
@@ -31,8 +32,11 @@ public class WebController {
     }
 
     @GetMapping("maintain")
-    public String maintain() {
+    public String maintain(@RequestParam(required = false) String redirect) {
         if (!maintenanceService.isMaintaining()) {
+            if (redirect != null) {
+                return "redirect:" + redirect;
+            }
             return "redirect:/";
         }
         return "maintain";
