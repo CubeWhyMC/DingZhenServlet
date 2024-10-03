@@ -45,8 +45,11 @@ public class OnlineConfigController {
      * Public profiles
      */
     @GetMapping("profile/public/tags")
-    public VapeRestBean<List<String>> publicTags(@PathVariable String token) {
-        return VapeRestBean.success(new ArrayList<>()); // stage 23
+    public void /* VapeRestBean<List<String>> */ publicTags(@PathVariable String token, HttpServletResponse response) throws IOException {
+        // return VapeRestBean.success(new ArrayList<>()); // stage 23
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getOutputStream().write(Objects.requireNonNull(this.getClass().getResourceAsStream("/fake-pub-tags.json")).readAllBytes());
     }
 
     /**
