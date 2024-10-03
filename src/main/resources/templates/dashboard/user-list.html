@@ -29,11 +29,11 @@
                 'X-Admin-Password': adminPassword
             }
         })
-            。then(response => response.json())
-            。then(users => {
+            .then(response => response.json())
+            .then(users => {
                 renderUserList(users);
             })
-            。catch(error => {
+            .catch(error => {
                 console.error('Error fetching user data:', error);
                 document.getElementById('user-table-body').innerHTML = '<tr><td colspan="5">Error loading user data</td></tr>';
             });
