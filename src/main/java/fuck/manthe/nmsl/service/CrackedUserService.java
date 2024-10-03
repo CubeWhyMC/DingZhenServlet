@@ -15,7 +15,11 @@ public interface CrackedUserService {
 
     void removeUser(CrackedUser user);
 
-    boolean renewUser(String username, int day);
+    boolean renew(String username, int days);
+
+    void renew(CrackedUser user, int days);
+
+    void renewAll(int days);
 
     boolean hasExpired(String username);
 
@@ -28,4 +32,5 @@ public interface CrackedUserService {
     void removeExpired();
 
     CrackedUser findByUsername(String username);
+
 }

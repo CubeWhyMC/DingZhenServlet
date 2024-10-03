@@ -3,7 +3,10 @@ package fuck.manthe.nmsl.controller.admin;
 import cn.hutool.crypto.SecureUtil;
 import fuck.manthe.nmsl.entity.CrackedUser;
 import fuck.manthe.nmsl.entity.RestBean;
+import fuck.manthe.nmsl.entity.dto.AddUserDTO;
 import fuck.manthe.nmsl.entity.dto.CrackedUserDTO;
+import fuck.manthe.nmsl.entity.dto.RenewDTO;
+import fuck.manthe.nmsl.entity.dto.ResetPasswordDTO;
 import fuck.manthe.nmsl.service.AnalysisService;
 import fuck.manthe.nmsl.service.CrackedUserService;
 import jakarta.annotation.Resource;
@@ -37,13 +40,13 @@ public class UserManageController {
     }
 
     @PostMapping("add")
-    public ResponseEntity<RestBean<String>> addUser(@RequestParam String username, @RequestParam String password, @RequestParam int day) {
+    public ResponseEntity<RestBean<String>> addUser(@RequestBody AddUserDTO dto) {
         long expire = -1L;
-        log.info("User {} has added by an admin", username);
-        if (day != -1) {
-            expire = System.currentTimeMillis() + (long) day * 24 * 60 * 60 * 1000;
+        log.info("User {} has added by an admin", dto.getUsername());
+        if (dto.getDays() != -1) {
+            expire = System.currentTimeMillis() + (long) dto.getDays() * 24 * 60 * 60 * 1000;
         }
-        if (crackedUserService.addUser(CrackedUser.builder().password(SecureUtil.sha1(password)).username(username).expire(expire).build())) {
+        if (crackedUserService.addUser(CrackedUser.builder().password(SecureUtil.sha1(dto.getPassword())).username(dto.getUsername()).expire(expire).build())) {
             return ResponseEntity.ok(RestBean.success("OK"));
         }
         return new ResponseEntity<>(RestBean.failure(409, "Conflict"), HttpStatus.CONFLICT);
@@ -51,12 +54,18 @@ public class UserManageController {
 
 
     @PostMapping("renew/{username}")
-    public ResponseEntity<RestBean<String>> renew(@PathVariable String username, @RequestParam int day) {
-        log.info("An admin renewed the expire date of user {} ({}d)", username, day);
-        if (crackedUserService.renewUser(username, day)) {
+    public ResponseEntity<RestBean<String>> renew(@PathVariable String username, @RequestBody RenewDTO dto) {
+        log.info("An admin renewed the expire date of user {} ({}d)", username, dto.getDays());
+        if (crackedUserService.renew(username, dto.getDays())) {
             return ResponseEntity.ok(RestBean.success("OK"));
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("renewAll")
+    public ResponseEntity<RestBean<String>> renewAll(@RequestBody RenewDTO dto) {
+        crackedUserService.renewAll(dto.getDays());
+        return ResponseEntity.ok(RestBean.success("OK"));
     }
 
     @DeleteMapping("remove/{username}")
@@ -67,16 +76,16 @@ public class UserManageController {
     }
 
     @PostMapping("password/{username}/reset")
-    public ResponseEntity<RestBean<String>> resetPassword(@PathVariable String username, @RequestParam String password) {
+    public ResponseEntity<RestBean<String>> resetPassword(@PathVariable String username, @RequestBody ResetPasswordDTO dto) {
         log.info("An admin reset the password of user {}", username);
-        if (crackedUserService.resetPassword(username, password)) {
+        if (crackedUserService.resetPassword(username, dto.getPassword())) {
             return ResponseEntity.ok(RestBean.success());
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @DeleteMapping("removeExpired")
     @Transactional
+    @DeleteMapping("removeExpired")
     public RestBean<String> removeExpired() {
         crackedUserService.removeExpired();
         return RestBean.success("Success");

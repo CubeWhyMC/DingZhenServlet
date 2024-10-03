@@ -122,13 +122,15 @@
                     return
                 }
                 // 这里应该调用API来更新用户天数
-                fetch(`/admin/user/renew/${username}?day=${days}`, {
+                fetch(`/admin/user/renew/${username}`, {
                     method: 'POST',
                     headers: {
-                        // 'Content-Type': 'application/x-www-form-urlencoded',
+                        'Content-Type': 'application/json',
                         'X-Admin-Password': localStorage.getItem('adminPassword')
                     },
-                    // body: ``,
+                    body: JSON.stringify({
+                        days: days
+                    }),
                 })
                     .then(response => response.json())
                     .then(data => {
@@ -153,11 +155,14 @@
     function changePassword(username) {
         mdui.prompt('请输入新密码：', '修改密码',
             function (value) {
-                fetch(`/admin/user/password/${username}/reset?password=${value}`, {
+                fetch(`/admin/user/password/${username}/reset`, {
                     method: 'POST',
                     headers: {
                         'X-Admin-Password': localStorage.getItem('adminPassword')
                     },
+                    body: JSON.stringify({
+                        password: value
+                    })
                 })
                     .then(response => response.json())
                     .then(data => {
@@ -218,29 +223,24 @@
                     return;
                 }
 
-                fetch('/admin/user/list', {
+                fetch('/admin/user/renewAll', {
+                    method: 'POST',
                     headers: {
-                        'X-Admin-Password': adminPassword
-                    }
+                        'X-Admin-Password': adminPassword,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        days: days
+                    })
                 })
                 .then(response => response.json())
-                .then(users => {
-                    const promises = users
-                        .filter(user => user.expire !== -1)
-                        .map(user =>
-                            fetch(`/admin/user/renew/${user.username}?day=${days}`, {
-                                method: 'POST',
-                                headers: {
-                                    'X-Admin-Password': adminPassword
-                                },
-                            })
-                        );
-                    
-                    return Promise.all(promises);
-                })
-                .then(() => {
-                    mdui.alert(`已为所有非无限期用户增加 ${days} 天`);
-                    fetchUserData(); // 重新加载用户列表
+                    .then(data => {
+                        if (data.code === 200) {
+                            mdui.alert(`已为所有非无限期用户增加 ${days} 天`);
+                            fetchUserData(); // 重新加载用户列表
+                        } else {
+                            throw Error(data.message);
+                        }
                 })
                 .catch(error => {
                     console.error('Error adding days to all users:', error);

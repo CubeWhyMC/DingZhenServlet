@@ -172,7 +172,7 @@ public class AuthController {
             webhookService.pushAll("renew", message);
 
             return ResponseEntity.ok(RestBean.success("Registered."));
-        } else if (crackedUserService.isValid(username, password) && crackedUserService.renewUser(username, redeemCode.getDate())) {
+        } else if (crackedUserService.isValid(username, password) && crackedUserService.renew(username, redeemCode.getDate())) {
             if (redeemService.useCode(redeemCode.getCode(), username)) {
                 log.info("User {} renewed it's account with the code {} ({}d).", username, redeemCode.getCode(), redeemCode.getDate());
             }
