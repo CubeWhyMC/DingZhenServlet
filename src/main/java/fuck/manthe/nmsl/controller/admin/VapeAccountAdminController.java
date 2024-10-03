@@ -1,12 +1,9 @@
 package fuck.manthe.nmsl.controller.admin;
 
-import com.standardwebhooks.exceptions.WebhookSigningException;
 import fuck.manthe.nmsl.entity.RestBean;
 import fuck.manthe.nmsl.entity.VapeAccount;
-import fuck.manthe.nmsl.entity.dto.PauseInjectDTO;
 import fuck.manthe.nmsl.entity.dto.VapeAccountDTO;
 import fuck.manthe.nmsl.entity.vo.VapeAccountVO;
-import fuck.manthe.nmsl.entity.webhook.PauseInjectMessage;
 import fuck.manthe.nmsl.service.VapeAccountService;
 import fuck.manthe.nmsl.service.WebhookService;
 import jakarta.annotation.Resource;
@@ -74,25 +71,6 @@ public class VapeAccountAdminController {
     @PostMapping("resetColddown")
     public RestBean<String> resetColdDown(@RequestParam String username) {
         vapeAccountService.resetColdDown(vapeAccountService.findByUsername(username));
-        return RestBean.success("Success");
-    }
-
-    @PostMapping("pauseInject")
-    public RestBean<String> pauseLogin(@RequestBody PauseInjectDTO dto) throws WebhookSigningException {
-        PauseInjectMessage message = new PauseInjectMessage(dto.isInjectEnabled());
-        message.setTimestamp(System.currentTimeMillis() / 1000L);
-        message.setState(dto.isInjectEnabled());
-
-        vapeAccountService.pauseInject(dto.isInjectEnabled());
-        if (!dto.isInjectEnabled()) {
-            message.setContent("已暂停注入,现在只有永久用户可以注入");
-            log.info("Injecting vape was limited to lifetime users only.");
-        } else {
-            message.setContent("已允许注入,现在所有人都可以注入");
-            log.info("Unlimited injecting.");
-        }
-        webhookService.pushAll("pause-inject", message); // push to webhooks
-
         return RestBean.success("Success");
     }
 }
