@@ -1,0 +1,67 @@
+<!-- code-history.html -->
+<div class="mdui-typo">
+    <h1>历史卡密列表</h1>
+    <div class="mdui-textfield mdui-textfield-floating-label">
+        <label class="mdui-textfield-label">搜索用户名</label>
+        <input class="mdui-textfield-input" type="text" id="search-input" onkeyup="searchRedeems()"/>
+    </div>
+</div>
+<div class="mdui-table-fluid">
+    <table class="mdui-table mdui-table-hoverable">
+        <thead>
+        <tr>
+            <th>用户名</th>
+            <th>卡密</th>
+        </tr>
+        </thead>
+        <tbody id="redeem-table-body">
+        <!-- 卡密数据将通过 JavaScript 动态插入这里 -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    const adminPassword = localStorage.getItem('adminPassword');
+    let allRedeems = [];
+
+    function fetchRedeemData() {
+        fetch('/admin/redeem/sold', {
+            headers: {
+                'X-Admin-Password': adminPassword
+            }
+        })
+        .then(response => response.json())
+        .then(redeems => {
+            allRedeems = redeems;
+            renderRedeemList(redeems);
+        })
+        .catch(error => {
+            console.error('Error fetching redeem data:', error);
+            document.getElementById('redeem-table-body').innerHTML = '<tr><td colspan="2">Error loading redeem data</td></tr>';
+        });
+    }
+
+    function renderRedeemList(redeems) {
+        const tableBody = document.getElementById('redeem-table-body');
+        tableBody.innerHTML = '';
+
+        redeems.forEach(redeem => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${redeem.username}</td>
+                <td>${redeem.code}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    function searchRedeems() {
+        const searchTerm = document.getElementById('search-input').value.toLowerCase();
+        const filteredRedeems = allRedeems.filter(redeem => 
+            redeem.username.toLowerCase().includes(searchTerm)
+        );
+        renderRedeemList(filteredRedeems);
+    }
+
+    fetchRedeemData();
+</script>
