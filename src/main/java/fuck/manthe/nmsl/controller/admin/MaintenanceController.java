@@ -40,7 +40,7 @@ public class MaintenanceController {
             message.setContent("已关闭维护模式,现在功能一切正常");
             log.info("Unlimited injecting.");
         }
-        webhookService.pushAll("pause-inject", message); // push to webhooks
+        webhookService.pushAll("maintenance", message); // push to webhooks
 
         maintenanceService.setMaintaining(dto.isMaintaining());
         return RestBean.success(dto.isMaintaining());

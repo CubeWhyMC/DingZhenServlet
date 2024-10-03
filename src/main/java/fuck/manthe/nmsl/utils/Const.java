@@ -4,7 +4,6 @@ public interface Const {
     String COLD_DOWN = "vape:cold-down";
     String ACCOUNT_COLD_DOWN = "vape:cold-down:account:";
     String QUEUE = "vape:cold-down:queue";
-    String PAUSE_INJECT = "vape:cold-down:pause-inject";
     // Analysis
     String TOTAL_LAUNCH = "vape:total-launch";
     String TODAY_LAUNCH = "vape:today-launch";
