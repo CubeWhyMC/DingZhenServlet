@@ -39,11 +39,16 @@ function addUser() {
         return;
     }
 
-    fetch(`/admin/user/add?username=${username}&password=${password}&day=${days}`, {
+    fetch(`/admin/user/add`, {
         method: 'POST',
         headers: {
             'X-Admin-Password': adminPassword
         },
+        body: JSON.stringify({
+            username: username,
+            password: password,
+            days: days
+        })
     })
     .then(response => {
         if (response.status === 200) {

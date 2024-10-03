@@ -7,11 +7,14 @@ import fuck.manthe.nmsl.service.AnalysisService;
 import fuck.manthe.nmsl.service.CrackedUserService;
 import fuck.manthe.nmsl.service.RedeemService;
 import jakarta.annotation.Resource;
+import jakarta.transaction.Transactional;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Log4j2
 @Service
 public class CrackedUserServiceImpl implements CrackedUserService {
     @Resource
@@ -49,6 +52,7 @@ public class CrackedUserServiceImpl implements CrackedUserService {
     }
 
     @Override
+    @Transactional
     public void removeUser(String username) {
         // delete user
         userRepository.deleteByUsername(username);
@@ -62,11 +66,17 @@ public class CrackedUserServiceImpl implements CrackedUserService {
     }
 
     @Override
-    public boolean renewUser(String username, int day) {
+    public boolean renew(String username, int days) {
         Optional<CrackedUser> optional = userRepository.findByUsername(username);
         if (optional.isEmpty()) return false;
         CrackedUser user = optional.get();
-        if (day == -1) {
+        renew(user, days);
+        return true;
+    }
+
+    @Override
+    public void renew(CrackedUser user, int days) {
+        if (days == -1) {
             user.setExpire(-1L);
         } else {
             if (user.getExpire() == -1L) {
@@ -74,10 +84,19 @@ public class CrackedUserServiceImpl implements CrackedUserService {
             } else if (user.getExpire() < System.currentTimeMillis()) {
                 user.setExpire(System.currentTimeMillis());
             }
-            user.setExpire(user.getExpire() + (long) day * 24 * 60 * 60 * 1000);
+            user.setExpire(user.getExpire() + (long) days * 24 * 60 * 60 * 1000);
         }
         userRepository.save(user);
-        return true;
+        log.info("Renewed user {} (Expire at {})", user.getUsername(), user.getExpire());
+    }
+
+    @Override
+    public void renewAll(int days) {
+        log.info("Adding {} days to all users", days);
+        for (CrackedUser crackedUser : list()) {
+            if (crackedUser.getExpire() == -1) continue;
+            renew(crackedUser, days);
+        }
     }
 
     @Override
