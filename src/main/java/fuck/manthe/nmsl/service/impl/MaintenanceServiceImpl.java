@@ -39,8 +39,9 @@ public class MaintenanceServiceImpl implements MaintenanceService {
             longRedisTemplate.opsForValue().set(Const.MAINTAIN_START_AT, System.currentTimeMillis());
         } else {
             booleanRedisTemplate.opsForValue().set(Const.IS_MAINTAINING, false);
-            if (shouldRenew) {
-                crackedUserService.renewAll(calculateDuration());
+            int days = calculateDuration();
+            if (shouldRenew && days > 0) {
+                crackedUserService.renewAll(days);
             }
             log.info("Maintain mode disabled.");
         }
@@ -56,7 +57,11 @@ public class MaintenanceServiceImpl implements MaintenanceService {
 
     @Override
     public int calculateDuration() {
-        long durationInMillis = System.currentTimeMillis() - getStartTime();
+        long startTime = getStartTime();
+        if (startTime == -1) {
+            return 0;
+        }
+        long durationInMillis = System.currentTimeMillis() - startTime;
         int durationInDays = (int) (durationInMillis / (1000 * 60 * 60 * 24));
         durationInDays = durationInDays < 1 ? 0 : durationInDays;
         return durationInDays;
