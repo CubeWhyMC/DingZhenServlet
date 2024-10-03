@@ -8,6 +8,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Objects;
 
 @RestController
@@ -18,9 +23,17 @@ public class OnlineConfigController {
         // TODO real account info
         // just return a fake account info
         return VapeRestBean.success(AuthorizationDTO.builder()
+                .accountCreation(formatVapeTime(new Date(0))) // 1970/1/1
                 .userId(114514)
-                .username("getvape.today")
+                .username("getvape-today")
                 .build());
+    }
+
+    private String formatVapeTime(Date date) {
+        Instant instant = date.toInstant();
+        ZonedDateTime zonedDateTime = instant.atZone(ZoneOffset.UTC);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+        return zonedDateTime.format(formatter);
     }
 
     @GetMapping("settings/load/global")
