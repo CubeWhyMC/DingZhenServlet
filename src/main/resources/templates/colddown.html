@@ -113,51 +113,76 @@
 </div>
 
 <script>
+    let endTime;
+    let countdownInterval;
+
     async function fetchEndTime() {
-        const response = await fetch('/colddown/json');
-        const data = await response.json();
-        return new Date(data.time);
+        try {
+            const response = await fetch('/colddown/json');
+            const data = await response.json();
+            return new Date(data.time);
+        } catch (error) {
+            console.error('获取时间失败:', error);
+            return null;
+        }
     }
 
-    function startCountdown(endTime) {
+    async function updateEndTime() {
+        const newEndTime = await fetchEndTime();
+        if (newEndTime) {
+            endTime = newEndTime;
+            updateCountdown();
+        }
+    }
+
+    function updateCountdown() {
         const minuteHand = document.querySelector('.minute-hand');
         const secondHand = document.querySelector('.second-hand');
         const digitalClock = document.getElementById('digital-clock');
 
-        function updateCountdown() {
-            if (endTime === -1) {
-                digitalClock.innerHTML = "公共冷却已在服务端禁用";
-                clearInterval(interval);
-                return;
-            }
-            const now = new Date().getTime();
-            const distance = endTime.getTime() - now;
-
-            if (distance < 0) {
-                digitalClock.innerHTML = "倒计时结束，你现在可以注入";
-                clearInterval(interval);
-                return;
-            }
-
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            const secondsDegrees = ((seconds / 60) * 360) + 90;
-            const minutesDegrees = ((minutes / 6) * 360) + ((seconds/60)*6) + 90;
-
-            secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
-            minuteHand.style.transform = `rotate(${minutesDegrees}deg)`;
-
-            digitalClock.innerHTML = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        if (!endTime) {
+            digitalClock.innerHTML = "正在获取数据...";
+            return;
         }
 
-        updateCountdown();
-        const interval = setInterval(updateCountdown, 1000);
+        if (endTime.getTime() === -1) {
+            digitalClock.innerHTML = "公共冷却已在服务端禁用";
+            clearInterval(countdownInterval);
+            return;
+        }
+
+        const now = new Date().getTime();
+        const distance = endTime.getTime() - now;
+
+        if (distance < 0) {
+            digitalClock.innerHTML = "倒计时结束，你现在可以注入";
+            clearInterval(countdownInterval);
+            return;
+        }
+
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        const secondsDegrees = ((seconds / 60) * 360) + 90;
+        const minutesDegrees = ((minutes / 6) * 360) + ((seconds/60)*6) + 90;
+
+        secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
+        minuteHand.style.transform = `rotate(${minutesDegrees}deg)`;
+
+        digitalClock.innerHTML = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     }
 
-    fetchEndTime().then(endTime => {
-        startCountdown(endTime);
-    });
+    async function init() {
+        await updateEndTime();
+        
+        // 每秒更新倒计时
+        countdownInterval = setInterval(updateCountdown, 1000);
+        
+        // 每30秒从服务器获取一次最新的结束时间
+        setInterval(updateEndTime, 30000);
+    }
+
+    init();
 </script>
 </body>
 </html>
