@@ -25,4 +25,9 @@ public class WebController {
     public String register() {
         return "redeem";
     }
+
+    @GetMapping("maintain")
+    public String maintain() {
+        return "maintain";
+    }
 }
