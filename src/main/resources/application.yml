@@ -35,6 +35,9 @@ share:
   user:
     # 每日自动清理失效用户
     auto-delete-expired: true
+  maintain:
+    # 是否在维护结束后自动补偿时间
+    auto-renew: true
 service:
   # 服务端工作模式
   # full 可以刷新VapeToken 也可以作为验证服务 默认使用gateway
