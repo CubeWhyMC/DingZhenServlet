@@ -1,0 +1,16 @@
+{
+  "data": {
+    "inventorySwitchMode": 0.0,
+    "autoLogin": true,
+    "showInventoryKeybind": [],
+    "shareInventory": true,
+    "showSelf": true,
+    "pingKeybind": [],
+    "showServer": true,
+    "friendStates": {},
+    "showUsername": true,
+    "partyShowTarget": true
+  },
+  "error": null,
+  "successful": true
+}
