@@ -2,6 +2,7 @@
 <div class="mdui-typo">
     <h1>用户列表</h1>
     <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-red" onclick="removeExpiredUsers()">一键清除过期用户</button>
+    <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-green" onclick="addDaysToAll()">发放补偿</button>
 </div>
 <div class="mdui-table-fluid">
     <table class="mdui-table mdui-table-hoverable">
@@ -207,5 +208,52 @@
             }
         );
     }
+
+        function addDaysToAll() {
+        mdui.prompt('请输入要为所有用户增加的天数：', '批量增加天数',
+            function (value) {
+                let days = parseInt(value);
+                if (isNaN(days) || days <= 0) {
+                    mdui.alert('请输入一个有效的正整数');
+                    return;
+                }
+                
+                fetch('/admin/listUsers', {
+                    headers: {
+                        'X-Admin-Password': adminPassword
+                    }
+                })
+                .then(response => response.json())
+                .then(users => {
+                    const promises = users
+                        .filter(user => user.expire !== -1)
+                        .map(user => 
+                            fetch(`/admin/renew/${user.username}?day=${days}`, {
+                                method: 'POST',
+                                headers: {
+                                    'X-Admin-Password': adminPassword
+                                },
+                            })
+                        );
+                    
+                    return Promise.all(promises);
+                })
+                .then(() => {
+                    mdui.alert(`已为所有非无限期用户增加 ${days} 天`);
+                    fetchUserData(); // 重新加载用户列表
+                })
+                .catch(error => {
+                    console.error('Error adding days to all users:', error);
+                    mdui.alert('批量增加天数失败，请稍后再试');
+                });
+            },
+            function (value) {},
+            {
+                confirmText: '确认',
+                cancelText: '取消'
+            }
+        );
+    }
+    
     fetchUserData()
 </script>
