@@ -1,5 +1,8 @@
 ![cdbf6c81800a19d8bc3e6ba78aad958ba61ea8d3e843](https://github.com/user-attachments/assets/c9cef282-cdc3-49b3-b730-84c8090bfac3)
 # 丁真Servlet
+
+[![Discord](https://img.shields.io/discord/1047866655033802802?label=Discord&color=blue&link=https%3A%2F%2Fdiscord.gg%2FrCqCepgWJc)](https://discord.lunarclient.top)
+
 ***尚忆丁真乎？吾等欲使君亦得如丁真之神奇瑞克五代！此瑞克五代，非但省心省力，更令君尝新鲜有趣之功能。犹如得一万能之遥控，欲观何物即观何物，欲玩何物即玩何物！***
 > 提示: 吸烟有害健康.
 

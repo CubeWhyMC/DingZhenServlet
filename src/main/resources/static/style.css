@@ -17,6 +17,14 @@ body {
     transform: translateY(20px);
     animation: fadeInUp 0.8s ease-out forwards;
 }
+
+.center {
+    width: 50%;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
 h1, h2 {
     color: #2c3e50;
 }
