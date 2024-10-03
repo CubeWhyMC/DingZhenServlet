@@ -8,8 +8,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -21,7 +19,7 @@ public class OnlineConfigController {
         // just return a fake account info
         return VapeRestBean.success(AuthorizationDTO.builder()
                 .userId(114514)
-                .username("DingZhen")
+                .username("getvape.today")
                 .build());
     }
 
@@ -31,8 +29,11 @@ public class OnlineConfigController {
     }
 
     @GetMapping("settings/load/online")
-    public VapeRestBean<OnlineConfigDTO> loadOnline(@PathVariable String token) {
-        return VapeRestBean.success(OnlineConfigDTO.builder().build());
+    public void /*VapeRestBean<OnlineConfigDTO>*/ loadOnline(@PathVariable String token, HttpServletResponse response) throws IOException {
+//        return VapeRestBean.success(OnlineConfigDTO.builder().build());
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getOutputStream().write(Objects.requireNonNull(this.getClass().getResourceAsStream("/fake-data/fake-online-config.json")).readAllBytes());
     }
 
     @PostMapping("settings/save/online")
@@ -49,7 +50,7 @@ public class OnlineConfigController {
         // return VapeRestBean.success(new ArrayList<>()); // stage 23
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        response.getOutputStream().write(Objects.requireNonNull(this.getClass().getResourceAsStream("/fake-pub-tags.json")).readAllBytes());
+        response.getOutputStream().write(Objects.requireNonNull(this.getClass().getResourceAsStream("/fake-data/fake-pub-tags.json")).readAllBytes());
     }
 
     /**
@@ -63,6 +64,6 @@ public class OnlineConfigController {
 //                .build());
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        response.getOutputStream().write(Objects.requireNonNull(this.getClass().getResourceAsStream("/fake-private-config.json")).readAllBytes());
+        response.getOutputStream().write(Objects.requireNonNull(this.getClass().getResourceAsStream("/fake-data/fake-private-config.json")).readAllBytes());
     }
 }
