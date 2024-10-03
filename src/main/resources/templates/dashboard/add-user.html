@@ -39,7 +39,7 @@ function addUser() {
         return;
     }
 
-    fetch(`/admin/addUser?username=${username}&password=${password}&day=${days}`, {
+    fetch(`/admin/user/add?username=${username}&password=${password}&day=${days}`, {
         method: 'POST',
         headers: {
             'X-Admin-Password': adminPassword

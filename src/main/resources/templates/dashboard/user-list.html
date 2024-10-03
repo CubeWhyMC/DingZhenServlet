@@ -25,7 +25,7 @@
     const adminPassword = localStorage.getItem('adminPassword');
 
     function fetchUserData() {
-        fetch('/admin/listUsers', {
+        fetch('/admin/user/list', {
             headers: {
                 'X-Admin-Password': adminPassword
             }
@@ -87,7 +87,7 @@
     function removeExpiredUsers() {
         mdui.confirm('确定要清除所有过期用户吗？', '清除过期用户',
             function () {
-                fetch('/admin/removeExpired', {
+                fetch('/admin/user/removeExpired', {
                     method: 'DELETE',
                     headers: {
                         'X-Admin-Password': adminPassword
@@ -122,7 +122,7 @@
                     return
                 }
                 // 这里应该调用API来更新用户天数
-                fetch(`/admin/renew/${username}?day=${days}`, {
+                fetch(`/admin/user/renew/${username}?day=${days}`, {
                     method: 'POST',
                     headers: {
                         // 'Content-Type': 'application/x-www-form-urlencoded',
@@ -153,7 +153,7 @@
     function changePassword(username) {
         mdui.prompt('请输入新密码：', '修改密码',
             function (value) {
-                fetch(`/admin/password/${username}/reset?password=${value}`, {
+                fetch(`/admin/user/password/${username}/reset?password=${value}`, {
                     method: 'POST',
                     headers: {
                         'X-Admin-Password': localStorage.getItem('adminPassword')
@@ -184,7 +184,7 @@
         mdui.confirm('确定要删除用户 ' + username + ' 吗？', '删除用户',
             function () {
                 // 这里应该调用API来删除用户
-                fetch(`/admin/removeUser/${username}`, {
+                fetch(`/admin/user/remove/${username}`, {
                     method: 'DELETE',
                     headers: {
                         'X-Admin-Password': localStorage.getItem('adminPassword')
@@ -217,8 +217,8 @@
                     mdui.alert('请输入一个有效的正整数');
                     return;
                 }
-                
-                fetch('/admin/listUsers', {
+
+                fetch('/admin/user/list', {
                     headers: {
                         'X-Admin-Password': adminPassword
                     }
@@ -227,8 +227,8 @@
                 .then(users => {
                     const promises = users
                         .filter(user => user.expire !== -1)
-                        .map(user => 
-                            fetch(`/admin/renew/${user.username}?day=${days}`, {
+                        .map(user =>
+                            fetch(`/admin/user/renew/${user.username}?day=${days}`, {
                                 method: 'POST',
                                 headers: {
                                     'X-Admin-Password': adminPassword
