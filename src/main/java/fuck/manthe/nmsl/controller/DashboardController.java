@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("dashboard")
 public class DashboardController {
-    @GetMapping("login")
-    public String login() {
-        return "dashboard/login";
-    }
+//    @GetMapping("login")
+//    public String login() {
+//        return "dashboard/login";
+//    }
 
     @GetMapping("add-user")
     public String addUser() {
