@@ -1,7 +1,7 @@
 package fuck.manthe.nmsl.service.impl;
 
 import fuck.manthe.nmsl.service.CrackedUserService;
-import fuck.manthe.nmsl.service.MaintainService;
+import fuck.manthe.nmsl.service.MaintenanceService;
 import fuck.manthe.nmsl.utils.Const;
 import jakarta.annotation.Resource;
 import lombok.extern.log4j.Log4j2;
@@ -13,7 +13,7 @@ import java.util.Objects;
 
 @Log4j2
 @Service
-public class MaintainServiceImpl implements MaintainService {
+public class MaintenanceServiceImpl implements MaintenanceService {
     @Resource
     RedisTemplate<String, Boolean> booleanRedisTemplate;
 
@@ -56,6 +56,9 @@ public class MaintainServiceImpl implements MaintainService {
 
     @Override
     public int calculateDuration() {
-        return 0;
+        long durationInMillis = System.currentTimeMillis() - getStartTime();
+        int durationInDays = (int) (durationInMillis / (1000 * 60 * 60 * 24));
+        durationInDays = durationInDays < 1 ? 0 : durationInDays;
+        return durationInDays;
     }
 }

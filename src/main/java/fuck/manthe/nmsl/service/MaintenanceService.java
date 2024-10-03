@@ -1,6 +1,6 @@
 package fuck.manthe.nmsl.service;
 
-public interface MaintainService {
+public interface MaintenanceService {
 
     boolean isMaintaining();
 

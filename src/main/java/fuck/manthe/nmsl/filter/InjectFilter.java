@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
-@Order(0)
+@Order(3)
 public class InjectFilter implements Filter {
 //    @Resource
 //    RedisTemplate<String, Long> redisTemplate;

@@ -43,7 +43,6 @@ public class AdminFilter implements Filter {
             } else {
                 log.warn("Someone tried to log in to the dashboard, but the password was incorrect.");
                 httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid admin parameter");
-//                return;
             }
         } else {
             chain.doFilter(request, response);
