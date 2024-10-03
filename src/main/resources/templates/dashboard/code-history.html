@@ -10,8 +10,10 @@
     <table class="mdui-table mdui-table-hoverable">
         <thead>
         <tr>
-            <th>用户名</th>
             <th>卡密</th>
+            <th>天数</th>
+            <th>用户名</th>
+            <th>分销商</th>
         </tr>
         </thead>
         <tbody id="redeem-table-body">
@@ -32,8 +34,8 @@
         })
         .then(response => response.json())
         .then(redeems => {
-            allRedeems = redeems;
-            renderRedeemList(redeems);
+            allRedeems = redeems.data;
+            renderRedeemList(redeems.data);
         })
         .catch(error => {
             console.error('Error fetching redeem data:', error);
@@ -48,8 +50,10 @@
         redeems.forEach(redeem => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${redeem.username}</td>
                 <td>${redeem.code}</td>
+                <td>${redeem.date}</td>
+                <td>${redeem.redeemer}</td>
+                <td>${redeem.reseller}</td>
             `;
             tableBody.appendChild(row);
         });
@@ -57,8 +61,8 @@
 
     function searchRedeems() {
         const searchTerm = document.getElementById('search-input').value.toLowerCase();
-        const filteredRedeems = allRedeems.filter(redeem => 
-            redeem.username.toLowerCase().includes(searchTerm)
+        const filteredRedeems = allRedeems.filter(redeem =>
+            redeem.redeemer.toLowerCase().includes(searchTerm)
         );
         renderRedeemList(filteredRedeems);
     }

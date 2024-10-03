@@ -5,16 +5,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@RequestMapping("/dashboard")
-@Controller
 @Log4j2
+@Controller
+@RequestMapping("dashboard")
 public class DashboardController {
-    @GetMapping("/login")
+    @GetMapping("login")
     public String login() {
         return "dashboard/login";
     }
 
-    @GetMapping("/add-user")
+    @GetMapping("add-user")
     public String addUser() {
         return "dashboard/add-user";
     }
@@ -52,5 +52,10 @@ public class DashboardController {
     @GetMapping("webhook")
     public String webhook() {
         return "dashboard/webhook";
+    }
+
+    @GetMapping("code-history")
+    public String codeHistory() {
+        return "dashboard/code-history";
     }
 }
