@@ -5,6 +5,7 @@ import fuck.manthe.nmsl.entity.dto.AuthorizationDTO;
 import fuck.manthe.nmsl.entity.dto.GlobalConfigDTO;
 import fuck.manthe.nmsl.entity.dto.OnlineConfigDTO;
 import jakarta.servlet.http.HttpServletResponse;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -29,7 +30,8 @@ public class OnlineConfigController {
                 .build());
     }
 
-    private String formatVapeTime(Date date) {
+    @NotNull
+    private String formatVapeTime(@NotNull Date date) {
         Instant instant = date.toInstant();
         ZonedDateTime zonedDateTime = instant.atZone(ZoneOffset.UTC);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
