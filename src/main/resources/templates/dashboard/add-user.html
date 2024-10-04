@@ -37,7 +37,7 @@ function addUser() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
     const days = document.getElementById('days').value;
-    const admin = document.getElementById('admin').value;
+    const admin = document.getElementById('admin').checked;
 
     if (!username || !password || !days) {
         mdui.alert('请填写所有字段');
