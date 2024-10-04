@@ -49,7 +49,7 @@ public class WebhookServiceImpl implements WebhookService {
     }
 
     @Override
-    public WebhookEndpoint find(long id) {
+    public WebhookEndpoint find(String id) {
         return webhookEndpointRepository.findById(id).orElse(null);
     }
 
@@ -59,7 +59,7 @@ public class WebhookServiceImpl implements WebhookService {
     }
 
     @Override
-    public void remove(long id) {
+    public void remove(String id) {
         webhookEndpointRepository.deleteById(id);
     }
 

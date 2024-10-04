@@ -29,8 +29,6 @@
 </div>
 
 <script>
-    const adminPassword = localStorage.getItem('adminPassword');
-
     function addWebhook() {
         const name = document.getElementById('add-name').value;
         const endpoint = document.getElementById('add-endpoint').value;
@@ -40,7 +38,6 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-Admin-Password': adminPassword
             },
             body: JSON.stringify({name, endpoint, secret})
         })
@@ -62,7 +59,6 @@
     function fetchWebhooks() {
         fetch('/admin/webhook/list', {
             headers: {
-                'X-Admin-Password': adminPassword
             }
         })
             .then(response => response.json())
@@ -109,7 +105,6 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-Admin-Password': adminPassword
                     },
                     body: JSON.stringify({name: value})
                 })
@@ -143,7 +138,6 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-Admin-Password': adminPassword
                     },
                     body: JSON.stringify({secret: value})
                 })
@@ -177,7 +171,6 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-Admin-Password': adminPassword
                     },
                     body: JSON.stringify({url: value})
                 })
@@ -210,7 +203,6 @@
                 fetch(`/admin/webhook/${id}/remove`, {
                     method: 'DELETE',
                     headers: {
-                        'X-Admin-Password': adminPassword
                     }
                 })
                     .then(response => response.json())
@@ -243,7 +235,6 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-Admin-Password': adminPassword
                     },
                     body: JSON.stringify({content: value})
                 })

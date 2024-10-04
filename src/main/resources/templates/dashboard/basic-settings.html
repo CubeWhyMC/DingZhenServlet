@@ -42,15 +42,11 @@
     let maintenanceModeState = true;
 
     function resetGlobalColdDown() {
-        const adminPassword = localStorage.getItem('adminPassword');
-
         mdui.confirm('确定要重置注入冷却吗？', '重置确认',
             function () {
                 fetch('/admin/colddown/reset', {
                     method: 'POST',
-                    headers: {
-                        'X-Admin-Password': adminPassword
-                    },
+                    headers: {}
                 })
                     .then(response => response.json())
                     .then(data => {
@@ -82,12 +78,9 @@
     }
 
     function loadMaintenanceState() {
-        const adminPassword = localStorage.getItem('adminPassword');
-
         fetch("/admin/maintenance/state", {
             method: 'GET',
             headers: {
-                'X-Admin-Password': adminPassword,
                 'Content-Type': "application/json"
             }
         })
@@ -101,14 +94,12 @@
     }
 
     function toggleInject() {
-        const adminPassword = localStorage.getItem('adminPassword');
 
         mdui.confirm(`确定要${maintenanceText()}维护模式吗?`, '确认',
             function () {
                 fetch('/admin/maintenance/state', {
                     method: 'POST',
                     headers: {
-                        'X-Admin-Password': adminPassword,
                         'Content-Type': "application/json"
                     },
                     body: JSON.stringify({

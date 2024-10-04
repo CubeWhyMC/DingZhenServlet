@@ -29,7 +29,7 @@ public class GatewayAdminController {
     }
 
     @DeleteMapping("remove")
-    public ResponseEntity<RestBean<String>> remove(@RequestParam long id) {
+    public ResponseEntity<RestBean<String>> remove(@RequestParam String id) {
         if (gatewayService.removeGateway(id)) {
             return new ResponseEntity<>(RestBean.failure(404, "Gateway not found"), HttpStatus.NOT_FOUND);
         }

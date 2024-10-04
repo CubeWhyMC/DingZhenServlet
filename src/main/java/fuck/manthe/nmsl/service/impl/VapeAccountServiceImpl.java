@@ -8,7 +8,6 @@ import fuck.manthe.nmsl.service.VapeAccountService;
 import fuck.manthe.nmsl.utils.Const;
 import fuck.manthe.nmsl.utils.CryptUtil;
 import jakarta.annotation.Resource;
-import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -100,7 +99,6 @@ public class VapeAccountServiceImpl implements VapeAccountService {
     }
 
     @Override
-    @Transactional
     public boolean removeAccount(String username) {
         if (!vapeAccountRepository.existsByUsername(username)) {
             return false;

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>登录到DingZhenServlet</title>
+</head>
+<body>
+<h1>请登录</h1>
+<div th:if="${param.error}">
+    错误的用户名或者密码
+</div>
+<div th:if="${param.logout}">
+    成功登出
+</div>
+<form method="post" th:action="@{/login}">
+    <div>
+        <input name="username" placeholder="Username" type="text"/>
+    </div>
+    <div>
+        <input name="password" placeholder="Password" type="password"/>
+    </div>
+    <input type="submit" value="Log in"/>
+</form>
+</body>
+</html>

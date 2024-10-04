@@ -87,45 +87,38 @@
 
     <script>
         // 检查是否已登录
-        function checkLogin() {
-            const adminPassword = localStorage.getItem('adminPassword');
-            fetch('/admin/ping', {
-                method: 'POST',
-                headers: {
-                    // 'Content-Type': 'application/x-www-form-urlencoded'
-                    "X-Admin-Password": adminPassword
-                },
-            })
-                // .then(response => response.json())
-                .then(response => {
-                    if (!response.ok) {
-                        mdui.alert('登录失效');
-                        window.location.href = '/dashboard/login'
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            if (!adminPassword) {
-                window.location.href = '/dashboard/login';
-            }
-        }
+        // function checkLogin() {
+        //     fetch('/admin/ping', {
+        //         method: 'POST',
+        //         credentials: 'include',
+        //         headers: {
+        //             credentials: 'include',
+        //         },
+        //     })
+        //         // .then(response => response.json())
+        //         .then(response => {
+        //             if (!response.ok) {
+        //                 mdui.alert('登录失效');
+        //                 window.location.href = '/login'
+        //             }
+        //         })
+        //         .catch(error => {
+        //             console.error('Error:', error);
+        //         });
+        // }
     
         // 登出函数
         function logout() {
-            localStorage.removeItem('adminPassword');
-            window.location.href = '/dashboard/login';
+            window.location.href = '/logout';
         }
     
         // 在页面加载时检查登录状态
-        document.addEventListener('DOMContentLoaded', checkLogin);
+        // document.addEventListener('DOMContentLoaded', checkLogin);
         let regDetectJs = /<script(.|\n)*?>(.|\n|\r\n)*?<\/script>/ig;
         // 修改 loadContent 函数以包含管理员密码
         function loadContent(url) {
-            const adminPassword = localStorage.getItem('adminPassword');
             fetch(`dashboard/${url}`, {
                 headers: {
-                    'X-Admin-Password': adminPassword
                 }
             })
                 .then(response => response.text())

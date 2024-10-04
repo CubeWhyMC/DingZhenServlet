@@ -32,7 +32,6 @@ function addUser() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
     const days = document.getElementById('days').value;
-    const adminPassword = localStorage.getItem('adminPassword');
 
     if (!username || !password || !days) {
         mdui.alert('请填写所有字段');
@@ -42,7 +41,7 @@ function addUser() {
     fetch(`/admin/user/add`, {
         method: 'POST',
         headers: {
-            'X-Admin-Password': adminPassword
+            'Content-Type': "application/json",
         },
         body: JSON.stringify({
             username: username,

@@ -2,8 +2,8 @@ package fuck.manthe.nmsl.controller;
 
 import fuck.manthe.nmsl.entity.RestBean;
 import fuck.manthe.nmsl.entity.dto.LoginDTO;
-import fuck.manthe.nmsl.service.CrackedUserService;
 import fuck.manthe.nmsl.service.QueueService;
+import fuck.manthe.nmsl.service.UserService;
 import jakarta.annotation.Resource;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
@@ -16,14 +16,14 @@ import java.util.List;
 @RequestMapping("colddown/queue")
 public class QueueController {
     @Resource
-    CrackedUserService crackedUserService;
+    UserService userService;
 
     @Resource
     QueueService queueService;
 
     @PostMapping("join")
     public @NotNull ResponseEntity<RestBean<String>> join(@RequestBody LoginDTO login) {
-        if (!crackedUserService.isValid(login.getUsername(), login.getPassword()))
+        if (!userService.isValid(login.getUsername(), login.getPassword()))
             return new ResponseEntity<>(RestBean.unauthorized("Unauthorized"), HttpStatus.UNAUTHORIZED);
         if (!queueService.join(login.getUsername()))
             return new ResponseEntity<>(RestBean.failure(409, "You're always queued."), HttpStatus.CONFLICT);
@@ -39,7 +39,7 @@ public class QueueController {
     @DeleteMapping("quit")
     public @NotNull ResponseEntity<RestBean<String>> quit(@RequestBody LoginDTO login) {
         // 不想玩了可以直接取消名额.
-        if (!crackedUserService.isValid(login.getUsername(), login.getPassword()))
+        if (!userService.isValid(login.getUsername(), login.getPassword()))
             return new ResponseEntity<>(RestBean.failure(403, "Unauthorized"), HttpStatus.UNAUTHORIZED);
         queueService.quit(login.getUsername());
         return ResponseEntity.ok(RestBean.success("Removed " + login.getUsername() + " from queue."));

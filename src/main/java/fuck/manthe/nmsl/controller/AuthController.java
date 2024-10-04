@@ -1,6 +1,5 @@
 package fuck.manthe.nmsl.controller;
 
-import cn.hutool.crypto.SecureUtil;
 import com.standardwebhooks.exceptions.WebhookSigningException;
 import fuck.manthe.nmsl.entity.*;
 import fuck.manthe.nmsl.entity.dto.VapeAuthorizeDTO;
@@ -18,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URLDecoder;
@@ -33,7 +33,7 @@ public class AuthController {
     RedisTemplate<String, Long> redisTemplate;
 
     @Resource
-    CrackedUserService crackedUserService;
+    UserService userService;
 
     @Resource
     RedeemService redeemService;
@@ -56,6 +56,9 @@ public class AuthController {
     @Resource
     MaintenanceService maintenanceService;
 
+    @Resource
+    PasswordEncoder passwordEncoder;
+
     @Value("${share.cold-down.global.enabled}")
     boolean coldDownEnabled;
 
@@ -77,18 +80,18 @@ public class AuthController {
         String password = map.get("password");
         // 统计请求次数
         log.info("User {} login", username);
-        CrackedUser crackedUser = crackedUserService.findByUsername(username);
+        User crackedUser = userService.findByUsername(username);
         if (maintenanceService.isMaintaining() && crackedUser.getExpire() != -1) {
             // 暂停注入
             log.info("Blocked user {} to inject. Injections are only open to lifetime users. (Maintaining)", username);
             return ErrorCode.SERVER.formatError("Maintaining");
         }
         analysisService.authRequested(username);
-        if (!crackedUserService.isValid(username, password)) {
+        if (!userService.isValid(username, password)) {
             // 凭证错误
             return ErrorCode.ACCOUNT.formatError("Unauthorized");
         }
-        if (crackedUserService.hasExpired(username)) {
+        if (userService.hasExpired(username)) {
             // 账户失效
             return ErrorCode.ACCOUNT.formatError("Expired");
         }
@@ -161,7 +164,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(RestBean.failure(401, "Code was redeemed"));
         }
 
-        if (crackedUserService.addUser(CrackedUser.builder().password(SecureUtil.sha1(password)).username(username).expire(expire).build())) {
+        if (userService.addUser(User.builder().password(passwordEncoder.encode(password)).username(username).expire(expire).build())) {
             if (redeemService.useCode(redeemCode.getCode(), username)) {
                 log.info("User {} registered it's account with the code {} ({}d).", username, redeemCode.getCode(), redeemCode.getDate());
             }
@@ -175,7 +178,7 @@ public class AuthController {
             webhookService.pushAll("renew", message);
 
             return ResponseEntity.ok(RestBean.success("Registered."));
-        } else if (crackedUserService.isValid(username, password) && crackedUserService.renew(username, redeemCode.getDate())) {
+        } else if (userService.isValid(username, password) && userService.renew(username, redeemCode.getDate())) {
             if (redeemService.useCode(redeemCode.getCode(), username)) {
                 log.info("User {} renewed it's account with the code {} ({}d).", username, redeemCode.getCode(), redeemCode.getDate());
             }
@@ -184,7 +187,7 @@ public class AuthController {
             message.setRedeemUsername(username);
             message.setTimestamp(System.currentTimeMillis() / 1000L);
             message.setCode(redeemCode.getCode());
-            message.setExpireAt(crackedUserService.findByUsername(username).getExpire());
+            message.setExpireAt(userService.findByUsername(username).getExpire());
             message.setContent("用户 %s 使用%s 兑换了%s 天订阅".formatted(username, redeemCode.getCode(), redeemCode.getDate()));
             webhookService.pushAll("renew", message);
             return ResponseEntity.ok(RestBean.success("Renewed."));
@@ -199,7 +202,7 @@ public class AuthController {
 
     @GetMapping("verify")
     public ResponseEntity<String> verify(@RequestParam String username, @RequestParam String password) {
-        if (!crackedUserService.isValid(username, password) || crackedUserService.hasExpired(username)) {
+        if (!userService.isValid(username, password) || userService.hasExpired(username)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         return ResponseEntity.ok("Valid user");
@@ -207,7 +210,7 @@ public class AuthController {
 
     @PostMapping("verify")
     public ResponseEntity<String> verify(@RequestBody VerifyLoginDTO dto) {
-        if (!crackedUserService.isValidHash(dto.getUsername(), dto.getHashedPassword()) || crackedUserService.hasExpired(dto.getUsername())) {
+        if (!userService.isValid(dto.getUsername(), dto.getPassword()) || userService.hasExpired(dto.getUsername())) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         return ResponseEntity.ok("Valid user");

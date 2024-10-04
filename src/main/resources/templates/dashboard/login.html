@@ -58,7 +58,6 @@
             // .then(response => response.json())
             .then(response => {
                 if (response.ok) {
-                    localStorage.setItem('adminPassword', password);
                     window.location.href = '/dashboard';
                 } else {
                     mdui.alert('登录失败');

@@ -31,6 +31,11 @@ public class WebController {
         return "redeem";
     }
 
+    @GetMapping("login")
+    public String login() {
+        return "login";
+    }
+
     @GetMapping("maintain")
     public String maintain(@RequestParam(required = false) String redirect) {
         if (!maintenanceService.isMaintaining()) {
