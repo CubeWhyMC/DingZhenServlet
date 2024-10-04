@@ -1,0 +1,19 @@
+{
+  "properties": [
+    {
+      "name": "mongodb.encrypt.keys",
+      "type": "java.lang.String",
+      "description": "MongoDB encrypt keys."
+    },
+    {
+      "name": "mongodb.encrypt.keys[0].version",
+      "type": "java.lang.String",
+      "description": "Key version."
+    },
+    {
+      "name": "mongodb.encrypt.keys[0].key",
+      "type": "java.lang.String",
+      "description": "Encrypt key."
+    }
+  ]
+}

@@ -7,6 +7,13 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+# 数据库加密
+# 实际部署的时候请务必修改这个,否则他人可能可以解密你的数据库
+# openssl rand -base64 32
+mongodb.encrypt:
+  keys:
+    - version: 1
+      key: R0afdUePq5uuN+Lnm8MFb5jGQFRsAi3wuMv3QE41YrE=
 share:
   webhook:
     # 是否启用webhook
