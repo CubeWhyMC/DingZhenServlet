@@ -22,12 +22,10 @@
 </div>
 
 <script>
-    const adminPassword = localStorage.getItem('adminPassword');
 
     function fetchUserData() {
         fetch('/admin/user/list', {
             headers: {
-                'X-Admin-Password': adminPassword
             }
         })
             .then(response => response.json())
@@ -89,9 +87,7 @@
             function () {
                 fetch('/admin/user/removeExpired', {
                     method: 'DELETE',
-                    headers: {
-                        'X-Admin-Password': adminPassword
-                    },
+                    headers: {}
                 })
                     .then(response => response.json())
                     .then(data => {
@@ -126,7 +122,6 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-Admin-Password': localStorage.getItem('adminPassword')
                     },
                     body: JSON.stringify({
                         days: days
@@ -158,7 +153,7 @@
                 fetch(`/admin/user/password/${username}/reset`, {
                     method: 'POST',
                     headers: {
-                        'X-Admin-Password': localStorage.getItem('adminPassword')
+                        'Content-Type': "application/json",
                     },
                     body: JSON.stringify({
                         password: value
@@ -192,7 +187,6 @@
                 fetch(`/admin/user/remove/${username}`, {
                     method: 'DELETE',
                     headers: {
-                        'X-Admin-Password': localStorage.getItem('adminPassword')
                     },
                 })
                     .then(response => response.json())
@@ -226,7 +220,6 @@
                 fetch('/admin/user/renewAll', {
                     method: 'POST',
                     headers: {
-                        'X-Admin-Password': adminPassword,
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({

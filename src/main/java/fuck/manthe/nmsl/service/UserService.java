@@ -1,23 +1,21 @@
 package fuck.manthe.nmsl.service;
 
-import fuck.manthe.nmsl.entity.CrackedUser;
+import fuck.manthe.nmsl.entity.User;
 
 import java.util.List;
 
-public interface CrackedUserService {
+public interface UserService {
     boolean isValid(String username, String password);
 
-    boolean isValidHash(String username, String password);
-
-    boolean addUser(CrackedUser user);
+    boolean addUser(User user);
 
     void removeUser(String username);
 
-    void removeUser(CrackedUser user);
+    void removeUser(User user);
 
     boolean renew(String username, int days);
 
-    void renew(CrackedUser user, int days);
+    void renew(User user, int days);
 
     void renewAll(int days);
 
@@ -25,12 +23,12 @@ public interface CrackedUserService {
 
     boolean resetPassword(String username, String newPassword);
 
-    List<CrackedUser> list();
+    List<User> list();
 
     long count();
 
     void removeExpired();
 
-    CrackedUser findByUsername(String username);
+    User findByUsername(String username);
 
 }

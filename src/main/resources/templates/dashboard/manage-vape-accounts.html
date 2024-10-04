@@ -45,8 +45,6 @@
 </div>
 
 <script>
-    const adminPassword = localStorage.getItem('adminPassword');
-
     function addVapeAccount() {
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
@@ -61,7 +59,6 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-Admin-Password': adminPassword
             },
             body: JSON.stringify({
                 username: username,
@@ -92,7 +89,6 @@
         fetch('/admin/shared/list', {
             method: 'GET',
             headers: {
-                'X-Admin-Password': adminPassword
             }
         })
             .then(response => response.json())
@@ -139,7 +135,6 @@
                 fetch(`/admin/shared/remove?username=${username}`, {
                     method: 'DELETE',
                     headers: {
-                        'X-Admin-Password': adminPassword
                     },
                 })
                     .then(response => response.json())
@@ -170,9 +165,7 @@
             function (value) {
                 fetch(`/admin/shared/updatePassword?username=${username}&newPassword=${value}`, {
                     method: 'PUT',
-                    headers: {
-                        'X-Admin-Password': localStorage.getItem('adminPassword')
-                    },
+                    headers: {}
                 })
                     .then(response => response.json())
                     .then(data => {
@@ -199,7 +192,6 @@
                 fetch(`/admin/shared/updateHwid?username=${username}&newHwid=${value}`, {
                     method: 'PUT',
                     headers: {
-                        'X-Admin-Password': localStorage.getItem('adminPassword')
                     },
                 })
                     .then(response => response.json())
@@ -225,9 +217,7 @@
             function () {
                 fetch(`/admin/shared/resetColddown?username=${username}`, {
                     method: 'POST',
-                    headers: {
-                        'X-Admin-Password': localStorage.getItem('adminPassword')
-                    },
+                    headers: {}
                 })
                     .then(response => response.json())
                     .then(data => {

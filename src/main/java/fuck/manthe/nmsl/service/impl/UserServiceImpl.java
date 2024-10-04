@@ -1,14 +1,13 @@
 package fuck.manthe.nmsl.service.impl;
 
-import cn.hutool.crypto.SecureUtil;
-import fuck.manthe.nmsl.entity.CrackedUser;
+import fuck.manthe.nmsl.entity.User;
 import fuck.manthe.nmsl.repository.UserRepository;
 import fuck.manthe.nmsl.service.AnalysisService;
-import fuck.manthe.nmsl.service.CrackedUserService;
 import fuck.manthe.nmsl.service.RedeemService;
+import fuck.manthe.nmsl.service.UserService;
 import jakarta.annotation.Resource;
-import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +15,7 @@ import java.util.Optional;
 
 @Log4j2
 @Service
-public class CrackedUserServiceImpl implements CrackedUserService {
+public class UserServiceImpl implements UserService {
     @Resource
     UserRepository userRepository;
 
@@ -26,23 +25,21 @@ public class CrackedUserServiceImpl implements CrackedUserService {
     @Resource
     RedeemService redeemService;
 
-    @Override
-    public boolean isValid(String username, String password) {
-        return isValidHash(username, SecureUtil.sha1(password));
-    }
+    @Resource
+    PasswordEncoder passwordEncoder;
 
     @Override
-    public boolean isValidHash(String username, String password) {
-        Optional<CrackedUser> optional = userRepository.findByUsername(username);
+    public boolean isValid(String username, String password) {
+        Optional<User> optional = userRepository.findByUsername(username);
         if (optional.isPresent()) {
-            CrackedUser user = optional.get();
-            return user.getPassword().equals(password);
+            User user = optional.get();
+            return passwordEncoder.matches(password, user.getPassword());
         }
         return false;
     }
 
     @Override
-    public boolean addUser(CrackedUser user) {
+    public boolean addUser(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
             return false;
         }
@@ -52,7 +49,6 @@ public class CrackedUserServiceImpl implements CrackedUserService {
     }
 
     @Override
-    @Transactional
     public void removeUser(String username) {
         // delete user
         userRepository.deleteByUsername(username);
@@ -61,21 +57,21 @@ public class CrackedUserServiceImpl implements CrackedUserService {
     }
 
     @Override
-    public void removeUser(CrackedUser user) {
+    public void removeUser(User user) {
         userRepository.delete(user);
     }
 
     @Override
     public boolean renew(String username, int days) {
-        Optional<CrackedUser> optional = userRepository.findByUsername(username);
+        Optional<User> optional = userRepository.findByUsername(username);
         if (optional.isEmpty()) return false;
-        CrackedUser user = optional.get();
+        User user = optional.get();
         renew(user, days);
         return true;
     }
 
     @Override
-    public void renew(CrackedUser user, int days) {
+    public void renew(User user, int days) {
         if (days == -1) {
             user.setExpire(-1L);
         } else {
@@ -93,7 +89,7 @@ public class CrackedUserServiceImpl implements CrackedUserService {
     @Override
     public void renewAll(int days) {
         log.info("Adding {} days to all users", days);
-        for (CrackedUser crackedUser : list()) {
+        for (User crackedUser : list()) {
             if (crackedUser.getExpire() == -1) continue;
             renew(crackedUser, days);
         }
@@ -101,7 +97,7 @@ public class CrackedUserServiceImpl implements CrackedUserService {
 
     @Override
     public boolean hasExpired(String username) {
-        Optional<CrackedUser> optional = userRepository.findByUsername(username);
+        Optional<User> optional = userRepository.findByUsername(username);
         if (optional.isEmpty()) return true;
         if (optional.get().getExpire() == -1L) {
             return false;
@@ -111,16 +107,16 @@ public class CrackedUserServiceImpl implements CrackedUserService {
 
     @Override
     public boolean resetPassword(String username, String newPassword) {
-        Optional<CrackedUser> optional = userRepository.findByUsername(username);
+        Optional<User> optional = userRepository.findByUsername(username);
         if (optional.isEmpty()) return false;
-        CrackedUser user = optional.get();
-        user.setPassword(SecureUtil.sha1(newPassword));
+        User user = optional.get();
+        user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
         return true;
     }
 
     @Override
-    public List<CrackedUser> list() {
+    public List<User> list() {
         return userRepository.findAll();
     }
 
@@ -135,7 +131,7 @@ public class CrackedUserServiceImpl implements CrackedUserService {
     }
 
     @Override
-    public CrackedUser findByUsername(String username) {
+    public User findByUsername(String username) {
         return userRepository.findByUsername(username).orElse(null);
     }
 }

@@ -1,25 +1,24 @@
 package fuck.manthe.nmsl.entity;
 
-import fuck.manthe.nmsl.annotation.Encrypted;
-import jakarta.persistence.*;
+import com.bol.secure.Encrypted;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @Builder
-@Entity
+@Document
 @AllArgsConstructor
 @NoArgsConstructor
 public class Gateway {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     private String name;
     private String address;
-    @Column(name = "gateway_key")
     @Encrypted
     private String key;
 }

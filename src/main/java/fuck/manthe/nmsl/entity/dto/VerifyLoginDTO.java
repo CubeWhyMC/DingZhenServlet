@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class VerifyLoginDTO {
     private String username;
-    private String hashedPassword; // password with sha1
+    private String password;
 }

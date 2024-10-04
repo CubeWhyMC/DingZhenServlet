@@ -1,27 +1,25 @@
 package fuck.manthe.nmsl.entity;
 
-import fuck.manthe.nmsl.annotation.Encrypted;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.bol.secure.Encrypted;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
-@Entity
 @Builder
+@Document
 @AllArgsConstructor
 @NoArgsConstructor
 public class WebhookEndpoint implements BaseData {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     private String name;
     private String url;
+
     @Encrypted
     private String secret;
 }

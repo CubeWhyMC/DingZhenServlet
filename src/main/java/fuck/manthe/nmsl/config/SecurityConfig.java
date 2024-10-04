@@ -15,16 +15,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests((conf) -> conf
+                .authorizeHttpRequests(conf -> conf
                         .requestMatchers("/dashboard**").authenticated()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/**").hasAuthority("ADMIN")
                         .anyRequest().permitAll()
                 )
-//                .formLogin((form) -> form
-//                        .loginPage("/dashboard/login")
-//                        .loginProcessingUrl("/dashboard/login")
-//                        .permitAll()
-//                )
+                .formLogin((form) -> form
+                        .loginPage("/login")
+                        .permitAll()
+                )
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
                 .csrf(AbstractHttpConfigurer::disable)
                 .logout(LogoutConfigurer::permitAll);

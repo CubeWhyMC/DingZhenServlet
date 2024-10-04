@@ -79,7 +79,7 @@ public class GatewayServiceImpl implements GatewayService {
     }
 
     @Override
-    public boolean removeGateway(long id) {
+    public boolean removeGateway(String id) {
         if (!gatewayRepository.existsById(id)) return false;
         gatewayRepository.deleteById(id);
         return true;

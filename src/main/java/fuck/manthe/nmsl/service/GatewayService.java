@@ -21,7 +21,7 @@ public interface GatewayService {
 
     void addGateway(Gateway gateway);
 
-    boolean removeGateway(long id);
+    boolean removeGateway(String id);
 
     Gateway getOne();
 

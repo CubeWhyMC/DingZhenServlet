@@ -1,24 +1,24 @@
 package fuck.manthe.nmsl.entity;
 
-import fuck.manthe.nmsl.conventer.CryptConverter;
-import jakarta.persistence.*;
+import com.bol.secure.Encrypted;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
-@Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
+@Document
+@NoArgsConstructor
+@AllArgsConstructor
 public class VapeAccount {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     private String username;
-    @Convert(converter = CryptConverter.class)
+    @Encrypted
     private String password;
     private String hwid;
 }

@@ -16,11 +16,11 @@ public interface WebhookService {
      */
     WebhookEndpoint add(String name, String url, String secret);
 
-    WebhookEndpoint find(long id);
+    WebhookEndpoint find(String id);
 
     List<WebhookEndpoint> list();
 
-    void remove(long id);
+    void remove(String id);
 
     WebhookEndpoint update(WebhookEndpoint entity);
 

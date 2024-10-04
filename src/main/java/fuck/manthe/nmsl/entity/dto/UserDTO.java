@@ -5,8 +5,8 @@ import lombok.Data;
 
 @Data
 @Builder
-public class CrackedUserDTO {
-    private Long id;
+public class UserDTO {
+    private String id;
     private String username;
     private Long expire;
 

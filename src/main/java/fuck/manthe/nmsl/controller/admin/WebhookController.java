@@ -26,13 +26,13 @@ public class WebhookController {
 
     @DeleteMapping("{id}/remove")
     public ResponseEntity<RestBean<String>> remove(@PathVariable String id) {
-        webhookService.remove(Long.parseLong(id));
+        webhookService.remove(id);
         return ResponseEntity.ok(RestBean.success("Success"));
     }
 
     @PostMapping("{id}/name")
     public ResponseEntity<RestBean<WebhookEndpointVO>> rename(@PathVariable String id, @RequestBody RenameWebhookDTO dto) {
-        WebhookEndpoint entity = webhookService.find(Long.parseLong(id));
+        WebhookEndpoint entity = webhookService.find(id);
         entity.setName(dto.getName());
         webhookService.update(entity);
         return ResponseEntity.ok(RestBean.success(entity.asViewObject(WebhookEndpointVO.class)));
@@ -40,7 +40,7 @@ public class WebhookController {
 
     @PostMapping("{id}/secret")
     public ResponseEntity<RestBean<WebhookEndpointVO>> updateSecret(@PathVariable String id, @RequestBody UpdateWebhookSecretDTO dto) {
-        WebhookEndpoint entity = webhookService.find(Long.parseLong(id));
+        WebhookEndpoint entity = webhookService.find(id);
         entity.setSecret(dto.getSecret());
         webhookService.update(entity);
         return ResponseEntity.ok(RestBean.success(entity.asViewObject(WebhookEndpointVO.class)));
@@ -48,7 +48,7 @@ public class WebhookController {
 
     @PostMapping("{id}/url")
     public ResponseEntity<RestBean<WebhookEndpointVO>> updateUrl(@PathVariable String id, @RequestBody UpdateWebhookUrlDTO dto) {
-        WebhookEndpoint entity = webhookService.find(Long.parseLong(id));
+        WebhookEndpoint entity = webhookService.find(id);
         entity.setUrl(dto.getUrl());
         webhookService.update(entity);
         return ResponseEntity.ok(RestBean.success(entity.asViewObject(WebhookEndpointVO.class)));
@@ -56,7 +56,7 @@ public class WebhookController {
 
     @PostMapping("{id}/test")
     public ResponseEntity<RestBean<String>> test(@PathVariable String id, @RequestBody TestWebhookDTO dto) throws Exception {
-        WebhookEndpoint endpoint = webhookService.find(Long.parseLong(id));
+        WebhookEndpoint endpoint = webhookService.find(id);
         webhookService.push(endpoint, "test", JSON.toJSONString(dto));
         return ResponseEntity.ok(RestBean.success("Pushed"));
     }

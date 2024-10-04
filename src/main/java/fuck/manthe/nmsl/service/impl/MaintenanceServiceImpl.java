@@ -1,7 +1,7 @@
 package fuck.manthe.nmsl.service.impl;
 
-import fuck.manthe.nmsl.service.CrackedUserService;
 import fuck.manthe.nmsl.service.MaintenanceService;
+import fuck.manthe.nmsl.service.UserService;
 import fuck.manthe.nmsl.utils.Const;
 import jakarta.annotation.Resource;
 import lombok.extern.log4j.Log4j2;
@@ -21,7 +21,7 @@ public class MaintenanceServiceImpl implements MaintenanceService {
     RedisTemplate<String, Long> longRedisTemplate;
 
     @Resource
-    CrackedUserService crackedUserService;
+    UserService userService;
 
     @Value("${share.maintain.auto-renew}")
     boolean shouldRenew;
@@ -41,7 +41,7 @@ public class MaintenanceServiceImpl implements MaintenanceService {
             booleanRedisTemplate.opsForValue().set(Const.IS_MAINTAINING, false);
             int days = calculateDuration();
             if (shouldRenew && days > 0) {
-                crackedUserService.renewAll(days);
+                userService.renewAll(days);
             }
             log.info("Maintain mode disabled.");
         }

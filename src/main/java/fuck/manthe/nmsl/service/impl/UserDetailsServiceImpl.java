@@ -1,8 +1,8 @@
 package fuck.manthe.nmsl.service.impl;
 
-import fuck.manthe.nmsl.entity.Admin;
+import fuck.manthe.nmsl.entity.User;
 import fuck.manthe.nmsl.entity.UserDetailsImpl;
-import fuck.manthe.nmsl.service.AdminService;
+import fuck.manthe.nmsl.service.UserService;
 import jakarta.annotation.Resource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,16 +12,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Resource
-    AdminService adminService;
+    UserService userService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Admin admin = adminService.findByUsername(username);
-        if (admin == null) return null;
+        User user = userService.findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found with username: " + username);
+        }
         return UserDetailsImpl.builder()
-                .username(admin.getUsername())
-                .password(admin.getPassword())
-                .role(admin.getRole())
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .role(user.getRole())
                 .build();
     }
 }
