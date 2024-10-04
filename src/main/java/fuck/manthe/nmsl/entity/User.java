@@ -29,6 +29,7 @@ public class User {
     private LocalDateTime registerTime = LocalDateTime.now();
 
     // online
-    private OnlineConfig onlineConfig;
+    @Builder.Default
+    private OnlineConfig onlineConfig = OnlineConfig.DEFAULT;
     private GlobalConfig globalConfig;
 }
