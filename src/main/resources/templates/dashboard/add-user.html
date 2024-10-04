@@ -19,6 +19,11 @@
                     <label class="mdui-textfield-label">天数</label>
                     <input class="mdui-textfield-input" type="number" id="days"/>
                 </div>
+                <label class="mdui-checkbox">
+                    <input id="admin" type="checkbox"/>
+                    <i class="mdui-checkbox-icon"></i>
+                    <span style="color: red">管理员</span>权限
+                </label>
             </div>
             <div class="mdui-card-actions">
                 <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="addUser()">添加用户</button>
@@ -32,6 +37,7 @@ function addUser() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
     const days = document.getElementById('days').value;
+    const admin = document.getElementById('admin').value;
 
     if (!username || !password || !days) {
         mdui.alert('请填写所有字段');
@@ -46,7 +52,8 @@ function addUser() {
         body: JSON.stringify({
             username: username,
             password: password,
-            days: days
+            days: days,
+            admin: admin
         })
     })
     .then(response => {

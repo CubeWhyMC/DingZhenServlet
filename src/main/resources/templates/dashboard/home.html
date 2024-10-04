@@ -41,10 +41,8 @@
 <script>
 // 从API获取数据并更新页面
 function fetchDashboardData() {
-    // 这里应该是实际的API端点
     fetch('/admin/analysis', {
         headers: {
-            'X-Admin-Password': localStorage.getItem('adminPassword')
         }
     })
         .then(response => response.json())

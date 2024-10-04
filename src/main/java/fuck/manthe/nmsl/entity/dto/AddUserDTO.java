@@ -7,4 +7,6 @@ public class AddUserDTO {
     private String username;
     private String password;
     private int days;
+
+    private boolean admin = false;
 }

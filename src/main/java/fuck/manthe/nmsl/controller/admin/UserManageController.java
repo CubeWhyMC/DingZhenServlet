@@ -5,7 +5,7 @@ import fuck.manthe.nmsl.entity.User;
 import fuck.manthe.nmsl.entity.dto.AddUserDTO;
 import fuck.manthe.nmsl.entity.dto.RenewDTO;
 import fuck.manthe.nmsl.entity.dto.ResetPasswordDTO;
-import fuck.manthe.nmsl.entity.dto.UserDTO;
+import fuck.manthe.nmsl.entity.vo.UserVO;
 import fuck.manthe.nmsl.service.AnalysisService;
 import fuck.manthe.nmsl.service.UserService;
 import jakarta.annotation.Resource;
@@ -31,11 +31,12 @@ public class UserManageController {
     PasswordEncoder passwordEncoder;
 
     @GetMapping("list")
-    public List<UserDTO> listUsers() {
-        return userService.list().stream().map((user) -> UserDTO.builder()
+    public List<UserVO> listUsers() {
+        return userService.list().stream().map((user) -> UserVO.builder()
                 .id(user.getId())
                 .username(user.getUsername())
                 .expire(user.getExpire())
+                .role(user.getRole())
                 .totalLaunch(analysisService.getTotalLaunch(user.getUsername()))
                 .lastLaunch(analysisService.getLastLaunch(user.getUsername()))
                 .build()).toList();
@@ -48,7 +49,13 @@ public class UserManageController {
         if (dto.getDays() != -1) {
             expire = System.currentTimeMillis() + (long) dto.getDays() * 24 * 60 * 60 * 1000;
         }
-        if (userService.addUser(User.builder().password(passwordEncoder.encode(dto.getPassword())).username(dto.getUsername()).expire(expire).build())) {
+        if (userService.addUser(User.builder()
+                .password(passwordEncoder.encode(dto.getPassword()))
+                .username(dto.getUsername())
+                .role((dto.isAdmin()) ? "ADMIN" : "USER")
+                .expire(expire)
+                .build()
+        )) {
             return ResponseEntity.ok(RestBean.success("OK"));
         }
         return new ResponseEntity<>(RestBean.failure(409, "Conflict"), HttpStatus.CONFLICT);
