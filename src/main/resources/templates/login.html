@@ -1,24 +1,53 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>登录到DingZhenServlet</title>
+    <link href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script>
+    <style>
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .login-card {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 20px;
+        }
+    </style>
 </head>
-<body>
-<h1>请登录</h1>
-<div th:if="${param.error}">
-    错误的用户名或者密码
-</div>
-<div th:if="${param.logout}">
-    成功登出
-</div>
-<form method="post" th:action="@{/login}">
-    <div>
-        <input name="username" placeholder="Username" type="text"/>
+<body class="mdui-theme-primary-indigo mdui-theme-accent-pink">
+<div class="mdui-container">
+    <div class="mdui-card login-card">
+        <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title">登录到DingZhenServlet</div>
+            <div class="mdui-card-primary-subtitle">请输入您的用户名和密码</div>
+        </div>
+        <div class="mdui-card-content">
+            <div class="mdui-text-color-red" th:if="${param.error}">
+                错误的用户名或者密码
+            </div>
+            <div class="mdui-text-color-green" th:if="${param.logout}">
+                成功登出
+            </div>
+            <form class="mdui-p-t-2" method="post" th:action="@{/login}">
+                <div class="mdui-textfield mdui-textfield-floating-label">
+                    <label class="mdui-textfield-label">用户名</label>
+                    <input class="mdui-textfield-input" name="username" required type="text"/>
+                </div>
+                <div class="mdui-textfield mdui-textfield-floating-label">
+                    <label class="mdui-textfield-label">密码</label>
+                    <input class="mdui-textfield-input" name="password" required type="password"/>
+                </div>
+                <div class="mdui-p-t-3">
+                    <button class="mdui-btn mdui-btn-raised mdui-btn-block mdui-color-theme-accent" type="submit">登录
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-    <div>
-        <input name="password" placeholder="Password" type="password"/>
-    </div>
-    <input type="submit" value="Log in"/>
-</form>
+</div>
 </body>
 </html>

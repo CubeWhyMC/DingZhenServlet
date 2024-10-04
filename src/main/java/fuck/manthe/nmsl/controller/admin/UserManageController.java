@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.ZoneOffset;
 import java.util.List;
 
 @Log4j2
@@ -37,6 +38,7 @@ public class UserManageController {
                 .id(user.getId())
                 .username(user.getUsername())
                 .expire(user.getExpire())
+                .registerTime(user.getRegisterTime().toInstant(ZoneOffset.UTC).toEpochMilli())
                 .role(user.getRole())
                 .totalLaunch(analysisService.getTotalLaunch(user.getUsername()))
                 .lastLaunch(analysisService.getLastLaunch(user.getUsername()))
