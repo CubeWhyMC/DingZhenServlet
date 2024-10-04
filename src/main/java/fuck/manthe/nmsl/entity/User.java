@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @Document
@@ -22,5 +24,7 @@ public class User {
     private String role;
 
     @Builder.Default
-    private Long expire = -1L; // 失效时间,设置为-1禁用
+    private long expire = -1L; // 失效时间,设置为-1禁用
+    @Builder.Default
+    private LocalDateTime registerTime = LocalDateTime.now();
 }

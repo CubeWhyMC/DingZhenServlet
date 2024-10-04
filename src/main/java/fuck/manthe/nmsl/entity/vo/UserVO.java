@@ -8,8 +8,9 @@ import lombok.Data;
 public class UserVO {
     private String id;
     private String username;
-    private Long expire;
     private String role;
+    private long expire;
+    private long registerTime;
 
     // analysis
     private long totalLaunch;

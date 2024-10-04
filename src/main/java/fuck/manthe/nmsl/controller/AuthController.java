@@ -59,6 +59,9 @@ public class AuthController {
     @Resource
     PasswordEncoder passwordEncoder;
 
+    @Resource
+    OnlineConfigService onlineConfigService;
+
     @Value("${share.cold-down.global.enabled}")
     boolean coldDownEnabled;
 
@@ -78,7 +81,6 @@ public class AuthController {
         Map<String, String> map = decodeParam(bodyParam);
         String username = map.get("email");
         String password = map.get("password");
-        // 统计请求次数
         log.info("User {} login", username);
         User crackedUser = userService.findByUsername(username);
         if (maintenanceService.isMaintaining() && crackedUser.getExpire() != -1) {
@@ -108,33 +110,43 @@ public class AuthController {
         log.info("User {} tried to inject!", username);
         // 统计启动次数
         analysisService.launchInvoked(username);
+        // auth with vape.gg
+        String token = null;
         // use gateway
+
         if (gatewayService.canUseGateway()) {
             Gateway gateway = gatewayService.getOne();
             if (gateway != null) {
                 VapeAuthorizeDTO authorize = gatewayService.use(gateway);
                 if (authorize != null) {
                     log.info("Successfully authed with the gateway {} ({})", gateway.getName(), gateway.getId());
-                    return authorize.getToken();
+                    token = authorize.getToken();
                 }
                 log.error("Gateway {} ({}) is not available. Authorizing with this server...", gateway.getName(), gateway.getId());
             }
         }
         // 没有配置gateway或者所有的gateway都在冷却
         // 在这个服务器处理登录
-        VapeAccount vapeAccount = vapeAccountService.getOne();
-        if (vapeAccount == null) {
-            // 每个账户的冷却
-            return ErrorCode.PRE_ACCOUNT_COLD_DOWN.formatError("Inject cold down");
+        if (token == null) {
+            // 上一步失败了或者是没有可用的Gateway
+            VapeAccount vapeAccount = vapeAccountService.getOne();
+            if (vapeAccount == null) {
+                // 每个账户的冷却
+                return ErrorCode.PRE_ACCOUNT_COLD_DOWN.formatError("Inject cold down");
+            }
+            VapeAuthorizeDTO authorize = vapeAccountService.doAuth(vapeAccount);
+            token = authorize.getToken();
         }
-        VapeAuthorizeDTO authorize = vapeAccountService.doAuth(vapeAccount);
+
         // Push to webhook
         UserInjectMessage message = new UserInjectMessage();
         message.setContent("User %s inject".formatted(username));
         message.setUsername(username);
         message.setTimestamp(System.currentTimeMillis() / 1000L);
         webhookService.pushAll("inject", message);
-        return authorize.getToken();
+        // Cache with online config service
+        onlineConfigService.cache(token.substring(1), username); // 看起来是UUID
+        return token;
     }
 
     @NotNull
