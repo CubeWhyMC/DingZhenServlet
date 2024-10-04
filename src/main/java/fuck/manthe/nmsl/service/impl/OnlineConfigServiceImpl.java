@@ -1,9 +1,6 @@
 package fuck.manthe.nmsl.service.impl;
 
-import fuck.manthe.nmsl.entity.GlobalConfig;
-import fuck.manthe.nmsl.entity.OnlineConfig;
-import fuck.manthe.nmsl.entity.OnlineToken;
-import fuck.manthe.nmsl.entity.User;
+import fuck.manthe.nmsl.entity.*;
 import fuck.manthe.nmsl.repository.OnlineTokenRepository;
 import fuck.manthe.nmsl.service.AnalysisService;
 import fuck.manthe.nmsl.service.OnlineConfigService;
@@ -87,5 +84,11 @@ public class OnlineConfigServiceImpl implements OnlineConfigService {
         tags.add("Manthe");
         tags.add("#VapeClient");
         return tags;
+    }
+
+    @Override
+    public PrivateProfile loadPrivateProfile(String token) {
+        User user = this.findByToken(token);
+        return user.getPrivateProfile();
     }
 }
