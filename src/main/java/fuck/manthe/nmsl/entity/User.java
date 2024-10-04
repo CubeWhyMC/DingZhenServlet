@@ -27,4 +27,8 @@ public class User {
     private long expire = -1L; // 失效时间,设置为-1禁用
     @Builder.Default
     private LocalDateTime registerTime = LocalDateTime.now();
+
+    // online
+    private OnlineConfig onlineConfig;
+    private GlobalConfig globalConfig;
 }
