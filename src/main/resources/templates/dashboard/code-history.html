@@ -23,13 +23,11 @@
 </div>
 
 <script>
-    const adminPassword = localStorage.getItem('adminPassword');
     let allRedeems = [];
 
     function fetchRedeemData() {
         fetch('/admin/redeem/sold', {
             headers: {
-                'X-Admin-Password': adminPassword
             }
         })
         .then(response => response.json())

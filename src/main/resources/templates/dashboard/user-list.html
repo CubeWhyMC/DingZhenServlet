@@ -9,6 +9,7 @@
         <thead>
         <tr>
             <th>用户名</th>
+            <th>权限组</th>
             <th>剩余天数</th>
             <th>失效时间</th>
             <th>上次注入时间</th>
@@ -69,6 +70,7 @@
 
             row.innerHTML = `
                 <td>${user.username}</td>
+                <td>${user.role}</td>
                 <td>${expire}</td>
                 <td>${expire1}</td>
                 <td>${lastInject}</td>
