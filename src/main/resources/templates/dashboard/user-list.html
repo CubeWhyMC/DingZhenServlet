@@ -193,8 +193,12 @@
                 })
                     .then(response => response.json())
                     .then(data => {
-                        mdui.alert('已删除用户 ' + username);
-                        fetchUserData(); // 重新加载用户列表
+                        if (data.code === 200) {
+                            mdui.alert('已删除用户 ' + username);
+                            fetchUserData(); // 重新加载用户列表
+                        } else {
+                            mdui.alert(`删除失败: ${data.message}`);
+                        }
                     })
                     .catch(error => {
                         console.error('Error deleting user:', error);
