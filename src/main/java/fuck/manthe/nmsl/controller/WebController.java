@@ -46,4 +46,9 @@ public class WebController {
         }
         return "maintain";
     }
+
+    @GetMapping("dashboard")
+    public String dashboard() {
+        return "redirect:/admin/dashboard";
+    }
 }
