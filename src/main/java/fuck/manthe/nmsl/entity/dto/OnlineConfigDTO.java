@@ -11,24 +11,24 @@ import java.util.Map;
 @Builder
 public class OnlineConfigDTO {
     @Builder.Default
-    boolean autoLogin = true;
+    private boolean autoLogin = true;
 
     @Builder.Default
-    Map<String, String> friendStates = new HashMap<>();
+    private Map<String, String> friendStates = new HashMap<>();
 
-    boolean partyShowTarget;
+    private boolean partyShowTarget;
 
-    List<String> pingKeybind;
+    private List<String> pingKeybind;
 
-    boolean shareInventory;
+    private boolean shareInventory;
 
-    List<String> showInventoryKeybind;
+    private List<String> showInventoryKeybind;
 
-    boolean showSelf;
+    private boolean showSelf;
 
-    boolean showServer;
+    private boolean showServer;
 
-    boolean showUsername;
+    private boolean showUsername;
 
-    double inventorySwitchMode;
+    private double inventorySwitchMode;
 }

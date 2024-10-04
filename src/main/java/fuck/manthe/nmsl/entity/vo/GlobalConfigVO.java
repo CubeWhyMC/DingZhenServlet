@@ -1,11 +1,11 @@
-package fuck.manthe.nmsl.entity.dto;
+package fuck.manthe.nmsl.entity.vo;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class GlobalConfigDTO {
+public class GlobalConfigVO {
     private boolean cache;
     private boolean firstRun;
 }
