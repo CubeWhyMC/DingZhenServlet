@@ -9,9 +9,7 @@ import fuck.manthe.nmsl.entity.dto.GlobalConfigDTO;
 import fuck.manthe.nmsl.entity.dto.OnlineConfigDTO;
 import fuck.manthe.nmsl.entity.vo.GlobalConfigVO;
 import fuck.manthe.nmsl.entity.vo.OnlineConfigVO;
-import fuck.manthe.nmsl.service.AnalysisService;
 import fuck.manthe.nmsl.service.OnlineConfigService;
-import fuck.manthe.nmsl.service.UserService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +21,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,12 +29,6 @@ import java.util.Objects;
 public class OnlineConfigController {
     @Resource
     OnlineConfigService onlineConfigService;
-
-    @Resource
-    AnalysisService analysisService;
-
-    @Resource
-    UserService userService;
 
     @GetMapping("authenticated")
     public VapeRestBean<AuthorizationDTO> onAuthenticated(@PathVariable String token) {
@@ -59,41 +50,25 @@ public class OnlineConfigController {
 
     @GetMapping("settings/load/global")
     public VapeRestBean<GlobalConfigVO> loadGlobal(@PathVariable String token) {
-        User user = onlineConfigService.findByToken(token);
-        GlobalConfig globalConfig = user.getGlobalConfig();
-        if (globalConfig == null) {
-            globalConfig = GlobalConfig.builder()
-                    .cache(true)
-                    .firstRun(analysisService.getLastLaunch(user.getUsername()) == -1)
-                    .build();
-        }
-        return VapeRestBean.success(globalConfig.asViewObject(GlobalConfigVO.class));
+        return VapeRestBean.success(onlineConfigService.loadGlobal(token).asViewObject(GlobalConfigVO.class));
     }
 
     @PostMapping("settings/save/global")
     public VapeRestBean<GlobalConfigVO> saveGlobal(@PathVariable String token, @RequestBody GlobalConfigDTO dto) {
-        User user = onlineConfigService.findByToken(token);
-        user.setGlobalConfig(GlobalConfig.builder()
+        return VapeRestBean.success(onlineConfigService.saveGlobal(token, GlobalConfig.builder()
                 .cache(dto.isCache())
                 .firstRun(dto.isFirstRun())
-                .build());
-        return VapeRestBean.success(userService.save(user).getGlobalConfig().asViewObject(GlobalConfigVO.class));
+                .build()).asViewObject(GlobalConfigVO.class));
     }
 
     @GetMapping("settings/load/online")
     public VapeRestBean<OnlineConfigVO> loadOnline(@PathVariable String token) {
-        User user = onlineConfigService.findByToken(token);
-        OnlineConfig onlineConfig = user.getOnlineConfig();
-        if (onlineConfig == null) {
-            onlineConfig = OnlineConfig.DEFAULT; // first launch
-        }
-        return VapeRestBean.success(onlineConfig.asViewObject(OnlineConfigVO.class));
+        return VapeRestBean.success(onlineConfigService.loadOnline(token).asViewObject(OnlineConfigVO.class));
     }
 
     @PostMapping("settings/save/online")
     public VapeRestBean<OnlineConfigVO> saveOnline(@PathVariable String token, @RequestBody OnlineConfigDTO dto) {
-        User user = onlineConfigService.findByToken(token);
-        user.setOnlineConfig(OnlineConfig.builder()
+        OnlineConfig cfg = onlineConfigService.saveOnline(token, OnlineConfig.builder()
                 .autoLogin(dto.isAutoLogin())
                 .friendStates(dto.getFriendStates())
                 .pingKeybind(dto.getPingKeybind())
@@ -104,7 +79,7 @@ public class OnlineConfigController {
                 .showUsername(dto.isShowUsername())
                 .inventorySwitchMode(dto.getInventorySwitchMode())
                 .build());
-        return VapeRestBean.success(userService.save(user).getOnlineConfig().asViewObject(OnlineConfigVO.class));
+        return VapeRestBean.success(cfg.asViewObject(OnlineConfigVO.class));
     }
 
     /**
@@ -114,12 +89,7 @@ public class OnlineConfigController {
     @GetMapping("profile/public/tags")
     public VapeRestBean<List<String>> publicTags(@PathVariable String token) {
         // 不知道这个是干什么的
-        ArrayList<String> tags = new ArrayList<>();
-        tags.add("getvape.today");
-        tags.add("Hypixel");
-        tags.add("Manthe");
-        tags.add("#VapeClient");
-        return VapeRestBean.success(tags);
+        return VapeRestBean.success(onlineConfigService.loadPublicTags());
     }
 
     /**
