@@ -9,6 +9,7 @@ import fuck.manthe.nmsl.entity.vo.UserVO;
 import fuck.manthe.nmsl.service.AnalysisService;
 import fuck.manthe.nmsl.service.UserService;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -78,10 +79,13 @@ public class UserManageController {
     }
 
     @DeleteMapping("remove/{username}")
-    public RestBean<Object> removeUser(@PathVariable String username) {
+    public ResponseEntity<RestBean<Object>> removeUser(@PathVariable String username, HttpServletRequest request) {
+        if (request.getUserPrincipal().getName().equals(username)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(RestBean.failure(400, "You cannot lose the access to the admin dashboard."));
+        }
         log.info("An admin removed a user with name {}", username);
         userService.removeUser(username);
-        return RestBean.success();
+        return ResponseEntity.ok(RestBean.success());
     }
 
     @PostMapping("password/{username}/reset")
