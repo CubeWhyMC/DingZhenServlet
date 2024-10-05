@@ -167,6 +167,7 @@ public class VapeAccountServiceImpl implements VapeAccountService {
                                 .build();
                     }
                 }
+                log.debug("Fetch token for {} ({})", vapeAccount.getUsername(), responseString);
                 return VapeAuthorizeDTO.builder()
                         .token(responseString)
                         .status(VapeAuthorizeDTO.Status.OK)

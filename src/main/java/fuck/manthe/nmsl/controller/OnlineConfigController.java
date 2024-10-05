@@ -7,14 +7,13 @@ import fuck.manthe.nmsl.service.OnlineConfigService;
 import fuck.manthe.nmsl.util.FormatUtil;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
+@Log4j2
 @RestController
 @RequestMapping("/api/v1/{token}")
 public class OnlineConfigController {
@@ -27,6 +26,17 @@ public class OnlineConfigController {
     @GetMapping("authenticated")
     public VapeRestBean<AuthorizationDTO> onAuthenticated(@PathVariable String token) {
         User user = onlineConfigService.findByToken(token);
+        if (user == null) {
+            log.error("Failed to find user with the online token {}", token);
+            return VapeRestBean.success(
+                    AuthorizationDTO.builder()
+                            .accountCreation(formatUtil.formatVapeTime(new Date()))
+                            .userId(114514)
+                            .username("getvape-today")
+                            .build()
+            ); // return fake data
+        }
+        log.info("User {} login to the fake online service (token={})", user.getUsername(), token);
         return VapeRestBean.success(AuthorizationDTO.builder()
                 .accountCreation(formatUtil.formatVapeTime(user.getRegisterTime()))
                 .userId(114514)
