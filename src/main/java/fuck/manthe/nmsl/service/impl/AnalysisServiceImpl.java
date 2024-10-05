@@ -1,7 +1,7 @@
 package fuck.manthe.nmsl.service.impl;
 
 import fuck.manthe.nmsl.service.AnalysisService;
-import fuck.manthe.nmsl.utils.Const;
+import fuck.manthe.nmsl.util.Const;
 import jakarta.annotation.Resource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;

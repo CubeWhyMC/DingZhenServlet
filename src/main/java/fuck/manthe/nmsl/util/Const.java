@@ -1,4 +1,4 @@
-package fuck.manthe.nmsl.utils;
+package fuck.manthe.nmsl.util;
 
 public interface Const {
     String COLD_DOWN = "vape:cold-down";

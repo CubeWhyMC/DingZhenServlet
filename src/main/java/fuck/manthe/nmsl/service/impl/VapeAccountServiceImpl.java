@@ -5,8 +5,7 @@ import fuck.manthe.nmsl.entity.VapeAccount;
 import fuck.manthe.nmsl.entity.dto.VapeAuthorizeDTO;
 import fuck.manthe.nmsl.repository.VapeAccountRepository;
 import fuck.manthe.nmsl.service.VapeAccountService;
-import fuck.manthe.nmsl.utils.Const;
-import fuck.manthe.nmsl.utils.CryptUtil;
+import fuck.manthe.nmsl.util.Const;
 import jakarta.annotation.Resource;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.MediaType;
@@ -44,13 +43,7 @@ public class VapeAccountServiceImpl implements VapeAccountService {
     RedisTemplate<String, Long> redisTemplate;
 
     @Resource
-    RedisTemplate<String, Boolean> booleanRedisTemplate;
-
-    @Resource
     VapeAccountRepository vapeAccountRepository;
-
-    @Resource
-    CryptUtil cryptUtil;
 
     @Resource
     OkHttpClient httpClient;
@@ -111,7 +104,7 @@ public class VapeAccountServiceImpl implements VapeAccountService {
     public boolean updatePassword(String username, String newPassword) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         VapeAccount account = vapeAccountRepository.findByUsername(username);
         if (account == null) return false;
-        account.setPassword(cryptUtil.encryptString(newPassword));
+        account.setPassword(newPassword);
         vapeAccountRepository.save(account);
         return false;
     }

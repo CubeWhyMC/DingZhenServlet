@@ -8,7 +8,7 @@ import fuck.manthe.nmsl.entity.webhook.UserInjectMessage;
 import fuck.manthe.nmsl.entity.webhook.UserRegisterMessage;
 import fuck.manthe.nmsl.entity.webhook.UserRenewMessage;
 import fuck.manthe.nmsl.service.*;
-import fuck.manthe.nmsl.utils.Const;
+import fuck.manthe.nmsl.util.Const;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.log4j.Log4j2;

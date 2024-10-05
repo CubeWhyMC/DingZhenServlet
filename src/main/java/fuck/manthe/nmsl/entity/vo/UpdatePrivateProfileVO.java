@@ -1,11 +1,10 @@
-package fuck.manthe.nmsl.entity.dto;
+package fuck.manthe.nmsl.entity.vo;
 
 import com.alibaba.fastjson2.JSONObject;
-import fuck.manthe.nmsl.entity.BaseData;
 import lombok.Data;
 
 @Data
-public class UpdatePrivateProfileDTO implements BaseData {
+public class UpdatePrivateProfileVO {
     private JSONObject data;
     private boolean is_public;
     private String name; // profile name

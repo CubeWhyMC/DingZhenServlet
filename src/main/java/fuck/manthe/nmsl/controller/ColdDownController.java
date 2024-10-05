@@ -2,7 +2,7 @@ package fuck.manthe.nmsl.controller;
 
 import fuck.manthe.nmsl.entity.dto.ColdDownDTO;
 import fuck.manthe.nmsl.service.VapeAccountService;
-import fuck.manthe.nmsl.utils.Const;
+import fuck.manthe.nmsl.util.Const;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;

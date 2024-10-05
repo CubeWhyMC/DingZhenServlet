@@ -30,10 +30,6 @@ share:
     queue:
       # 是否启用额外的排队机制
       state: true
-  crypt:
-    # AES Key
-    # 用于加密一些数据,实际部署请修改这个
-    secret-key: powered-by-zzyss
   user:
     # 每日自动清理失效用户
     auto-delete-expired: true
