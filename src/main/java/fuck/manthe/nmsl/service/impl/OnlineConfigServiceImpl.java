@@ -131,6 +131,7 @@ public class OnlineConfigServiceImpl implements OnlineConfigService {
                         .name(profile.getName())
                         .uuid(profile.getUuid())
                         .data(profile.getData())
+                        .owner(user)
                         .lastUpdated(updatedTime)
                         .created(updatedTime)
                         .vapeVersion(profile.getVapeVersion())
