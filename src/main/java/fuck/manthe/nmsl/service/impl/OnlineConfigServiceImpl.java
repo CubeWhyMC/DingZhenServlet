@@ -10,6 +10,7 @@ import fuck.manthe.nmsl.service.UserService;
 import fuck.manthe.nmsl.util.FormatUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -24,6 +25,7 @@ public class OnlineConfigServiceImpl implements OnlineConfigService {
     CheatProfileRepository cheatProfileRepository;
 
     @Resource
+    @Lazy
     UserService userService;
 
     @Resource
