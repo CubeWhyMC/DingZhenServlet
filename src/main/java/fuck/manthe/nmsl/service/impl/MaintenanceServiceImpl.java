@@ -2,7 +2,7 @@ package fuck.manthe.nmsl.service.impl;
 
 import fuck.manthe.nmsl.service.MaintenanceService;
 import fuck.manthe.nmsl.service.UserService;
-import fuck.manthe.nmsl.utils.Const;
+import fuck.manthe.nmsl.util.Const;
 import jakarta.annotation.Resource;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;

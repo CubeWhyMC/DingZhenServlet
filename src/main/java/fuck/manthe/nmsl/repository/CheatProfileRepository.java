@@ -10,4 +10,6 @@ import java.util.Optional;
 @Repository
 public interface CheatProfileRepository extends MongoRepository<CheatProfile, String> {
     Optional<CheatProfile> findAllByOwner(User owner);
+
+    Optional<CheatProfile> findByUuid(String uuid);
 }

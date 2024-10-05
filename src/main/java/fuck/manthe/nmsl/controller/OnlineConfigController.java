@@ -1,24 +1,18 @@
 package fuck.manthe.nmsl.controller;
 
 import fuck.manthe.nmsl.entity.*;
-import fuck.manthe.nmsl.entity.dto.AuthorizationDTO;
-import fuck.manthe.nmsl.entity.dto.GlobalConfigDTO;
-import fuck.manthe.nmsl.entity.dto.OnlineConfigDTO;
-import fuck.manthe.nmsl.entity.vo.GlobalConfigVO;
-import fuck.manthe.nmsl.entity.vo.OnlineConfigVO;
+import fuck.manthe.nmsl.entity.dto.*;
+import fuck.manthe.nmsl.entity.vo.*;
 import fuck.manthe.nmsl.service.OnlineConfigService;
+import fuck.manthe.nmsl.util.FormatUtil;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @RestController
@@ -27,22 +21,17 @@ public class OnlineConfigController {
     @Resource
     OnlineConfigService onlineConfigService;
 
+    @Resource
+    FormatUtil formatUtil;
+
     @GetMapping("authenticated")
     public VapeRestBean<AuthorizationDTO> onAuthenticated(@PathVariable String token) {
         User user = onlineConfigService.findByToken(token);
         return VapeRestBean.success(AuthorizationDTO.builder()
-                .accountCreation(formatVapeTime(user.getRegisterTime()))
+                .accountCreation(formatUtil.formatVapeTime(user.getRegisterTime()))
                 .userId(114514)
                 .username(user.getUsername())
                 .build());
-    }
-
-    @NotNull
-    private String formatVapeTime(@NotNull LocalDateTime date) {
-        Instant instant = date.toInstant(ZoneOffset.UTC);
-        ZonedDateTime zonedDateTime = instant.atZone(ZoneOffset.UTC);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-        return zonedDateTime.format(formatter);
     }
 
     @GetMapping("settings/load/global")
@@ -93,7 +82,7 @@ public class OnlineConfigController {
      * Private config
      */
     @GetMapping("profile/private/all")
-    public VapeRestBean<PrivateProfile> privateConfig(@PathVariable String token, HttpServletResponse response) throws IOException {
+    public VapeRestBean<PrivateProfileVO> privateConfig(@PathVariable String token, HttpServletResponse response) throws IOException {
         PrivateProfile profile = onlineConfigService.loadPrivateProfile(token);
         if (profile == null) {
             response.setContentType("application/json");
@@ -101,6 +90,38 @@ public class OnlineConfigController {
             response.getOutputStream().write(Objects.requireNonNull(this.getClass().getResourceAsStream("/fake-data/fake-private-config.json")).readAllBytes());
             return null;
         }
-        return VapeRestBean.success(profile);
+        List<CheatProfile> savedProfiles = onlineConfigService.loadSavedProfiles(token);
+        Map<String, CheatProfileVO> voMap = new HashMap<>();
+        savedProfiles.forEach((cheatProfile) -> {
+            voMap.put(cheatProfile.getId(), CheatProfileVO.builder()
+                    .profileId(cheatProfile.getId())
+                    .uuid(cheatProfile.getUuid())
+                    .name(cheatProfile.getName())
+                    .created(cheatProfile.getCreated())
+                    .data(cheatProfile.getData())
+                    .lastUpdated(cheatProfile.getLastUpdated())
+                    .ownerId(114514)
+                    .vapeVersion(cheatProfile.getVapeVersion())
+                    .lastUpdated(cheatProfile.getLastUpdated())
+                    .metadata(cheatProfile.getMetadata())
+                    .build());
+        });
+        PrivateProfileVO vo = PrivateProfileVO.builder()
+                .friends(profile.getFriends())
+                .profiles(voMap)
+                .publicProfiles(new HashMap<>()) // TODO public profiles
+                .otherData(profile.getOtherData())
+                .build();
+        return VapeRestBean.success(vo);
+    }
+
+    @PostMapping("profile/save/private")
+    public SavePrivateProfileVO savePrivateProfile(@PathVariable String token, SavePrivateProfileDTO dto) {
+        List<UpdatePrivateProfileDTO> updatedProfiles = dto.getUpdatedProfiles();
+        onlineConfigService.updateCheatProfiles(token, updatedProfiles);
+        return SavePrivateProfileVO.builder()
+                .deletedProfiles(dto.getDeletedProfiles())
+                .updatedProfiles(dto.getUpdatedProfiles().stream().map(it -> it.asViewObject(UpdatePrivateProfileVO.class)).toList())
+                .build();
     }
 }

@@ -1,7 +1,7 @@
 package fuck.manthe.nmsl.service.impl;
 
 import fuck.manthe.nmsl.service.QueueService;
-import fuck.manthe.nmsl.utils.Const;
+import fuck.manthe.nmsl.util.Const;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;

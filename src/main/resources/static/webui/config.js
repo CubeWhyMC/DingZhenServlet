@@ -5,8 +5,18 @@ let config = {};
 
 // 从后端获取配置
 async function fetchConfig() {
+    const metaTag = document.querySelector('meta[name="profile-uuid"]');
+    let profileUuid = metaTag.content;
     try {
-        const response = await fetch('/api/v2/config');
+        const response = await fetch('/api/v2/config', {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                uuid: profileUuid
+            })
+        });
         config = await response.json();
         renderConfig();
     } catch (error) {

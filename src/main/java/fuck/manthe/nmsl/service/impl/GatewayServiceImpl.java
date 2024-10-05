@@ -6,8 +6,7 @@ import fuck.manthe.nmsl.entity.dto.ColdDownDTO;
 import fuck.manthe.nmsl.entity.dto.VapeAuthorizeDTO;
 import fuck.manthe.nmsl.repository.GatewayRepository;
 import fuck.manthe.nmsl.service.GatewayService;
-import fuck.manthe.nmsl.utils.Const;
-import fuck.manthe.nmsl.utils.CryptUtil;
+import fuck.manthe.nmsl.util.Const;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.extern.log4j.Log4j2;
@@ -35,17 +34,18 @@ public class GatewayServiceImpl implements GatewayService {
 
     @Value("${service.mode}")
     String mode;
+
     @Value("${service.gateway.key}")
     String gatewayKey;
+
     @Value("${service.gateway.always}")
     boolean alwaysEnableGateway;
 
     @Resource
     GatewayRepository gatewayRepository;
+
     @Resource
     OkHttpClient httpClient;
-    @Resource
-    CryptUtil cryptUtil;
 
     @PostConstruct
     public void init() {

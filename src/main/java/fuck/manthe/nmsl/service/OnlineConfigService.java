@@ -1,11 +1,10 @@
 package fuck.manthe.nmsl.service;
 
-import fuck.manthe.nmsl.entity.GlobalConfig;
-import fuck.manthe.nmsl.entity.OnlineConfig;
-import fuck.manthe.nmsl.entity.PrivateProfile;
-import fuck.manthe.nmsl.entity.User;
+import fuck.manthe.nmsl.entity.*;
+import fuck.manthe.nmsl.entity.dto.UpdatePrivateProfileDTO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface OnlineConfigService {
     void cache(String token, String username);
@@ -25,4 +24,12 @@ public interface OnlineConfigService {
     PrivateProfile loadPrivateProfile(String token);
 
     PrivateProfile savePrivateProfile(String token, PrivateProfile privateProfile);
+
+    void updateCheatProfiles(String token, List<UpdatePrivateProfileDTO> updatedProfile);
+
+    CheatProfile saveCheatProfile(CheatProfile profile);
+
+    List<CheatProfile> loadSavedProfiles(String token);
+
+    CheatProfile findProfileByUuid(String uuid);
 }

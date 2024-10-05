@@ -1,7 +1,7 @@
 package fuck.manthe.nmsl.controller.admin;
 
 import fuck.manthe.nmsl.entity.RestBean;
-import fuck.manthe.nmsl.utils.Const;
+import fuck.manthe.nmsl.util.Const;
 import jakarta.annotation.Resource;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.redis.core.RedisTemplate;
