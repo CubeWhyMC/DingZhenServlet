@@ -163,4 +163,9 @@ public class OnlineConfigServiceImpl implements OnlineConfigService {
     public CheatProfile findProfileByUuid(String uuid) {
         return cheatProfileRepository.findByUuid(uuid).orElse(null);
     }
+
+    @Override
+    public void deleteAllCheatProfile(User user) {
+        cheatProfileRepository.deleteAllByOwner(user);
+    }
 }

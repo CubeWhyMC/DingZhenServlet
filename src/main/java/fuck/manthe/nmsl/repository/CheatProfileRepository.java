@@ -12,4 +12,6 @@ public interface CheatProfileRepository extends MongoRepository<CheatProfile, St
     Optional<CheatProfile> findAllByOwner(User owner);
 
     Optional<CheatProfile> findByUuid(String uuid);
+
+    void deleteAllByOwner(User user);
 }

@@ -20,5 +20,7 @@ public interface RedeemService {
 
     List<RedeemCode> listSold();
 
-    void deleteByRedeemer(String username);
+    void deleteAllByRedeemerUsername(String username);
+
+    void deleteAllByRedeemer(User user);
 }
