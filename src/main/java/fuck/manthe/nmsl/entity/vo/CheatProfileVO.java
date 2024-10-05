@@ -1,11 +1,15 @@
 package fuck.manthe.nmsl.entity.vo;
 
 import com.alibaba.fastjson2.JSONObject;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CheatProfileVO {
     private int ownerId;
 
