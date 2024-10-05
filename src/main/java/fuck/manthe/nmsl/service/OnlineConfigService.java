@@ -23,4 +23,6 @@ public interface OnlineConfigService {
     List<String> loadPublicTags();
 
     PrivateProfile loadPrivateProfile(String token);
+
+    PrivateProfile savePrivateProfile(String token, PrivateProfile privateProfile);
 }

@@ -1,6 +1,7 @@
 package fuck.manthe.nmsl.repository;
 
 import fuck.manthe.nmsl.entity.RedeemCode;
+import fuck.manthe.nmsl.entity.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,5 +18,7 @@ public interface RedeemRepository extends MongoRepository<RedeemCode, String> {
 
     List<RedeemCode> findAllByAvailable(boolean state);
 
-    void deleteAllByRedeemer(String redeemer);
+    void deleteAllByRedeemer(User redeemer);
+
+    void deleteAllByRedeemerUsername(String username);
 }

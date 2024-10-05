@@ -91,4 +91,11 @@ public class OnlineConfigServiceImpl implements OnlineConfigService {
         User user = this.findByToken(token);
         return user.getPrivateProfile();
     }
+
+    @Override
+    public PrivateProfile savePrivateProfile(String token, PrivateProfile privateProfile) {
+        User user = this.findByToken(token);
+        user.setPrivateProfile(privateProfile);
+        return userService.save(user).getPrivateProfile();
+    }
 }

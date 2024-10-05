@@ -1,6 +1,7 @@
 package fuck.manthe.nmsl.service.impl;
 
 import fuck.manthe.nmsl.entity.RedeemCode;
+import fuck.manthe.nmsl.entity.User;
 import fuck.manthe.nmsl.repository.RedeemRepository;
 import fuck.manthe.nmsl.service.RedeemService;
 import jakarta.annotation.Resource;
@@ -26,12 +27,12 @@ public class RedeemServiceImpl implements RedeemService {
     }
 
     @Override
-    public boolean useCode(String code, String username) {
+    public boolean useCode(String code, User user) {
         Optional<RedeemCode> redeemCode1 = redeemRepository.findByAvailableAndCode(true, code);
         if (redeemCode1.isEmpty()) return false;
         RedeemCode redeemCode = redeemCode1.get();
         redeemCode.setAvailable(false);
-        redeemCode.setRedeemer(username);
+        redeemCode.setRedeemer(user);
         redeemRepository.save(redeemCode);
         return true;
     }
@@ -60,6 +61,6 @@ public class RedeemServiceImpl implements RedeemService {
 
     @Override
     public void deleteByRedeemer(String username) {
-        redeemRepository.deleteAllByRedeemer(username);
+        redeemRepository.deleteAllByRedeemerUsername(username);
     }
 }
