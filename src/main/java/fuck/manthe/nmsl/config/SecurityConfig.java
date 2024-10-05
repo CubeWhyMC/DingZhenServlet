@@ -17,6 +17,8 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(conf -> conf
                         .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                        .requestMatchers("/webui**").authenticated()
+                        .requestMatchers("/api/v2/**").authenticated()
                         .anyRequest().permitAll()
                 )
                 .formLogin((form) -> form
