@@ -3,6 +3,7 @@ package fuck.manthe.nmsl.service.impl;
 import fuck.manthe.nmsl.entity.User;
 import fuck.manthe.nmsl.repository.UserRepository;
 import fuck.manthe.nmsl.service.AnalysisService;
+import fuck.manthe.nmsl.service.OnlineConfigService;
 import fuck.manthe.nmsl.service.RedeemService;
 import fuck.manthe.nmsl.service.UserService;
 import jakarta.annotation.Resource;
@@ -24,6 +25,9 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     RedeemService redeemService;
+
+    @Resource
+    OnlineConfigService onlineConfigService;
 
     @Resource
     PasswordEncoder passwordEncoder;
@@ -49,11 +53,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void removeUser(String username) {
-        // TODO delete configs
+        User user = findByUsername(username);
+
+        // delete configs
+        onlineConfigService.deleteAllCheatProfile(user);
         // delete redeemed codes
-        redeemService.deleteByRedeemer(username);
+        redeemService.deleteAllByRedeemer(user);
         // delete user
-        userRepository.deleteByUsername(username);
+        userRepository.delete(user);
+        log.info("User {} was success removed.", username);
     }
 
     @Override

@@ -60,7 +60,12 @@ public class RedeemServiceImpl implements RedeemService {
     }
 
     @Override
-    public void deleteByRedeemer(String username) {
+    public void deleteAllByRedeemerUsername(String username) {
         redeemRepository.deleteAllByRedeemerUsername(username);
+    }
+
+    @Override
+    public void deleteAllByRedeemer(User user) {
+        redeemRepository.deleteAllByRedeemer(user);
     }
 }

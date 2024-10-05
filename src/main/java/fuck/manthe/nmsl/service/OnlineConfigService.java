@@ -32,4 +32,6 @@ public interface OnlineConfigService {
     List<CheatProfile> loadSavedProfiles(String token);
 
     CheatProfile findProfileByUuid(String uuid);
+
+    void deleteAllCheatProfile(User user);
 }
