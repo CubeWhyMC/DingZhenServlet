@@ -2,12 +2,20 @@ package fuck.manthe.nmsl.entity;
 
 import com.alibaba.fastjson2.JSONObject;
 import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
+@Document
 public class CheatProfile {
+    @Id
+    private String id; // aka profileId
+
+    @DBRef
+    private User owner;
+
     private String uuid; // view for everyone
-    private String profileId; // internal
-    private int ownerId;
     private String name; // profile name
     private String vapeVersion;
 

@@ -1,6 +1,7 @@
 package fuck.manthe.nmsl.service;
 
 import fuck.manthe.nmsl.entity.RedeemCode;
+import fuck.manthe.nmsl.entity.User;
 
 import java.util.List;
 
@@ -9,7 +10,7 @@ public interface RedeemService {
 
     void addCode(RedeemCode code);
 
-    boolean useCode(String code, String username);
+    boolean useCode(String code, User user);
 
     boolean removeCode(String code);
 

@@ -39,13 +39,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean addUser(User user) {
+    public User addUser(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
-            return false;
+            return null;
         }
         analysisService.userRegistered();
-        userRepository.save(user);
-        return true;
+        return userRepository.save(user);
     }
 
     @Override

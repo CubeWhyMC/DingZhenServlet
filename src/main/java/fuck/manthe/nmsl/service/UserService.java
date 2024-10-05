@@ -7,7 +7,7 @@ import java.util.List;
 public interface UserService {
     boolean isValid(String username, String password);
 
-    boolean addUser(User user);
+    User addUser(User user);
 
     void removeUser(String username);
 

@@ -176,8 +176,9 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(RestBean.failure(401, "Code was redeemed"));
         }
 
-        if (userService.addUser(User.builder().password(passwordEncoder.encode(password)).username(username).expire(expire).build())) {
-            if (redeemService.useCode(redeemCode.getCode(), username)) {
+        User user = userService.addUser(User.builder().password(passwordEncoder.encode(password)).username(username).role("USER").expire(expire).build());
+        if (user != null) {
+            if (redeemService.useCode(redeemCode.getCode(), user)) {
                 log.info("User {} registered it's account with the code {} ({}d).", username, redeemCode.getCode(), redeemCode.getDate());
             }
             // push to webhooks
@@ -191,7 +192,8 @@ public class AuthController {
 
             return ResponseEntity.ok(RestBean.success("Registered."));
         } else if (userService.isValid(username, password) && userService.renew(username, redeemCode.getDate())) {
-            if (redeemService.useCode(redeemCode.getCode(), username)) {
+            User existUser = userService.findByUsername(username);
+            if (redeemService.useCode(redeemCode.getCode(), existUser)) {
                 log.info("User {} renewed it's account with the code {} ({}d).", username, redeemCode.getCode(), redeemCode.getDate());
             }
             // Push to webhooks

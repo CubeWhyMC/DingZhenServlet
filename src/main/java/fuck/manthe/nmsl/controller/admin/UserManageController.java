@@ -52,13 +52,14 @@ public class UserManageController {
         if (dto.getDays() != -1) {
             expire = System.currentTimeMillis() + (long) dto.getDays() * 24 * 60 * 60 * 1000;
         }
-        if (userService.addUser(User.builder()
+        User user = userService.addUser(User.builder()
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .username(dto.getUsername())
                 .role((dto.isAdmin()) ? "ADMIN" : "USER")
                 .expire(expire)
                 .build()
-        )) {
+        );
+        if (user != null) {
             return ResponseEntity.ok(RestBean.success("OK"));
         }
         return new ResponseEntity<>(RestBean.failure(409, "Conflict"), HttpStatus.CONFLICT);
