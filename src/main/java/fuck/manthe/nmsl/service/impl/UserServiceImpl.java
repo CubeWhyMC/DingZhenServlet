@@ -49,10 +49,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void removeUser(String username) {
-        // delete user
-        userRepository.deleteByUsername(username);
+        // TODO delete configs
         // delete redeemed codes
         redeemService.deleteByRedeemer(username);
+        // delete user
+        userRepository.deleteByUsername(username);
     }
 
     @Override
