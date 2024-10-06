@@ -63,9 +63,16 @@
             return;
         }
 
-        fetch(`/admin/redeem/gen?count=${count}&day=${days}&reseller=${reseller}`, {
+        fetch(`/admin/redeem/generate`, {
             method: 'POST',
-            headers: {}
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                count: count,
+                days: days,
+                reseller: (reseller === '') ? undefined : reseller
+            })
         })
             .then(response => response.json())
             .then(data => {
@@ -132,9 +139,14 @@
     }
 
     function deleteCode(code) {
-        fetch(`/admin/redeem/destroy?code=${code}`, {
+        fetch(`/admin/redeem/destroy`, {
             method: 'DELETE',
-            headers: {}
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                code: code
+            })
         })
             .then(response => response.json())
             .then(data => {
@@ -163,9 +175,14 @@
         mdui.confirm(`确定要删除选中的 ${selectedCodes.length} 个激活码吗？`, '确认批量删除',
             function () {
                 Promise.all(selectedCodes.map(code =>
-                    fetch(`/admin/redeem/destroy?code=${code}`, {
+                    fetch(`/admin/redeem/destroy`, {
                         method: 'DELETE',
-                        headers: {}
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: {
+                            code: code
+                        }
                     }).then(response => response.json())
                 ))
                     .then(results => {

@@ -129,10 +129,16 @@
         errorMessage.classList.add('hidden');
 
         try {
-            const response = await fetch(`/redeem?username=${username}&password=${password}&code=${code}`, {
+            const response = await fetch(`/redeem`, {
                 method: 'POST',
                 headers: {
-                }
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password,
+                    code: code
+                })
             });
 
             if (response.ok) {

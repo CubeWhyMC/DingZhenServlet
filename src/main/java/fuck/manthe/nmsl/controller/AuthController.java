@@ -2,6 +2,7 @@ package fuck.manthe.nmsl.controller;
 
 import com.standardwebhooks.exceptions.WebhookSigningException;
 import fuck.manthe.nmsl.entity.*;
+import fuck.manthe.nmsl.entity.dto.RedeemDTO;
 import fuck.manthe.nmsl.entity.dto.VapeAuthorizeDTO;
 import fuck.manthe.nmsl.entity.dto.VerifyLoginDTO;
 import fuck.manthe.nmsl.entity.webhook.UserInjectMessage;
@@ -164,8 +165,8 @@ public class AuthController {
     }
 
     @PostMapping("redeem")
-    public ResponseEntity<RestBean<String>> redeem(@RequestParam String username, @RequestParam String password, @RequestParam String code) throws WebhookSigningException {
-        RedeemCode redeemCode = redeemService.infoOrNull(code);
+    public ResponseEntity<RestBean<String>> redeem(@RequestBody RedeemDTO dto) throws WebhookSigningException {
+        RedeemCode redeemCode = redeemService.infoOrNull(dto.getCode());
         if (redeemCode == null)
             return new ResponseEntity<>(RestBean.failure(404, "Code not found."), HttpStatus.NOT_FOUND);
         long expire = -1L;
@@ -176,6 +177,8 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(RestBean.failure(401, "Code was redeemed"));
         }
 
+        String username = dto.getUsername();
+        String password = dto.getPassword();
         User user = userService.addUser(User.builder().password(passwordEncoder.encode(password)).username(username).role("USER").expire(expire).build());
         if (user != null) {
             if (redeemService.useCode(redeemCode.getCode(), user)) {
@@ -214,6 +217,7 @@ public class AuthController {
         return "OK";
     }
 
+    @Deprecated
     @GetMapping("verify")
     public ResponseEntity<String> verify(@RequestParam String username, @RequestParam String password) {
         if (!userService.isValid(username, password) || userService.hasExpired(username)) {

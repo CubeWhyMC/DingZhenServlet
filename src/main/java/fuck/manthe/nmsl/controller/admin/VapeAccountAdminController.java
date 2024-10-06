@@ -2,7 +2,7 @@ package fuck.manthe.nmsl.controller.admin;
 
 import fuck.manthe.nmsl.entity.RestBean;
 import fuck.manthe.nmsl.entity.VapeAccount;
-import fuck.manthe.nmsl.entity.dto.VapeAccountDTO;
+import fuck.manthe.nmsl.entity.dto.*;
 import fuck.manthe.nmsl.entity.vo.VapeAccountVO;
 import fuck.manthe.nmsl.service.VapeAccountService;
 import fuck.manthe.nmsl.service.WebhookService;
@@ -20,9 +20,6 @@ import java.util.List;
 public class VapeAccountAdminController {
     @Resource
     VapeAccountService vapeAccountService;
-
-    @Resource
-    WebhookService webhookService;
 
     @GetMapping("list")
     public RestBean<List<VapeAccountVO>> list() {
@@ -45,32 +42,32 @@ public class VapeAccountAdminController {
     }
 
     @DeleteMapping("remove")
-    public ResponseEntity<RestBean<String>> remove(@RequestParam String username) {
-        if (vapeAccountService.removeAccount(username)) {
+    public ResponseEntity<RestBean<String>> remove(@RequestBody RemoveSharedAccountDTO dto) {
+        if (vapeAccountService.removeAccount(dto.getUsername())) {
             return ResponseEntity.ok(RestBean.success("OK"));
         }
         return new ResponseEntity<>(RestBean.failure(404, "Account not Found"), HttpStatus.NOT_FOUND);
     }
 
     @PutMapping("updatePassword")
-    public ResponseEntity<RestBean<String>> updatePassword(@RequestParam String username, @RequestParam String newPassword) throws Exception {
-        if (vapeAccountService.updatePassword(username, newPassword)) {
+    public ResponseEntity<RestBean<String>> updatePassword(@RequestBody UpdateSharedPasswordDTO dto) throws Exception {
+        if (vapeAccountService.updatePassword(dto.getUsername(), dto.getPassword())) {
             return ResponseEntity.ok(RestBean.success("OK"));
         }
         return new ResponseEntity<>(RestBean.failure(404, "Account not Found"), HttpStatus.NOT_FOUND);
     }
 
     @PutMapping("updateHwid")
-    public ResponseEntity<RestBean<String>> updateHwid(@RequestParam String username, @RequestParam String newHwid) throws Exception {
-        if (vapeAccountService.updateHwid(username, newHwid)) {
+    public ResponseEntity<RestBean<String>> updateHwid(@RequestBody UpdateHwidDTO dto) throws Exception {
+        if (vapeAccountService.updateHwid(dto.getUsername(), dto.getHwid())) {
             return ResponseEntity.ok(RestBean.success("OK"));
         }
         return new ResponseEntity<>(RestBean.failure(404, "Account not Found"), HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("resetColddown")
-    public RestBean<String> resetColdDown(@RequestParam String username) {
-        vapeAccountService.resetColdDown(vapeAccountService.findByUsername(username));
+    public RestBean<String> resetColdDown(@RequestBody ResetSharedColdDownDTO dto) {
+        vapeAccountService.resetColdDown(vapeAccountService.findByUsername(dto.getUsername()));
         return RestBean.success("Success");
     }
 }
