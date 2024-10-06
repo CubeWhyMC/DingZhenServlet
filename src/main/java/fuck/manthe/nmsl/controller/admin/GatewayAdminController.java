@@ -3,6 +3,7 @@ package fuck.manthe.nmsl.controller.admin;
 import fuck.manthe.nmsl.entity.Gateway;
 import fuck.manthe.nmsl.entity.RestBean;
 import fuck.manthe.nmsl.entity.dto.GatewayDTO;
+import fuck.manthe.nmsl.entity.dto.RemoveGatewayDTO;
 import fuck.manthe.nmsl.entity.vo.GatewayVO;
 import fuck.manthe.nmsl.service.GatewayService;
 import jakarta.annotation.Resource;
@@ -29,8 +30,8 @@ public class GatewayAdminController {
     }
 
     @DeleteMapping("remove")
-    public ResponseEntity<RestBean<String>> remove(@RequestParam String id) {
-        if (gatewayService.removeGateway(id)) {
+    public ResponseEntity<RestBean<String>> remove(@RequestBody RemoveGatewayDTO dto) {
+        if (gatewayService.removeGateway(dto.getId())) {
             return new ResponseEntity<>(RestBean.failure(404, "Gateway not found"), HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.ok(RestBean.success("Success"));

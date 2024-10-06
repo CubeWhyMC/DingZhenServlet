@@ -132,10 +132,14 @@
     function deleteVapeAccount(username) {
         mdui.confirm('确定要删除此 VAPE 账号吗？', '删除确认',
             function () {
-                fetch(`/admin/shared/remove?username=${username}`, {
+                fetch(`/admin/shared/remove`, {
                     method: 'DELETE',
                     headers: {
+                        "Content-Type": "application/json"
                     },
+                    body: JSON.stringify({
+                        username: username
+                    })
                 })
                     .then(response => response.json())
                     .then(data => {
@@ -163,9 +167,15 @@
     function updatePassword(username) {
         mdui.prompt(`请输入共享账户 ${username} 的新密码：`, '修改密码',
             function (value) {
-                fetch(`/admin/shared/updatePassword?username=${username}&newPassword=${value}`, {
+                fetch(`/admin/shared/updatePassword`, {
                     method: 'PUT',
-                    headers: {}
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: value
+                    })
                 })
                     .then(response => response.json())
                     .then(data => {
@@ -189,10 +199,15 @@
     function updateHwid(username) {
         mdui.prompt(`请输入共享账户 ${username} 的新HWID：`, '修改HWID',
             function (value) {
-                fetch(`/admin/shared/updateHwid?username=${username}&newHwid=${value}`, {
+                fetch(`/admin/shared/updateHwid`, {
                     method: 'PUT',
                     headers: {
+                        "Content-Type": "application/json"
                     },
+                    body: JSON.stringify({
+                        username: username,
+                        hwid: value
+                    })
                 })
                     .then(response => response.json())
                     .then(data => {
@@ -215,9 +230,14 @@
     function resetCooldown(username) {
         mdui.confirm(`确定要重置账户 ${username} 的冷却时间吗？`, '重置确认',
             function () {
-                fetch(`/admin/shared/resetColddown?username=${username}`, {
+                fetch(`/admin/shared/resetColddown`, {
                     method: 'POST',
-                    headers: {}
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        username: username
+                    })
                 })
                     .then(response => response.json())
                     .then(data => {

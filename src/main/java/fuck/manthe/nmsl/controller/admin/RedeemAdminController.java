@@ -2,6 +2,8 @@ package fuck.manthe.nmsl.controller.admin;
 
 import fuck.manthe.nmsl.entity.RedeemCode;
 import fuck.manthe.nmsl.entity.RestBean;
+import fuck.manthe.nmsl.entity.dto.DestroyRedeemCodeDTO;
+import fuck.manthe.nmsl.entity.dto.GenerateRedeemCodeDTO;
 import fuck.manthe.nmsl.entity.vo.RedeemCodeVO;
 import fuck.manthe.nmsl.service.RedeemService;
 import jakarta.annotation.Resource;
@@ -36,18 +38,18 @@ public class RedeemAdminController {
     }
 
     @DeleteMapping("destroy")
-    public ResponseEntity<RestBean<String>> destroyRedeemCode(@RequestParam String code) {
-        if (redeemService.removeCode(code)) {
+    public ResponseEntity<RestBean<String>> destroyRedeemCode(@RequestBody DestroyRedeemCodeDTO dto) {
+        if (redeemService.removeCode(dto.getCode())) {
             return ResponseEntity.ok(RestBean.success("Success"));
         }
         return new ResponseEntity<>(RestBean.failure(404, "Code not found"), HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("gen")
-    public ResponseEntity<RestBean<List<RedeemCode>>> generateRedeemCode(@RequestParam int count, @RequestParam int day, @RequestParam(required = false) String reseller) {
+    @PostMapping("generate")
+    public ResponseEntity<RestBean<List<RedeemCode>>> generateRedeemCode(@RequestBody GenerateRedeemCodeDTO dto) {
         List<RedeemCode> result = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            RedeemCode code = generateOne(day, reseller);
+        for (int i = 0; i < dto.getCount(); i++) {
+            RedeemCode code = generateOne(dto.getDays(), dto.getReseller());
             redeemService.addCode(code);
             result.add(code);
         }
@@ -58,7 +60,7 @@ public class RedeemAdminController {
     private RedeemCode generateOne(int day, String reseller) {
         RedeemCode redeemCode = new RedeemCode();
         redeemCode.setDate(day);
-        redeemCode.setReseller((reseller != null) ? reseller : "DingZhen");
+        redeemCode.setReseller((reseller != null) ? reseller : "Manthe");
         redeemCode.setAvailable(true);
         redeemCode.setCode(UUID.randomUUID().toString());
         return redeemCode;
