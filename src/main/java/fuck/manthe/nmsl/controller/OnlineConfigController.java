@@ -119,7 +119,7 @@ public class OnlineConfigController {
         return VapeRestBean.success(vo);
     }
 
-    @PostMapping("profile/save/private")
+    @PostMapping("profile/private/save/profile/")
     public SavePrivateProfileVO savePrivateProfile(@PathVariable String token, @RequestBody SavePrivateProfileDTO dto) {
         List<UpdatePrivateProfileDTO> updatedProfiles = dto.getUpdatedProfiles();
         onlineConfigService.updateCheatProfiles(token, updatedProfiles);
