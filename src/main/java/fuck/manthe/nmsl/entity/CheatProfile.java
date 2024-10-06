@@ -1,5 +1,6 @@
 package fuck.manthe.nmsl.entity;
 
+import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +14,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class CheatProfile implements BaseData {
     @Id
     private String id; // aka profileId
+    private int publicId;
+
+    @Builder.Default
+    private String shareCode = RandomUtil.randomString(6).toLowerCase();
 
     @DBRef
     private User owner;

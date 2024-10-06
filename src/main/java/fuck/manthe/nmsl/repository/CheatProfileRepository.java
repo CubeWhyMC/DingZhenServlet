@@ -5,6 +5,7 @@ import fuck.manthe.nmsl.entity.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -12,6 +13,8 @@ public interface CheatProfileRepository extends MongoRepository<CheatProfile, St
     Optional<CheatProfile> findAllByOwner(User owner);
 
     Optional<CheatProfile> findByUuid(String uuid);
+
+    List<CheatProfile> findAllByNameContaining(String name);
 
     void deleteAllByOwner(User user);
 }

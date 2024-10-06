@@ -8,6 +8,7 @@ import fuck.manthe.nmsl.util.FormatUtil;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -22,6 +23,12 @@ public class OnlineConfigController {
 
     @Resource
     FormatUtil formatUtil;
+
+    @Value("${share.online.search.state}")
+    boolean isSearchEnabled;
+
+    @Value("${share.online.search.page-size}")
+    int pageSize;
 
     @GetMapping("authenticated")
     public VapeRestBean<AuthorizationDTO> onAuthenticated(@PathVariable String token) {
@@ -102,9 +109,7 @@ public class OnlineConfigController {
         }
         List<CheatProfile> savedProfiles = onlineConfigService.loadSavedProfiles(token);
         Map<String, CheatProfileVO> voMap = new HashMap<>();
-        savedProfiles.forEach((cheatProfile) -> {
-            voMap.put(cheatProfile.getId(), CheatProfileVO.fromCheatProfile(cheatProfile));
-        });
+        savedProfiles.forEach((cheatProfile) -> voMap.put(cheatProfile.getId(), CheatProfileVO.fromCheatProfile(cheatProfile)));
         PrivateProfileVO vo = PrivateProfileVO.builder()
                 .friends(profile.getFriends())
                 .profiles(voMap)
@@ -128,5 +133,42 @@ public class OnlineConfigController {
     public VapeRestBean<Object> updatePreferences(@PathVariable String token, @RequestBody UpdateOnlinePreferencesDTO dto) {
         onlineConfigService.updatePreferences(token, dto);
         return VapeRestBean.success();
+    }
+
+    @PostMapping("profile/public/list")
+    public VapeRestBean<SearchCheatProfileResultVO> searchProfile(@PathVariable String token, @RequestBody SearchCheatProfileDTO dto) {
+        if (!isSearchEnabled) {
+            return VapeRestBean.success(
+                    SearchCheatProfileResultVO.builder()
+                            .content(List.of())
+                            .size(pageSize)
+                            .last(true)
+                            .numberOfElements(0)
+                            .totalElements(0)
+                            .totalPages(0)
+                            .build()
+            );
+        }
+        List<CheatProfile> profiles = onlineConfigService.searchProfiles(dto.getSearch());
+        List<CheatProfile> subList = profiles.subList(0, pageSize);
+        List<SearchResultContentVO> results = new ArrayList<>();
+        for (CheatProfile profile : subList) {
+            results.add(SearchResultContentVO.builder()
+                            .tags(new ArrayList<>()) // TODO search tags
+                            .name(profile.getName())
+                            .shareCode(profile.getShareCode())
+                            .owner(OwnerVO.builder()
+                                    .userId(114514)
+                                    .username(profile.getOwner().getUsername())
+                                    .build())
+                    .build());
+        }
+        return VapeRestBean.success(SearchCheatProfileResultVO.builder()
+                        .content(results)
+                .size(pageSize)
+                .last(profiles.size() < pageSize || subList.size() < pageSize || (subList.size() == pageSize && profiles.size() % pageSize == 1))
+                .totalElements(profiles.size())
+                .numberOfElements(profiles.size())
+                .build());
     }
 }

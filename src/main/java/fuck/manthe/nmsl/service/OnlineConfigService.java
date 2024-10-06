@@ -42,4 +42,6 @@ public interface OnlineConfigService {
     CheatProfile findProfileById(String id);
 
     CheatProfile updateCheatProfile(CheatProfile profile);
+
+    List<CheatProfile> searchProfiles(String name);
 }

@@ -18,6 +18,14 @@ share:
     # 不是本地搭建保留默认即可 (auto)
     # 本地搭建请填写一个你本地可以访问的Cloudflare节点, 例如 172.67.41.38
     ip: auto
+  # 云配设置
+  online:
+    # 公共配置搜索
+    search:
+      # 是否启用搜索,设置为false则不会展示任何搜索结果
+      state: true
+      # 每页大小,设置太大可能导致客户端响应缓慢
+      page-size: 24
   webhook:
     # 是否启用webhook
     state: true

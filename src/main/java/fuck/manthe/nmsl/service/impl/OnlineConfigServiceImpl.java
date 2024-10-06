@@ -140,6 +140,7 @@ public class OnlineConfigServiceImpl implements OnlineConfigService {
                         .name(profile.getName())
                         .uuid(profile.getUuid())
                         .data(profile.getData())
+                        .publicId(Math.toIntExact(cheatProfileRepository.count()))
                         .owner(user)
                         .lastUpdated(updatedTime)
                         .created(updatedTime)
@@ -196,5 +197,17 @@ public class OnlineConfigServiceImpl implements OnlineConfigService {
     @Override
     public CheatProfile updateCheatProfile(CheatProfile profile) {
         return cheatProfileRepository.save(profile);
+    }
+
+    @Override
+    public List<CheatProfile> searchProfiles(String name) {
+        List<CheatProfile> list = new ArrayList<>();
+        if (name.length() == 32 || name.length() == 36) {
+            // is uuid
+            Optional<CheatProfile> profile = cheatProfileRepository.findByUuid(name);
+            profile.ifPresent(list::add);
+        }
+        list.addAll(cheatProfileRepository.findAllByNameContaining(name));
+        return list;
     }
 }
