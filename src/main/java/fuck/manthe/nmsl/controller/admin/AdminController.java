@@ -39,7 +39,7 @@ public class AdminController {
             log.warn("Admin account created");
             log.warn("Username: admin");
             log.warn("Password: {}", password);
-            log.info("Dashboard at /admin/dashboard");
+            log.warn("Dashboard at /admin/dashboard");
             log.warn("Please keep the account information safe, you will not be able to see it again!");
             userService.addUser(User.builder()
                     .username("admin")
