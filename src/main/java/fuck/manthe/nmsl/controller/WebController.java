@@ -1,15 +1,22 @@
 package fuck.manthe.nmsl.controller;
 
+import fuck.manthe.nmsl.entity.User;
 import fuck.manthe.nmsl.service.MaintenanceService;
+import fuck.manthe.nmsl.service.UserService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
+
 @Controller
 public class WebController {
     @Resource
     MaintenanceService maintenanceService;
+
+    @Resource
+    UserService userService;
 
     @GetMapping("/")
     public String index() {
@@ -48,7 +55,11 @@ public class WebController {
     }
 
     @GetMapping("dashboard")
-    public String dashboard() {
-        return "redirect:/admin/dashboard";
+    public String dashboard(Principal principal) {
+        User user = userService.findByUsername(principal.getName());
+        if (user.getRole().equals("ADMIN")) {
+            return "redirect:admin/dashboard";
+        }
+        return "redirect:webui/";
     }
 }
