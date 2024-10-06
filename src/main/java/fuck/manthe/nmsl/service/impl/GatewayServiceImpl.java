@@ -73,15 +73,18 @@ public class GatewayServiceImpl implements GatewayService {
     }
 
     @Override
-    public void addGateway(Gateway gateway) {
+    public Gateway addGateway(Gateway gateway) {
         // 由于考虑到可能用户会自己编写服务端来实现刷新账号的逻辑,所以此处不判断重复gateway
-        gatewayRepository.save(gateway);
+        Gateway saved = gatewayRepository.save(gateway);
+        log.info("Gateway {} was added (name=\"{}\", address=\"{}\")", saved.getId(), saved.getName(), gateway.getAddress());
+        return saved;
     }
 
     @Override
     public boolean removeGateway(String id) {
         if (!gatewayRepository.existsById(id)) return false;
         gatewayRepository.deleteById(id);
+        log.info("Gateway {} was deleted", id);
         return true;
     }
 
@@ -99,7 +102,7 @@ public class GatewayServiceImpl implements GatewayService {
     }
 
     @Override
-    public VapeAuthorizeDTO use(Gateway gateway) throws IOException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    public VapeAuthorizeDTO use(Gateway gateway) throws IOException {
         try (Response response = httpClient.newCall(new Request.Builder()
                 .get()
                 .url(new URL(gateway.getAddress() + "/gateway/token"))
@@ -138,6 +141,16 @@ public class GatewayServiceImpl implements GatewayService {
     @Override
     public List<Gateway> list() {
         return gatewayRepository.findAll();
+    }
+
+    @Override
+    public Gateway findGatewayById(String id) {
+        return gatewayRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Gateway saveGateway(Gateway gateway) {
+        return gatewayRepository.save(gateway);
     }
 
     @Override

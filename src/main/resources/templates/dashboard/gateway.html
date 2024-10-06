@@ -1,0 +1,234 @@
+<!-- public/gateway.html -->
+<div class="mdui-typo">
+    <h1>Vape 密钥刷新服务管理</h1>
+</div>
+
+<div class="mdui-card mdui-m-y-2">
+    <div class="mdui-card-content">
+        <h2 class="mdui-card-primary-title">添加 密钥刷新服务</h2>
+        <div class="mdui-textfield">
+            <input class="mdui-textfield-input" type="text" id="add-name" placeholder="名称"/>
+        </div>
+        <div class="mdui-textfield">
+            <input class="mdui-textfield-input" type="text" id="add-endpoint" placeholder="地址"/>
+        </div>
+        <div class="mdui-textfield">
+            <input class="mdui-textfield-input" type="text" id="add-secret" placeholder="密钥"/>
+        </div>
+        <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="addGateway()">添加
+        </button>
+    </div>
+</div>
+
+<!-- Gateway 列表 -->
+<div class="mdui-card">
+    <div class="mdui-card-content">
+        <h2 class="mdui-card-primary-title">服务列表</h2>
+        <div id="gateway-list"></div>
+    </div>
+</div>
+
+<script>
+    function addGateway() {
+        const name = document.getElementById('add-name').value;
+        const address = document.getElementById('add-endpoint').value;
+        const secret = document.getElementById('add-secret').value;
+
+        fetch('/admin/gateway/add', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: name,
+                address: address,
+                key: secret
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.code === 200) {
+                    mdui.alert('密钥刷新服务 添加成功');
+                    fetchGateways();
+                } else {
+                    mdui.alert('添加失败: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                mdui.alert('添加请求失败，请稍后再试');
+            });
+    }
+
+    function fetchGateways() {
+        fetch('/admin/gateway/list', {
+            headers: {}
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.code === 200) {
+                    const gatewayList = document.getElementById('gateway-list');
+                    gatewayList.innerHTML = '';
+                    data.data.forEach(gateway => {
+                        const gatewayElement = createGatewayElement(gateway);
+                        gatewayList.appendChild(gatewayElement);
+                    });
+                } else {
+                    mdui.alert('获取 Gateway 列表失败: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                mdui.alert('获取 Gateway 列表失败，请稍后再试');
+            });
+    }
+
+    function createGatewayElement(gateway) {
+        const element = document.createElement('div');
+        element.className = 'mdui-card mdui-m-y-1';
+        element.innerHTML = `
+        <div class="mdui-card-content">
+            <h3 class="mdui-card-primary-title">${gateway.name}</h3>
+            <p>地址: ${gateway.address}</p>
+            <button class="mdui-btn mdui-btn-raised mdui-ripple" onclick="renameGateway('${gateway.id}')">重命名</button>
+            <button class="mdui-btn mdui-btn-raised mdui-ripple" onclick="updateSecret('${gateway.id}')">更新 Secret</button>
+            <button class="mdui-btn mdui-btn-raised mdui-ripple" onclick="updateUrl('${gateway.id}')">更新 URL</button>
+            <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-red" onclick="removeGateway('${gateway.id}')">删除</button>
+        </div>
+    `;
+        return element;
+    }
+
+    function renameGateway(id) {
+        mdui.prompt('输入新名称', '重命名 Gateway',
+            function (value) {
+                fetch(`/admin/gateway/${id}/name`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({name: value})
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.code === 200) {
+                            mdui.alert('重命名成功');
+                            fetchGateways();
+                        } else {
+                            mdui.alert('重命名失败: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        mdui.alert('重命名请求失败，请稍后再试');
+                    });
+            },
+            function (value) {
+            },
+            {
+                confirmText: '确认',
+                cancelText: '取消'
+            }
+        );
+    }
+
+    function updateSecret(id) {
+        mdui.prompt('输入新 Secret', '更新 密钥刷新服务 Secret',
+            function (value) {
+                fetch(`/admin/gateway/${id}/key`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({key: value})
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.code === 200) {
+                            mdui.alert('Secret 更新成功');
+                            fetchGateways();
+                        } else {
+                            mdui.alert('更新失败: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        mdui.alert('更新请求失败，请稍后再试');
+                    });
+            },
+            function (value) {
+            },
+            {
+                confirmText: '确认',
+                cancelText: '取消'
+            }
+        );
+    }
+
+    function updateUrl(id) {
+        mdui.prompt('输入新 URL', '更新 密钥刷新服务 URL',
+            function (value) {
+                fetch(`/admin/gateway/${id}/address`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({address: value})
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.code === 200) {
+                            mdui.alert('URL 更新成功');
+                            fetchGateways();
+                        } else {
+                            mdui.alert('更新失败: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        mdui.alert('更新请求失败，请稍后再试');
+                    });
+            },
+            function (value) {
+            },
+            {
+                confirmText: '确认',
+                cancelText: '取消'
+            }
+        );
+    }
+
+    function removeGateway(id) {
+        mdui.confirm('确定要删除这个服务吗？', '删除服务',
+            function () {
+                fetch(`/admin/gateway/remove`, {
+                    method: 'DELETE',
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({id: id})
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.code === 200) {
+                            mdui.alert('Gateway 删除成功');
+                            fetchGateways();
+                        } else {
+                            mdui.alert('删除失败: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        mdui.alert('删除请求失败，请稍后再试');
+                    });
+            },
+            function () {
+            },
+            {
+                confirmText: '确认删除',
+                cancelText: '取消'
+            }
+        );
+    }
+    fetchGateways();
+</script>

@@ -19,7 +19,7 @@ public interface GatewayService {
 
     boolean canUseGateway();
 
-    void addGateway(Gateway gateway);
+    Gateway addGateway(Gateway gateway);
 
     boolean removeGateway(String id);
 
@@ -36,4 +36,8 @@ public interface GatewayService {
     long getRemoteColdDown(Gateway gateway) throws IOException;
 
     List<Gateway> list();
+
+    Gateway findGatewayById(String id);
+
+    Gateway saveGateway(Gateway gateway);
 }

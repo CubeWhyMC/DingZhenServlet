@@ -53,4 +53,9 @@ public class DashboardController {
     public String codeHistory() {
         return "dashboard/code-history";
     }
+
+    @GetMapping("gateway")
+    public String gateway() {
+        return "dashboard/gateway";
+    }
 }
