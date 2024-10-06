@@ -187,4 +187,14 @@ public class OnlineConfigServiceImpl implements OnlineConfigService {
         privateProfile.setOtherData(dto.getOtherData());
         this.savePrivateProfile(user, privateProfile);
     }
+
+    @Override
+    public CheatProfile findProfileById(String id) {
+        return cheatProfileRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public CheatProfile updateCheatProfile(CheatProfile profile) {
+        return cheatProfileRepository.save(profile);
+    }
 }

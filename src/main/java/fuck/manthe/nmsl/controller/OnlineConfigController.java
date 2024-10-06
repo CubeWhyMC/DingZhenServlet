@@ -103,18 +103,7 @@ public class OnlineConfigController {
         List<CheatProfile> savedProfiles = onlineConfigService.loadSavedProfiles(token);
         Map<String, CheatProfileVO> voMap = new HashMap<>();
         savedProfiles.forEach((cheatProfile) -> {
-            voMap.put(cheatProfile.getId(), CheatProfileVO.builder()
-                    .profileId(cheatProfile.getId())
-                    .uuid(cheatProfile.getUuid())
-                    .name(cheatProfile.getName())
-                    .created(cheatProfile.getCreated())
-                    .data(cheatProfile.getData())
-                    .lastUpdated(cheatProfile.getLastUpdated())
-                    .ownerId(114514)
-                    .vapeVersion(cheatProfile.getVapeVersion())
-                    .lastUpdated(cheatProfile.getLastUpdated())
-                    .metadata(cheatProfile.getMetadata())
-                    .build());
+            voMap.put(cheatProfile.getId(), CheatProfileVO.fromCheatProfile(cheatProfile));
         });
         PrivateProfileVO vo = PrivateProfileVO.builder()
                 .friends(profile.getFriends())

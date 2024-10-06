@@ -99,7 +99,7 @@ async function updateConfig(category, itemName, key, value) {
             },
             body: JSON.stringify(config),
         });
-        if (!response.ok) {
+        if (response.code !== 200) {
             throw new Error('Failed to update config');
         }
     } catch (error) {
