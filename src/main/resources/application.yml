@@ -12,6 +12,12 @@ mongodb.encrypt:
     - version: 1
       key: R0afdUePq5uuN+Lnm8MFb5jGQFRsAi3wuMv3QE41YrE=
 share:
+  # Token刷新服务器设置
+  issuer:
+    # 服务端内www.vape.gg解析的IP
+    # 不是本地搭建保留默认即可 (auto)
+    # 本地搭建请填写一个你本地可以访问的Cloudflare节点, 例如 172.67.41.38
+    ip: auto
   webhook:
     # 是否启用webhook
     state: true

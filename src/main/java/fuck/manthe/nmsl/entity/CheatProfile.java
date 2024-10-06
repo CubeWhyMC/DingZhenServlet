@@ -26,5 +26,6 @@ public class CheatProfile implements BaseData {
     private String created; // created time, e.g. 2024-08-12T02:43:00.692+00:00
     private String lastUpdated; // modify time, e.g. 2024-08-13T09:51:45.259+00:00
 
+    @Builder.Default
     private Object metadata = null; // idk
 }
