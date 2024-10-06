@@ -5,7 +5,6 @@ import fuck.manthe.nmsl.entity.dto.UpdateOnlinePreferencesDTO;
 import fuck.manthe.nmsl.entity.dto.UpdatePrivateProfileDTO;
 
 import java.util.List;
-import java.util.Map;
 
 public interface OnlineConfigService {
     void cache(String token, String username);
@@ -39,4 +38,8 @@ public interface OnlineConfigService {
     void deleteAllCheatProfile(User user);
 
     void updatePreferences(String token, UpdateOnlinePreferencesDTO dto);
+
+    CheatProfile findProfileById(String id);
+
+    CheatProfile updateCheatProfile(CheatProfile profile);
 }
