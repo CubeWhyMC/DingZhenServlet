@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 @AllArgsConstructor
 @NoArgsConstructor
-public class Gateway {
+public class Gateway implements BaseData {
     @Id
     private String id;
 
