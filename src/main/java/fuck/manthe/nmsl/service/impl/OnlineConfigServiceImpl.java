@@ -1,6 +1,7 @@
 package fuck.manthe.nmsl.service.impl;
 
 import fuck.manthe.nmsl.entity.*;
+import fuck.manthe.nmsl.entity.dto.UpdateOnlinePreferencesDTO;
 import fuck.manthe.nmsl.entity.dto.UpdatePrivateProfileDTO;
 import fuck.manthe.nmsl.repository.CheatProfileRepository;
 import fuck.manthe.nmsl.repository.OnlineTokenRepository;
@@ -176,5 +177,14 @@ public class OnlineConfigServiceImpl implements OnlineConfigService {
     @Override
     public void deleteAllCheatProfile(User user) {
         cheatProfileRepository.deleteAllByOwner(user);
+    }
+
+    @Override
+    public void updatePreferences(String token, UpdateOnlinePreferencesDTO dto) {
+        User user = this.findByToken(token);
+        PrivateProfile privateProfile = user.getPrivateProfile();
+        privateProfile.setFriends(dto.getFriends());
+        privateProfile.setOtherData(dto.getOtherData());
+        this.savePrivateProfile(user, privateProfile);
     }
 }

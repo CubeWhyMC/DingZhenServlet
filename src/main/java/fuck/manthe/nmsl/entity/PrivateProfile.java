@@ -8,7 +8,7 @@ import java.util.Map;
 
 @Data
 public class PrivateProfile implements BaseData {
-    private List<String> friends;
+    private List<JSONObject> friends;
     private Map<String, String> profiles; // internal id: uuid
     private Map<String, String> publicProfiles; // internal id: uuid
     private List<JSONObject> otherData;
