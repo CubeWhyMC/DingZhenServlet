@@ -88,11 +88,11 @@
             <h3 class="mdui-card-primary-title">${webhook.name}</h3>
             <p>Endpoint: ${webhook.url}</p>
 <!--            <p>Secret: ${webhook.secret}</p>-->
-            <button class="mdui-btn mdui-btn-raised mdui-ripple" onclick="renameWebhook(${webhook.id})">重命名</button>
-            <button class="mdui-btn mdui-btn-raised mdui-ripple" onclick="updateSecret(${webhook.id})">更新 Secret</button>
-            <button class="mdui-btn mdui-btn-raised mdui-ripple" onclick="updateUrl(${webhook.id})">更新 URL</button>
-            <button class="mdui-btn mdui-btn-raised mdui-ripple" onclick="testWebhook(${webhook.id})">发送测试消息</button>
-            <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-red" onclick="removeWebhook(${webhook.id})">删除</button>
+            <button class="mdui-btn mdui-btn-raised mdui-ripple" onclick="renameWebhook('${webhook.id}')">重命名</button>
+            <button class="mdui-btn mdui-btn-raised mdui-ripple" onclick="updateSecret('${webhook.id}')">更新 Secret</button>
+            <button class="mdui-btn mdui-btn-raised mdui-ripple" onclick="updateUrl('${webhook.id}')">更新 URL</button>
+            <button class="mdui-btn mdui-btn-raised mdui-ripple" onclick="testWebhook('${webhook.id}')">发送测试消息</button>
+            <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-red" onclick="removeWebhook('${webhook.id}')">删除</button>
         </div>
     `;
         return element;
