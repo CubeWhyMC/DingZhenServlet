@@ -14,7 +14,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PrivateProfileVO {
-    private List<String> friends;
+    private List<JSONObject> friends;
     private Map<String, CheatProfileVO> profiles; // internal id: uuid
     private Map<String, CheatProfileVO> publicProfiles; // internal id: uuid
     private List<JSONObject> otherData;
