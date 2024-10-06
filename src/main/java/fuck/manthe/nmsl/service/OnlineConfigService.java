@@ -25,6 +25,8 @@ public interface OnlineConfigService {
 
     PrivateProfile savePrivateProfile(String token, PrivateProfile privateProfile);
 
+    PrivateProfile savePrivateProfile(User user, PrivateProfile profile);
+
     void updateCheatProfiles(String token, List<UpdatePrivateProfileDTO> updatedProfile);
 
     CheatProfile saveCheatProfile(CheatProfile profile);

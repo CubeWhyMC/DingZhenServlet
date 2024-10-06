@@ -110,6 +110,12 @@ public class OnlineConfigServiceImpl implements OnlineConfigService {
     }
 
     @Override
+    public PrivateProfile savePrivateProfile(User user, PrivateProfile profile) {
+        user.setPrivateProfile(profile);
+        return userService.save(user).getPrivateProfile();
+    }
+
+    @Override
     public void updateCheatProfiles(String token, List<UpdatePrivateProfileDTO> updatedProfiles) {
         User user = this.findByToken(token);
         PrivateProfile privateProfile = user.getPrivateProfile();
@@ -143,6 +149,7 @@ public class OnlineConfigServiceImpl implements OnlineConfigService {
             map.put(internalId, profile.getUuid());
         }
         privateProfile.setProfiles(map);
+        savePrivateProfile(user, privateProfile);
     }
 
     @Override
