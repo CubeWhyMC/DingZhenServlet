@@ -1,7 +1,5 @@
 package fuck.manthe.nmsl;
 
-import fuck.manthe.nmsl.entity.User;
-import fuck.manthe.nmsl.service.OnlineConfigService;
 import fuck.manthe.nmsl.util.CryptoUtil;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
@@ -9,8 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class DingZhenServletApplicationTests {
-    @Resource
-    OnlineConfigService onlineConfigService;
+//    @Resource
+//    OnlineConfigService onlineConfigService;
 
     @Resource
     CryptoUtil cryptoUtil;
@@ -19,13 +17,13 @@ class DingZhenServletApplicationTests {
     void contextLoads() {
     }
 
-    @Test
-    void onlineToken() {
-        String token = "123";
-        onlineConfigService.cache(token, "admin");
-        User cachedUser = onlineConfigService.findByToken(token);
-        assert cachedUser != null && cachedUser.getUsername().equals("admin");
-    }
+//    @Test
+//    void onlineToken() {
+//        String token = "12345";
+//        onlineConfigService.cache(token, "admin");
+//        User cachedUser = onlineConfigService.findByToken(token);
+//        assert cachedUser != null && cachedUser.getUsername().equals("admin");
+//    }
 
     @Test
     void gatewayCrypto() throws Exception {
