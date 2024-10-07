@@ -2,11 +2,14 @@ package fuck.manthe.nmsl.service.impl;
 
 import com.alibaba.fastjson2.JSON;
 import fuck.manthe.nmsl.entity.Gateway;
-import fuck.manthe.nmsl.entity.dto.ColdDownDTO;
 import fuck.manthe.nmsl.entity.dto.VapeAuthorizeDTO;
+import fuck.manthe.nmsl.entity.vo.ColdDownVO;
+import fuck.manthe.nmsl.entity.vo.GatewayAuthorizeVO;
 import fuck.manthe.nmsl.repository.GatewayRepository;
 import fuck.manthe.nmsl.service.GatewayService;
+import fuck.manthe.nmsl.service.VapeAccountService;
 import fuck.manthe.nmsl.util.Const;
+import fuck.manthe.nmsl.util.CryptoUtil;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.extern.log4j.Log4j2;
@@ -17,9 +20,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import java.net.URL;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Log4j2
@@ -40,7 +49,15 @@ public class GatewayServiceImpl implements GatewayService {
     GatewayRepository gatewayRepository;
 
     @Resource
+    VapeAccountService vapeAccountService;
+
+    @Resource
     OkHttpClient httpClient;
+
+    @Resource
+    CryptoUtil cryptoUtil;
+
+    private final String secretText = "Hello World";
 
     @PostConstruct
     public void init() {
@@ -97,40 +114,25 @@ public class GatewayServiceImpl implements GatewayService {
     }
 
     @Override
-    public VapeAuthorizeDTO use(Gateway gateway) throws IOException {
+    public VapeAuthorizeDTO use(Gateway gateway) throws Exception {
         try (Response response = httpClient.newCall(new Request.Builder()
                 .get()
                 .url(new URL(gateway.getAddress() + "/gateway/token"))
-                .header("X-Gateway-Key", gateway.getKey())
+                .header("X-Gateway-Secret", cryptoUtil.encryptGateway(secretText))
                 .build()).execute()) {
-            if (response.body() != null) {
+            if (response.isSuccessful() && response.body() != null) {
                 String json = response.body().string();
-                long coldDown = getRemoteColdDown(gateway);
-                markColdDown(gateway, coldDown);
-                return JSON.parseObject(json, VapeAuthorizeDTO.class);
+                GatewayAuthorizeVO vo = JSON.parseObject(json, GatewayAuthorizeVO.class);
+                markColdDown(gateway, vo.getColdDown().getTime());
+                return this.processDecrypt(gateway, vo);
             } else {
+                if (!response.isSuccessful()) {
+                    log.error("Gateway {} responded {}", gateway.getName(), response.code());
+                }
                 log.error("Gateway {} ({}) responded an invalid response. (empty body)", gateway.getName(), gateway.getId());
                 return null;
             }
         }
-    }
-
-    @Override
-    public long getRemoteColdDown(Gateway gateway) {
-        try (Response response = httpClient.newCall(new Request.Builder()
-                .get()
-                .url(new URL(gateway.getAddress() + "/colddown/json"))
-                .header("X-Gateway-Key", gateway.getKey())
-                .build()).execute()) {
-            if (response.body() != null) {
-                String json = response.body().string();
-                ColdDownDTO coldDown = JSON.parseObject(json, ColdDownDTO.class);
-                return coldDown.getTime();
-            }
-        } catch (Exception e) {
-            return 0L; // not implemented
-        }
-        return 0L; // unreachable
     }
 
     @Override
@@ -146,6 +148,38 @@ public class GatewayServiceImpl implements GatewayService {
     @Override
     public Gateway saveGateway(Gateway gateway) {
         return gatewayRepository.save(gateway);
+    }
+
+    @Override
+    public GatewayAuthorizeVO processEncrypt(VapeAuthorizeDTO dto) throws Exception {
+        return GatewayAuthorizeVO.builder()
+                .token(cryptoUtil.encryptGateway(dto.getToken()))
+                .status(dto.getStatus())
+                .coldDown(ColdDownVO.builder()
+                        .time(vapeAccountService.calculateColdDown())
+                        .build()
+                )
+                .build();
+    }
+
+    @Override
+    public VapeAuthorizeDTO processDecrypt(Gateway gateway, GatewayAuthorizeVO vo) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        String token = cryptoUtil.decrypt(vo.getToken(), cryptoUtil.toKey(gateway.getKey()));
+        return VapeAuthorizeDTO.builder()
+                .status(vo.getStatus())
+                .token(token)
+                .build();
+    }
+
+    @Override
+    public boolean assertSecret(String providedSecret) {
+        try {
+            return Objects.equals(cryptoUtil.decryptGateway(providedSecret), secretText);
+        } catch (Exception e) {
+            log.error("Failed to verify gateway secret, have you configured correctly?");
+            log.error("Encrypted secret: {}", providedSecret);
+            return false;
+        }
     }
 
     @Override

@@ -17,6 +17,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Log4j2
@@ -32,6 +33,9 @@ public class VapeAccountServiceImpl implements VapeAccountService {
 
     @Value("${share.cold-down.global.during-min}")
     int globalMinColdDown;
+
+    @Value("${share.cold-down.global.enabled}")
+    boolean globalColdDownEnabled;
 
 
     @Resource
@@ -189,5 +193,17 @@ public class VapeAccountServiceImpl implements VapeAccountService {
     @Override
     public boolean hasConfigured() {
         return vapeAccountRepository.count() != 0;
+    }
+
+    @Override
+    public long calculateColdDown() {
+        Long next = this.nextAvailable();
+        if (globalColdDownEnabled) {
+            long globalColdDown = Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.COLD_DOWN), 0L);
+            if (next < globalColdDown) {
+                next = globalColdDown;
+            }
+        }
+        return next;
     }
 }

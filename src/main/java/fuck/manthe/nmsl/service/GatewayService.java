@@ -2,11 +2,12 @@ package fuck.manthe.nmsl.service;
 
 import fuck.manthe.nmsl.entity.Gateway;
 import fuck.manthe.nmsl.entity.dto.VapeAuthorizeDTO;
+import fuck.manthe.nmsl.entity.vo.GatewayAuthorizeVO;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -25,7 +26,7 @@ public interface GatewayService {
 
     Gateway getOne();
 
-    VapeAuthorizeDTO use(Gateway gateway) throws IOException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException;
+    VapeAuthorizeDTO use(Gateway gateway) throws Exception;
 
     void markColdDown(Gateway gateway, long expireAt);
 
@@ -33,11 +34,32 @@ public interface GatewayService {
 
     long getColdDown(Gateway gateway);
 
-    long getRemoteColdDown(Gateway gateway) throws IOException;
-
     List<Gateway> list();
 
     Gateway findGatewayById(String id);
 
     Gateway saveGateway(Gateway gateway);
+
+    /**
+     * Encrypt a VapeAuthorize info to GatewayAuthorize info
+     *
+     * @param dto response from the issuer
+     */
+    GatewayAuthorizeVO processEncrypt(VapeAuthorizeDTO dto) throws Exception;
+
+    /**
+     * Decrypt a response to VapeAuthorize info
+     *
+     * @param gateway the gateway
+     * @param vo      response from gateway
+     */
+    VapeAuthorizeDTO processDecrypt(Gateway gateway, GatewayAuthorizeVO vo) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException;
+
+    /**
+     * Verify the encrypt secret
+     *
+     * @param providedSecret secret key from headers
+     * @return is valid
+     */
+    boolean assertSecret(String providedSecret);
 }
