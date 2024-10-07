@@ -43,4 +43,6 @@ public interface VapeAccountService {
     VapeAuthorizeDTO doAuth(VapeAccount account);
 
     VapeAccount findByUsername(String username);
+
+    boolean hasConfigured();
 }
