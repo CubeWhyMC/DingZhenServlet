@@ -18,7 +18,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(conf -> conf
                         .requestMatchers("dashboard").authenticated()
                         .requestMatchers("/admin/**").hasAuthority("ADMIN")
-                        .requestMatchers("/webui**").authenticated()
+                        .requestMatchers("/webui**", "/webui/**").authenticated()
                         .requestMatchers("/api/v2/**").authenticated()
                         .anyRequest().permitAll()
                 )

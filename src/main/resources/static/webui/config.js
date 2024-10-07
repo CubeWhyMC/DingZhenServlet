@@ -8,14 +8,8 @@ async function fetchConfig() {
     const metaTag = document.querySelector('meta[name="profile-uuid"]');
     let profileUuid = metaTag.content;
     try {
-        const response = await fetch('/api/v2/config', {
-            method: 'GET',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                uuid: profileUuid
-            })
+        const response = await fetch(`/api/v2/config?uuid=${profileUuid}`, {
+            method: 'GET'
         });
         config = await response.json();
         renderConfig();
