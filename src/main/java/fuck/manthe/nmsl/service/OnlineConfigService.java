@@ -44,4 +44,8 @@ public interface OnlineConfigService {
     CheatProfile updateCheatProfile(CheatProfile profile);
 
     List<CheatProfile> searchProfiles(String name);
+
+    List<String> deleteCheatProfiles(String token, List<String> deletedProfiles);
+
+    void deleteCheatProfile(CheatProfile profile);
 }
