@@ -3,7 +3,6 @@ package fuck.manthe.nmsl.controller;
 import fuck.manthe.nmsl.entity.CheatProfile;
 import fuck.manthe.nmsl.entity.RestBean;
 import fuck.manthe.nmsl.entity.User;
-import fuck.manthe.nmsl.entity.dto.LoadWebProfileDTO;
 import fuck.manthe.nmsl.entity.vo.CheatProfileVO;
 import fuck.manthe.nmsl.service.OnlineConfigService;
 import fuck.manthe.nmsl.service.UserService;
@@ -39,12 +38,12 @@ public class WebuiApiController {
     }
 
     @GetMapping("config")
-    public ResponseEntity<CheatProfileVO> config(Principal principal, @RequestBody LoadWebProfileDTO dto) {
-        CheatProfile profile = onlineConfigService.findProfileByUuid(dto.getUuid());
+    public ResponseEntity<CheatProfileVO> config(Principal principal, @RequestParam String uuid) {
+        CheatProfile profile = onlineConfigService.findProfileByUuid(uuid);
         if (!Objects.equals(profile.getOwner().getUsername(), principal.getName())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        log.info("Load profile UUID:{} (by {})", dto.getUuid(), profile.getOwner().getUsername());
+        log.info("Load profile UUID:{} (by {})", uuid, profile.getOwner().getUsername());
         return ResponseEntity.ok(CheatProfileVO.fromCheatProfile(profile));
     }
 
