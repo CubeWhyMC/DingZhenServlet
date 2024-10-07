@@ -16,9 +16,6 @@ import java.io.IOException;
 @Log4j2
 @Order(2)
 public class GatewayFilter implements Filter {
-    @Value("${service.gateway.key}")
-    String gatewayKey;
-
     @Value("${service.gateway.always}")
     boolean alwaysEnableGateway;
 
@@ -37,9 +34,9 @@ public class GatewayFilter implements Filter {
                 httpResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, "Gateway is not enabled in config");
                 return;
             }
-            String providedKey = httpRequest.getHeader("X-Gateway-Key");
-            if (!gatewayKey.equals(providedKey)) {
-                log.warn("Invalid gateway key provided. Please ensure that the gateway key in the JVM parameters matches the one in the dashboard");
+            String providedSecret = httpRequest.getHeader("X-Gateway-Secret");
+            if (!gatewayService.assertSecret(providedSecret)) {
+                log.warn("Invalid gateway key provided. Please ensure that the gateway key in application.yml matches the one in the dashboard");
                 httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid gateway key");
                 return;
             }

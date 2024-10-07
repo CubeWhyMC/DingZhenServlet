@@ -63,6 +63,8 @@ service:
     # 建议保持关闭,否则可能会被偷token
     # 注意: 即使mode设置为local-only也会开启gateway, 这两个服务是互不干扰的
     always: false
-    # gateway 验证密钥
-    # 请务必修改这个值,否则token会被盗刷
-    key: zzyss-please-modify-this
+    # gateway 加密密钥
+    # 会用于验证连接和传递token 加密算法AES-256
+    # 如果你要部署密钥刷新服务, 请务必修改这个值,否则token会被盗刷
+    # openssl rand -base64 32
+    key: tg8DRuZZc9rAxrQgqDx/IuTa0ZgDogZ1cIxAO1udGPg=

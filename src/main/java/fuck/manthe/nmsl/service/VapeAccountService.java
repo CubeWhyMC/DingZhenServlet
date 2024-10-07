@@ -45,4 +45,6 @@ public interface VapeAccountService {
     VapeAccount findByUsername(String username);
 
     boolean hasConfigured();
+
+    long calculateColdDown();
 }
