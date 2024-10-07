@@ -67,12 +67,12 @@ public class WebuiApiController {
     }
 
     @GetMapping("config/list")
-    public ResponseEntity<List<CheatProfileVO>> configList(Principal principal) {
+    public ResponseEntity<List<String>> configList(Principal principal) {
         User user = userService.findByUsername(principal.getName());
-        List<CheatProfileVO> vos = new ArrayList<>();
+        List<String> uuids = new ArrayList<>();
         user.getPrivateProfile().getProfiles().forEach((id, uuid) -> {
-            vos.add(CheatProfileVO.fromCheatProfile(onlineConfigService.findProfileById(id)));
+            uuids.add(uuid);
         });
-        return ResponseEntity.ok(vos);
+        return ResponseEntity.ok(uuids);
     }
 }
