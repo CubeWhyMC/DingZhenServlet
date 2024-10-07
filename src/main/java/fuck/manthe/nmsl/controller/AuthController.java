@@ -72,11 +72,11 @@ public class AuthController {
     }
 
     @PostMapping("auth.php")
-    public String auth(HttpServletRequest request) throws Exception {
+    public ResponseEntity<String> auth(HttpServletRequest request) throws Exception {
         // Error message format: ERR CODE) MESSAGE
         if (gatewayService.isPureGateway()) {
             // This servlet only response for gateway auth requests
-            return ErrorCode.SERVER.formatError("It's not you, it's us.");
+            return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body(ErrorCode.SERVER.formatError("It's not you, it's us."));
         }
         String bodyParam = new String(request.getInputStream().readAllBytes());
         Map<String, String> map = decodeParam(bodyParam);
@@ -87,25 +87,25 @@ public class AuthController {
         if (maintenanceService.isMaintaining() && crackedUser.getExpire() != -1) {
             // 暂停注入
             log.info("Blocked user {} to inject. Injections are only open to lifetime users. (Maintaining)", username);
-            return ErrorCode.SERVER.formatError("Maintaining");
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(ErrorCode.SERVER.formatError("Maintaining"));
         }
         analysisService.authRequested(username);
         if (!userService.isValid(username, password)) {
             // 凭证错误
-            return ErrorCode.ACCOUNT.formatError("Unauthorized");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ErrorCode.ACCOUNT.formatError("Unauthorized"));
         }
         if (userService.hasExpired(username)) {
             // 账户失效
-            return ErrorCode.ACCOUNT.formatError("Expired");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ErrorCode.ACCOUNT.formatError("Expired"));
         }
         if (coldDownEnabled && Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.COLD_DOWN), 0L) > System.currentTimeMillis()) {
             // 公共冷却
-            return ErrorCode.GLOBAL_COLD_DOWN.formatError("Inject colddown");
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(ErrorCode.GLOBAL_COLD_DOWN.formatError("Inject colddown"));
         }
         // 排队机制
         if (queueService.state() && !queueService.isNext(username)) {
             // 排队
-            return ErrorCode.QUEUE.formatError("Not your turn");
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(ErrorCode.QUEUE.formatError("Not your turn"));
         }
         // Get an account from database
         log.info("User {} tried to inject!", username);
@@ -133,9 +133,12 @@ public class AuthController {
             VapeAccount vapeAccount = vapeAccountService.getOne();
             if (vapeAccount == null) {
                 // 每个账户的冷却
-                return ErrorCode.PRE_ACCOUNT_COLD_DOWN.formatError("Inject cold down");
+                return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(ErrorCode.PRE_ACCOUNT_COLD_DOWN.formatError("Inject cold down"));
             }
             VapeAuthorizeDTO authorize = vapeAccountService.doAuth(vapeAccount);
+            if (authorize.getStatus() != VapeAuthorizeDTO.Status.OK) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(authorize.getToken());
+            }
             token = authorize.getToken();
         }
 
@@ -147,7 +150,7 @@ public class AuthController {
         webhookService.pushAll("inject", message);
         // Cache with online config service
         onlineConfigService.cache(token.substring(1), username); // 看起来是UUID
-        return token;
+        return ResponseEntity.ok(token);
     }
 
     @NotNull
