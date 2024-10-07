@@ -16,11 +16,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 @Service
@@ -101,7 +96,7 @@ public class VapeAccountServiceImpl implements VapeAccountService {
     }
 
     @Override
-    public boolean updatePassword(String username, String newPassword) throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    public boolean updatePassword(String username, String newPassword) {
         VapeAccount account = vapeAccountRepository.findByUsername(username);
         if (account == null) return false;
         account.setPassword(newPassword);
@@ -189,5 +184,10 @@ public class VapeAccountServiceImpl implements VapeAccountService {
     @Override
     public VapeAccount findByUsername(String username) {
         return vapeAccountRepository.findByUsername(username);
+    }
+
+    @Override
+    public boolean hasConfigured() {
+        return vapeAccountRepository.count() != 0;
     }
 }

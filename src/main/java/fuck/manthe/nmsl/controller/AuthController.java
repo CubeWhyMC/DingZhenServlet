@@ -132,6 +132,9 @@ public class AuthController {
             // 上一步失败了或者是没有可用的Gateway
             VapeAccount vapeAccount = vapeAccountService.getOne();
             if (vapeAccount == null) {
+                if (vapeAccountService.hasConfigured()) {
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ErrorCode.NOT_CONFIGURED.formatError("Not configured"));
+                }
                 // 每个账户的冷却
                 return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(ErrorCode.PRE_ACCOUNT_COLD_DOWN.formatError("Inject cold down"));
             }
@@ -177,7 +180,7 @@ public class AuthController {
             expire = System.currentTimeMillis() + (long) redeemCode.getDate() * 24 * 60 * 60 * 1000;
         }
         if (!redeemCode.isAvailable()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(RestBean.failure(401, "Code was redeemed"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(RestBean.failure(400, "Code was redeemed"));
         }
 
         String username = dto.getUsername();
