@@ -38,13 +38,13 @@ public class WebuiApiController {
     }
 
     @GetMapping("config")
-    public ResponseEntity<CheatProfileVO> config(Principal principal, @RequestParam String uuid) {
+    public ResponseEntity<RestBean<CheatProfileVO>> config(Principal principal, @RequestParam String uuid) {
         CheatProfile profile = onlineConfigService.findProfileByUuid(uuid);
         if (!Objects.equals(profile.getOwner().getUsername(), principal.getName())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(RestBean.forbidden("Forbidden"));
         }
         log.info("Load profile UUID:{} (by {})", uuid, profile.getOwner().getUsername());
-        return ResponseEntity.ok(CheatProfileVO.fromCheatProfile(profile));
+        return ResponseEntity.ok(RestBean.success(CheatProfileVO.fromCheatProfile(profile)));
     }
 
     @PostMapping("config")
@@ -70,9 +70,7 @@ public class WebuiApiController {
     public ResponseEntity<List<String>> configList(Principal principal) {
         User user = userService.findByUsername(principal.getName());
         List<String> uuids = new ArrayList<>();
-        user.getPrivateProfile().getProfiles().forEach((id, uuid) -> {
-            uuids.add(uuid);
-        });
+        user.getPrivateProfile().getProfiles().forEach((id, uuid) -> uuids.add(uuid));
         return ResponseEntity.ok(uuids);
     }
 }

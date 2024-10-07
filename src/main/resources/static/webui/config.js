@@ -11,7 +11,7 @@ async function fetchConfig() {
         const response = await fetch(`/api/v2/config?uuid=${profileUuid}`, {
             method: 'GET'
         });
-        config = await response.json();
+        config = (await response.json()).data;
         renderConfig();
     } catch (error) {
         console.error('Error fetching config:', error);
@@ -23,7 +23,7 @@ function renderConfig() {
     const container = document.querySelector('.container');
     container.innerHTML = ''; // 清空现有内容
 
-    for (const [category, items] of Object.entries(config)) {
+    for (const [category, items] of Object.entries(config.data)) {
         const column = document.createElement('div');
         column.className = 'menu-column';
         column.innerHTML = `<h3>${category}</h3>`;
