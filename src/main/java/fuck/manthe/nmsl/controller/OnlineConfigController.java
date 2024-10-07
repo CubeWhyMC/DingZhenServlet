@@ -122,9 +122,10 @@ public class OnlineConfigController {
     @PostMapping("profile/private/save/profile/")
     public SavePrivateProfileVO savePrivateProfile(@PathVariable String token, @RequestBody SavePrivateProfileDTO dto) {
         List<UpdatePrivateProfileDTO> updatedProfiles = dto.getUpdatedProfiles();
+        List<String> deletedProfiles = dto.getDeletedProfiles();
         onlineConfigService.updateCheatProfiles(token, updatedProfiles);
         return SavePrivateProfileVO.builder()
-                .deletedProfiles(dto.getDeletedProfiles())
+                .deletedProfiles(onlineConfigService.deleteCheatProfiles(token, deletedProfiles))
                 .updatedProfiles(dto.getUpdatedProfiles().stream().map(it -> it.asViewObject(UpdatePrivateProfileVO.class)).toList())
                 .build();
     }
@@ -154,17 +155,17 @@ public class OnlineConfigController {
         List<SearchResultContentVO> results = new ArrayList<>();
         for (CheatProfile profile : subList) {
             results.add(SearchResultContentVO.builder()
-                            .tags(new ArrayList<>()) // TODO search tags
-                            .name(profile.getName())
-                            .shareCode(profile.getShareCode())
-                            .owner(OwnerVO.builder()
-                                    .userId(114514)
-                                    .username(profile.getOwner().getUsername())
-                                    .build())
+                    .tags(new ArrayList<>()) // TODO search tags
+                    .name(profile.getName())
+                    .shareCode(profile.getShareCode())
+                    .owner(OwnerVO.builder()
+                            .userId(114514)
+                            .username(profile.getOwner().getUsername())
+                            .build())
                     .build());
         }
         return VapeRestBean.success(SearchCheatProfileResultVO.builder()
-                        .content(results)
+                .content(results)
                 .size(pageSize)
                 .last(profiles.size() < pageSize || subList.size() < pageSize || (subList.size() == pageSize && profiles.size() % pageSize == 1))
                 .totalElements(profiles.size())
