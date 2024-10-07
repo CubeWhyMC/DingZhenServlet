@@ -10,9 +10,4 @@ public class GatewayAuthorizeVO {
     private String token;
     private VapeAuthorizeDTO.Status status;
     private ColdDownVO coldDown;
-
-    public enum Status {
-        OK,
-        SERVLET_ERROR, NO_ACCOUNT, BANNED_OR_INCORRECT
-    }
 }
