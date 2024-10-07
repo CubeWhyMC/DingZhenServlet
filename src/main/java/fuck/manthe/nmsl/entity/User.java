@@ -32,5 +32,6 @@ public class User {
     @Builder.Default
     private OnlineConfig onlineConfig = OnlineConfig.DEFAULT;
     private GlobalConfig globalConfig;
+    @Builder.Default
     private PrivateProfile privateProfile = PrivateProfile.DEFAULT;
 }
