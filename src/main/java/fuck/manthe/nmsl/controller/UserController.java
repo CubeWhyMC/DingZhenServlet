@@ -4,6 +4,7 @@ import com.standardwebhooks.exceptions.WebhookSigningException;
 import fuck.manthe.nmsl.entity.RedeemCode;
 import fuck.manthe.nmsl.entity.RestBean;
 import fuck.manthe.nmsl.entity.User;
+import fuck.manthe.nmsl.entity.dto.ForgetPasswordDTO;
 import fuck.manthe.nmsl.entity.dto.RedeemDTO;
 import fuck.manthe.nmsl.entity.webhook.UserRegisterMessage;
 import fuck.manthe.nmsl.entity.webhook.UserRenewMessage;
@@ -82,5 +83,23 @@ public class UserController {
             return ResponseEntity.ok(RestBean.success("Renewed."));
         }
         return new ResponseEntity<>(RestBean.failure(409, "User exists or wrong password"), HttpStatus.CONFLICT);
+    }
+
+    @PostMapping("forgetPassword")
+    public ResponseEntity<RestBean<String>> forgetPassword(@RequestBody ForgetPasswordDTO dto) {
+        User user = userService.findByUsername(dto.getUsername());
+        if (user == null) {
+            return new ResponseEntity<>(RestBean.failure(404, "User not found."), HttpStatus.NOT_FOUND);
+        }
+
+        RedeemCode redeemCode = redeemService.infoOrNull(dto.getRedeemCode());
+        if (redeemCode == null || redeemCode.isAvailable() || redeemCode.getRedeemer().getId().equals(user.getId())) {
+            // 邀请码找不到或者根本没被人用过
+            // 写到一起是为了防止被刷API
+            return new ResponseEntity<>(RestBean.failure(404, "Code not found."), HttpStatus.NOT_FOUND);
+        }
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        userService.save(user);
+        return ResponseEntity.ok(RestBean.success("Password reset successfully"));
     }
 }

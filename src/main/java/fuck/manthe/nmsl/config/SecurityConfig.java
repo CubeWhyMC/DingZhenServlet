@@ -17,6 +17,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(conf -> conf
                         .requestMatchers("/user/redeem").permitAll()
+                        .requestMatchers("/user/forgetPassword").anonymous()
                         .requestMatchers("/user/**").authenticated()
                         .requestMatchers("/dashboard").authenticated()
                         .requestMatchers("/admin/**").hasAuthority("ADMIN")
