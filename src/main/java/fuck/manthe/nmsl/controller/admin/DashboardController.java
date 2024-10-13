@@ -58,4 +58,9 @@ public class DashboardController {
     public String gateway() {
         return "dashboard/gateway";
     }
+
+    @GetMapping("migrate")
+    public String migrate() {
+        return "dashboard/migrate";
+    }
 }
