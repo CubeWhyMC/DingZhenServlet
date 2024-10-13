@@ -84,7 +84,16 @@
         // }
 
         // 页面加载完成后加载首页内容
-        document.addEventListener('DOMContentLoaded', () => loadContent('home'));
+        // document.addEventListener('DOMContentLoaded', () => loadContent('home'));
+        window.onload = function () {
+            const hash = window.location.hash; // 获取哈希值，例如 #page1
+            if (hash) {
+                const page = hash.substring(1); // 去掉前面的 #
+                loadContent(page); // 调用 loadContent 函数
+            } else {
+                loadContent('home');
+            }
+        };
     </script>
 
     <script>
@@ -119,6 +128,9 @@
         let regDetectJs = /<script(.|\n)*?>(.|\n|\r\n)*?<\/script>/ig;
         // 修改 loadContent 函数以包含管理员密码
         function loadContent(url) {
+            if (window.location.hash !== url) {
+                window.location.hash = url;
+            }
             fetch(`dashboard/${url}`, {
                 headers: {
                 }

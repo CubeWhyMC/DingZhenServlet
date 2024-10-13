@@ -32,7 +32,7 @@
             <div class="mdui-text-color-green" th:if="${param.logout}">
                 成功登出
             </div>
-            <form class="mdui-p-t-2" method="post" th:action="@{/login}">
+            <form class="mdui-p-t-2" method="post" th:action="@{/user/login}">
                 <div class="mdui-textfield mdui-textfield-floating-label">
                     <label class="mdui-textfield-label">用户名</label>
                     <input class="mdui-textfield-input" name="username" required type="text"/>

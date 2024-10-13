@@ -25,7 +25,7 @@ public class MaintenanceFilter implements Filter {
         if (maintenanceService.isMaintaining()) {
             String path = request.getRequestURI();
 
-            if (path.equals("/") || path.equals("/redeem")) {
+            if (path.equals("/") || path.equals("/user/redeem")) {
                 response.sendRedirect("/maintain?redirect=" + request.getRequestURI());
                 return;
             }
