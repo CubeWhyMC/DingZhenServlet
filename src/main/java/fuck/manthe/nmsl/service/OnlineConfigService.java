@@ -48,4 +48,6 @@ public interface OnlineConfigService {
     List<String> deleteCheatProfiles(String token, List<String> deletedProfiles);
 
     void deleteCheatProfile(CheatProfile profile);
+
+    String lastUpdatedId(String token);
 }
