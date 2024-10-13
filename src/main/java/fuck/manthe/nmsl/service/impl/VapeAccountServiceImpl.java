@@ -159,10 +159,25 @@ public class VapeAccountServiceImpl implements VapeAccountService {
                     }
                     if (responseString.length() != 33) {
                         // not a valid token
-                        log.error("Account {} seems banned or incorrect ({})", vapeAccount.getUsername(), responseString);
+                        if (responseString.equals("1006")) {
+                            // Cloudflare captcha
+                            log.error("Your IP address was banned by Manthe. Please switch your VPN endpoint or use a Gateway. ({})", responseString);
+                            return VapeAuthorizeDTO.builder()
+                                    .token("Cloudflare")
+                                    .status(VapeAuthorizeDTO.Status.CLOUDFLARE)
+                                    .build();
+                        }
+                        if (responseString.equals("102")) {
+                            log.error("Vape account {} was banned. ({})", vapeAccount.getUsername(), responseString);
+                            return VapeAuthorizeDTO.builder()
+                                    .token("Disabled")
+                                    .status(VapeAuthorizeDTO.Status.BANNED)
+                                    .build();
+                        }
+                        log.error("Auth server responded an error: {} (Account: {})", responseString, vapeAccount.getUsername());
                         return VapeAuthorizeDTO.builder()
                                 .token(responseString)
-                                .status(VapeAuthorizeDTO.Status.BANNED_OR_INCORRECT)
+                                .status(VapeAuthorizeDTO.Status.INCORRECT)
                                 .build();
                     }
                 }

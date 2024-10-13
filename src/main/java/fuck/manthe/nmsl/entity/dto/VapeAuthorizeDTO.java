@@ -10,11 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class VapeAuthorizeDTO {
-    String token;
-    Status status;
+    private String token;
+    private Status status;
 
     public enum Status {
         OK,
-        SERVLET_ERROR, NO_ACCOUNT, BANNED_OR_INCORRECT
+        SERVLET_ERROR, NO_ACCOUNT, INCORRECT, BANNED, CLOUDFLARE
     }
 }
