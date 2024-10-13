@@ -16,4 +16,6 @@ public interface Const {
     // Maintain mode
     String IS_MAINTAINING = "vape:maintain:state";
     String MAINTAIN_START_AT = "vape:maintain:start";
+    // Online
+    String LAST_UPDATED = "vape:online:last-updated:";
 }

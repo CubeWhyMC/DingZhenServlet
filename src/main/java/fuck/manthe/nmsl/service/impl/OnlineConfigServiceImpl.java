@@ -8,13 +8,16 @@ import fuck.manthe.nmsl.repository.OnlineTokenRepository;
 import fuck.manthe.nmsl.service.AnalysisService;
 import fuck.manthe.nmsl.service.OnlineConfigService;
 import fuck.manthe.nmsl.service.UserService;
+import fuck.manthe.nmsl.util.Const;
 import fuck.manthe.nmsl.util.FormatUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Log4j2
 @Service
@@ -31,6 +34,9 @@ public class OnlineConfigServiceImpl implements OnlineConfigService {
 
     @Resource
     AnalysisService analysisService;
+
+    @Resource
+    RedisTemplate<String, String> stringRedisTemplate;
 
     @Resource
     FormatUtil formatUtil;
@@ -150,6 +156,10 @@ public class OnlineConfigServiceImpl implements OnlineConfigService {
             }
             map.put(internalId, profile.getUuid());
         }
+        String lastUpdate = map.keySet().toArray(new String[0])[0];
+        // Cache profile id
+        // 由于reserve在调用updateCheatProfiles之后调用, 除了脚本小子, 这个缓存都是可以正常工作的
+        stringRedisTemplate.opsForValue().set(Const.LAST_UPDATED + token, lastUpdate, 1, TimeUnit.HOURS);
         privateProfile.setProfiles(map);
         savePrivateProfile(user, privateProfile);
     }
@@ -229,5 +239,10 @@ public class OnlineConfigServiceImpl implements OnlineConfigService {
     @Override
     public void deleteCheatProfile(CheatProfile profile) {
         cheatProfileRepository.delete(profile);
+    }
+
+    @Override
+    public String lastUpdatedId(String token) {
+        return stringRedisTemplate.opsForValue().get(Const.LAST_UPDATED + token);
     }
 }

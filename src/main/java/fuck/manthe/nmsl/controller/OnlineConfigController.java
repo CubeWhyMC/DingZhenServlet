@@ -133,6 +133,11 @@ public class OnlineConfigController {
         return VapeRestBean.success(voMap);
     }
 
+    @PostMapping("profile/private/reserve/")
+    public VapeRestBean<String> reserve(@PathVariable String token) {
+        return VapeRestBean.success(onlineConfigService.lastUpdatedId(token));
+    }
+
     @PostMapping("profile/private/save/user/")
     public VapeRestBean<Object> updatePreferences(@PathVariable String token, @RequestBody UpdateOnlinePreferencesDTO dto) {
         onlineConfigService.updatePreferences(token, dto);
