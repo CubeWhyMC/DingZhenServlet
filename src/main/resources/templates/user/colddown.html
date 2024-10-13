@@ -118,7 +118,7 @@
 
     async function fetchEndTime() {
         try {
-            const response = await fetch('/colddown/json');
+            const response = await fetch('/user/colddown/json');
             const data = await response.json();
             return new Date(data.time);
         } catch (error) {

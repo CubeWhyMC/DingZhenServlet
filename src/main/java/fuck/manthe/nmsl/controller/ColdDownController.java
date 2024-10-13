@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController()
-@RequestMapping("/colddown")
+@RequestMapping("/user/colddown")
 public class ColdDownController {
     @Resource
     VapeAccountService vapeAccountService;
