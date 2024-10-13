@@ -120,14 +120,17 @@ public class OnlineConfigController {
     }
 
     @PostMapping("profile/private/save/profile/")
-    public SavePrivateProfileVO savePrivateProfile(@PathVariable String token, @RequestBody SavePrivateProfileDTO dto) {
+    public VapeRestBean<Map<String, CheatProfileVO>> savePrivateProfile(@PathVariable String token, @RequestBody SavePrivateProfileDTO dto) {
         List<UpdatePrivateProfileDTO> updatedProfiles = dto.getUpdatedProfiles();
         List<String> deletedProfiles = dto.getDeletedProfiles();
         onlineConfigService.updateCheatProfiles(token, updatedProfiles);
-        return SavePrivateProfileVO.builder()
-                .deletedProfiles(onlineConfigService.deleteCheatProfiles(token, deletedProfiles))
-                .updatedProfiles(dto.getUpdatedProfiles().stream().map(it -> it.asViewObject(UpdatePrivateProfileVO.class)).toList())
-                .build();
+        onlineConfigService.deleteCheatProfiles(token, deletedProfiles);
+        List<CheatProfile> profiles = onlineConfigService.loadSavedProfiles(token);
+        Map<String, CheatProfileVO> voMap = new HashMap<>();
+        for (CheatProfile profile : profiles) {
+            voMap.put(profile.getId(), CheatProfileVO.fromCheatProfile(profile));
+        }
+        return VapeRestBean.success(voMap);
     }
 
     @PostMapping("profile/private/save/user/")
