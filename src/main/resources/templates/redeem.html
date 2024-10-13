@@ -129,7 +129,7 @@
         errorMessage.classList.add('hidden');
 
         try {
-            const response = await fetch(`/redeem`, {
+            const response = await fetch(`/user/redeem`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"
