@@ -16,8 +16,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(conf -> conf
-                        .requestMatchers("/user/**").authenticated()
                         .requestMatchers("/user/redeem").permitAll()
+                        .requestMatchers("/user/**").authenticated()
                         .requestMatchers("/dashboard").authenticated()
                         .requestMatchers("/admin/**").hasAuthority("ADMIN")
                         .requestMatchers("/webui**", "/webui/**").authenticated()
@@ -25,7 +25,7 @@ public class SecurityConfig {
                         .anyRequest().permitAll()
                 )
                 .formLogin((form) -> form
-                        .loginPage("/login")
+                        .loginPage("/user/login")
                         .permitAll()
                 )
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)

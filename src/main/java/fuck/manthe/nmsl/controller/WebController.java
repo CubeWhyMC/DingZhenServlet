@@ -33,12 +33,18 @@ public class WebController {
         return "queue";
     }
 
+    @Deprecated
     @GetMapping("redeem")
     public String register() {
+        return "redirect:/user/redeem";
+    }
+
+    @GetMapping("user/redeem")
+    public String redeem() {
         return "redeem";
     }
 
-    @GetMapping("login")
+    @GetMapping("user/login")
     public String login() {
         return "login";
     }
