@@ -1,0 +1,49 @@
+<!-- public/migrate.html -->
+<div class="mdui-typo">
+    <h1>从旧服务端迁移</h1>
+</div>
+
+<div class="mdui-card mdui-m-y-2">
+    <div class="mdui-card-content">
+        <h2 class="mdui-card-primary-title">输入旧服务端信息</h2>
+        <p>请确保后端可以访问到旧服务端</p>
+        <div class="mdui-textfield">
+            <input class="mdui-textfield-input" type="text" id="add-address" placeholder="服务端地址"/>
+        </div>
+        <div class="mdui-textfield">
+            <input class="mdui-textfield-input" type="text" id="add-secret" placeholder="超级管理密码"/>
+        </div>
+        <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="migrate()">开始迁移
+        </button>
+    </div>
+</div>
+
+<script>
+    function migrate() {
+        const address = document.getElementById('add-address').value;
+        const adminPassword = document.getElementById('add-secret').value;
+
+        fetch('/admin/server/migrate/legacy', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                address: address,
+                adminPassword: adminPassword
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.code === 200) {
+                    mdui.alert('正在迁移,请查看log获取进度');
+                } else {
+                    mdui.alert('失败: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                mdui.alert('请求失败，请稍后再试');
+            });
+    }
+</script>

@@ -147,4 +147,9 @@ public class UserServiceImpl implements UserService {
     public User save(User user) {
         return userRepository.save(user);
     }
+
+    @Override
+    public boolean existByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
 }

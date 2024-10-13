@@ -1,13 +1,9 @@
 package fuck.manthe.nmsl.controller;
 
-import com.standardwebhooks.exceptions.WebhookSigningException;
 import fuck.manthe.nmsl.entity.*;
-import fuck.manthe.nmsl.entity.dto.RedeemDTO;
 import fuck.manthe.nmsl.entity.dto.VapeAuthorizeDTO;
 import fuck.manthe.nmsl.entity.dto.VerifyLoginDTO;
 import fuck.manthe.nmsl.entity.webhook.UserInjectMessage;
-import fuck.manthe.nmsl.entity.webhook.UserRegisterMessage;
-import fuck.manthe.nmsl.entity.webhook.UserRenewMessage;
 import fuck.manthe.nmsl.service.*;
 import fuck.manthe.nmsl.util.Const;
 import jakarta.annotation.Resource;
@@ -18,7 +14,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URLDecoder;
@@ -37,9 +32,6 @@ public class AuthController {
     UserService userService;
 
     @Resource
-    RedeemService redeemService;
-
-    @Resource
     QueueService queueService;
 
     @Resource
@@ -56,9 +48,6 @@ public class AuthController {
 
     @Resource
     MaintenanceService maintenanceService;
-
-    @Resource
-    PasswordEncoder passwordEncoder;
 
     @Resource
     OnlineConfigService onlineConfigService;
@@ -168,54 +157,6 @@ public class AuthController {
             }
         }
         return map;
-    }
-
-    @PostMapping("redeem")
-    public ResponseEntity<RestBean<String>> redeem(@RequestBody RedeemDTO dto) throws WebhookSigningException {
-        RedeemCode redeemCode = redeemService.infoOrNull(dto.getCode());
-        if (redeemCode == null)
-            return new ResponseEntity<>(RestBean.failure(404, "Code not found."), HttpStatus.NOT_FOUND);
-        long expire = -1L;
-        if (redeemCode.getDate() != -1) {
-            expire = System.currentTimeMillis() + (long) redeemCode.getDate() * 24 * 60 * 60 * 1000;
-        }
-        if (!redeemCode.isAvailable()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(RestBean.failure(400, "Code was redeemed"));
-        }
-
-        String username = dto.getUsername();
-        String password = dto.getPassword();
-        User user = userService.addUser(User.builder().password(passwordEncoder.encode(password)).username(username).role("USER").expire(expire).build());
-        if (user != null) {
-            if (redeemService.useCode(redeemCode.getCode(), user)) {
-                log.info("User {} registered it's account with the code {} ({}d).", username, redeemCode.getCode(), redeemCode.getDate());
-            }
-            // push to webhooks
-            UserRegisterMessage message = new UserRegisterMessage();
-            message.setRedeemUsername(username);
-            message.setTimestamp(System.currentTimeMillis() / 1000L);
-            message.setCode(redeemCode.getCode());
-            message.setExpireAt(expire);
-            message.setContent("用户 %s 使用一个%s天兑换码 %s 注册了账户".formatted(username, redeemCode.getDate(), redeemCode.getCode()));
-            webhookService.pushAll("renew", message);
-
-            return ResponseEntity.ok(RestBean.success("Registered."));
-        } else if (userService.isValid(username, password) && userService.renew(username, redeemCode.getDate())) {
-            User existUser = userService.findByUsername(username);
-            if (redeemService.useCode(redeemCode.getCode(), existUser)) {
-                log.info("User {} renewed it's account with the code {} ({}d).", username, redeemCode.getCode(), redeemCode.getDate());
-            }
-            // Push to webhooks
-            UserRenewMessage message = new UserRenewMessage();
-            message.setRedeemUsername(username);
-            message.setTimestamp(System.currentTimeMillis() / 1000L);
-            message.setCode(redeemCode.getCode());
-            message.setExpireAt(userService.findByUsername(username).getExpire());
-            message.setContent("用户 %s 使用%s 兑换了%s 天订阅".formatted(username, redeemCode.getCode(), redeemCode.getDate()));
-            webhookService.pushAll("renew", message);
-            return ResponseEntity.ok(RestBean.success("Renewed."));
-        }
-        return new ResponseEntity<>(RestBean.failure(409, "User exists or wrong password"), HttpStatus.CONFLICT);
     }
 
     @GetMapping("check")
