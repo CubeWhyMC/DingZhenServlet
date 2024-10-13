@@ -24,29 +24,39 @@ public class WebController {
     }
 
     @GetMapping("colddown")
-    public String coldDown() {
-        return "colddown";
+    public String coldDownRedirect() {
+        return "redirect:/user/colddown";
     }
 
-    @GetMapping("queue")
-    public String queue() {
-        return "queue";
+    @GetMapping("user/colddown")
+    public String coldDown() {
+        return "user/colddown";
     }
+
+//    @GetMapping("queue")
+//    public String queue() {
+//        return "queue";
+//    }
 
     @Deprecated
     @GetMapping("redeem")
-    public String register() {
+    public String redeemRedirect() {
         return "redirect:/user/redeem";
     }
 
     @GetMapping("user/redeem")
     public String redeem() {
-        return "redeem";
+        return "user/redeem";
     }
 
     @GetMapping("user/login")
     public String login() {
-        return "login";
+        return "user/login";
+    }
+
+    @GetMapping("user/forgetPassword")
+    public String forgetPassword() {
+        return "user/forget-password";
     }
 
     @GetMapping("maintain")
