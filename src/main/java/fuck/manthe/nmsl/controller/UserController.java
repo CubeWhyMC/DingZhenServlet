@@ -93,7 +93,7 @@ public class UserController {
         }
 
         RedeemCode redeemCode = redeemService.infoOrNull(dto.getRedeemCode());
-        if (redeemCode == null || redeemCode.isAvailable() || redeemCode.getRedeemer().getId().equals(user.getId())) {
+        if (redeemCode == null || redeemCode.isAvailable() || redeemCode.getRedeemer() == null || !redeemCode.getRedeemer().getId().equals(user.getId())) {
             // 邀请码找不到或者根本没被人用过
             // 写到一起是为了防止被刷API
             return new ResponseEntity<>(RestBean.failure(404, "Code not found."), HttpStatus.NOT_FOUND);
