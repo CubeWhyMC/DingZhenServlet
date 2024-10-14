@@ -3,52 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>登录到DingZhenServlet</title>
+    <title>登录到丁真租号玩</title>
     <link href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script>
     <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
         body {
-            background-color: #f5f5f5;
+            background: linear-gradient(45deg, #6ac1c5, #bda5ff);
+        }
+
+        .content {
+            flex: 1 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .login-card {
+            width: 90%;
             max-width: 400px;
-            margin: 100px auto;
-            padding: 20px;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            background-color: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+
+        .login-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .mdui-textfield-input {
+            border-bottom: 2px solid #bda5ff;
+        }
+
+        .mdui-textfield-input:focus {
+            border-bottom-color: #6ac1c5;
+        }
+
+        .login-btn {
+            background: linear-gradient(45deg, #6ac1c5, #bda5ff) !important;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+
+        .forget-password {
+            text-align: right;
+            margin-top: 10px;
+        }
+
+        .forget-password a {
+            color: #6ac1c5;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .forget-password a:hover {
+            color: #bda5ff;
+        }
+
+        footer {
+            background-color: rgba(0, 0, 0, 0.1);
+            color: white;
+            text-align: center;
+            padding: 10px;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 600px) {
+            .login-card {
+                padding: 20px;
+            }
         }
     </style>
 </head>
 <body class="mdui-theme-primary-indigo mdui-theme-accent-pink">
-<div class="mdui-container">
-    <div class="mdui-card login-card">
+<div class="content">
+    <div class="mdui-card login-card mdui-shadow-5 animate__animated animate__fadeInDown">
         <div class="mdui-card-primary">
-            <div class="mdui-card-primary-title">登录到顶针服务</div>
-            <div class="mdui-card-primary-subtitle">请输入您的用户名和密码</div>
+            <div class="mdui-card-primary-title mdui-text-color-theme animate__animated animate__fadeIn animate__delay-1s">登录到顶针服务</div>
+            <div class="mdui-card-primary-subtitle animate__animated animate__fadeIn animate__delay-1s">请输入您的用户名和密码</div>
         </div>
         <div class="mdui-card-content">
-            <div class="mdui-text-color-red" th:if="${param.error}">
+            <div class="mdui-text-color-red animate__animated animate__fadeIn animate__delay-1s" th:if="${param.error}">
                 错误的用户名或者密码
             </div>
-            <div class="mdui-text-color-green" th:if="${param.logout}">
+            <div class="mdui-text-color-green animate__animated animate__fadeIn animate__delay-1s" th:if="${param.logout}">
                 成功登出
             </div>
             <form class="mdui-p-t-2" method="post" th:action="@{/user/login}">
-                <div class="mdui-textfield mdui-textfield-floating-label">
+                <div class="mdui-textfield mdui-textfield-floating-label animate__animated animate__fadeInUp animate__delay-1s">
                     <label class="mdui-textfield-label">用户名</label>
                     <input class="mdui-textfield-input" name="username" required type="text"/>
                 </div>
-                <div class="mdui-textfield mdui-textfield-floating-label">
+                <div class="mdui-textfield mdui-textfield-floating-label animate__animated animate__fadeInUp animate__delay-1s">
                     <label class="mdui-textfield-label">密码</label>
                     <input class="mdui-textfield-input" name="password" required type="password"/>
                 </div>
-                <div><a href="/user/forgetPassword">忘记密码</a></div>
-                <div class="mdui-p-t-3">
-                    <button class="mdui-btn mdui-btn-raised mdui-btn-block mdui-color-theme-accent" type="submit">登录
-                    </button>
+                <div class="forget-password animate__animated animate__fadeInUp animate__delay-2s">
+                    <a href="/user/forgetPassword">忘记密码？</a>
+                </div>
+                <div class="mdui-p-t-3 animate__animated animate__fadeInUp animate__delay-2s">
+                    <button class="mdui-btn mdui-btn-raised mdui-btn-block login-btn" type="submit">登录</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+<footer class="animate__animated animate__fadeIn animate__delay-3s">
+    © 2024 丁真租号玩
+</footer>
+<script>
+    document.querySelector('.login-card').addEventListener('mouseenter', function() {
+        this.classList.add('animate__pulse');
+    });
+    document.querySelector('.login-card').addEventListener('mouseleave', function() {
+        this.classList.remove('animate__pulse');
+    });
+</script>
 </body>
 </html>
