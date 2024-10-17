@@ -118,7 +118,7 @@ public class GatewayServiceImpl implements GatewayService {
         try (Response response = httpClient.newCall(new Request.Builder()
                 .get()
                 .url(new URL(gateway.getAddress() + "/gateway/token"))
-                .header("X-Gateway-Secret", cryptoUtil.encryptGateway(secretText))
+                .header("X-Gateway-Secret", cryptoUtil.encrypt(secretText, cryptoUtil.toKey(gateway.getKey())))
                 .build()).execute()) {
             if (response.isSuccessful() && response.body() != null) {
                 String json = response.body().string();
