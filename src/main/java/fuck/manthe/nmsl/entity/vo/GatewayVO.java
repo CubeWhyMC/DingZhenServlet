@@ -1,10 +1,11 @@
 package fuck.manthe.nmsl.entity.vo;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class GatewayVO {
     private String id;
 
