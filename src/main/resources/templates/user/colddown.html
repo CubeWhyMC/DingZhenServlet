@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>发车倒计时</title>
     <style>
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         body {
             font-family: 'Arial', sans-serif;
             display: flex;
@@ -15,8 +25,9 @@
             margin: 0;
             color: #fff;
             text-align: center;
-            overflow: hidden;
+            animation: fadeIn 1s ease-in-out;
         }
+
         .container {
             display: flex;
             flex-direction: column;
@@ -28,8 +39,8 @@
             backdrop-filter: blur(10px);
             width: 80%;
             max-width: 600px;
-            opacity: 0;
         }
+
         .clock {
             width: 300px;
             height: 300px;
@@ -40,35 +51,44 @@
             background: rgba(255, 255, 255, 0.1);
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
         }
+
         .clock-face {
             position: relative;
             width: 100%;
             height: 100%;
             transform: translateY(-3px);
+            animation: rotate 20s linear infinite;
         }
+
         .hand {
             position: absolute;
             top: 50%;
             right: 50%;
             transform-origin: 100%;
             transform: rotate(90deg);
-            transition: all 0.2s ease-out;
+            transition: all 0.05s;
+            transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
         }
+
         .minute-hand {
             width: 40%;
             height: 4px;
             background: #fff;
         }
+
         .second-hand {
             width: 45%;
             height: 2px;
             background: #ff6b6b;
         }
+
         .digital-clock {
             font-size: 48px;
             margin: 20px 0;
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            animation: fadeIn 2s ease-in-out;
         }
+
         .number {
             position: absolute;
             width: 100%;
@@ -77,10 +97,12 @@
             font-size: 20px;
             font-weight: bold;
         }
+
         .number span {
             display: inline-block;
             transform: rotate(-60deg);
         }
+
         .center-dot {
             position: absolute;
             top: 50%;
@@ -91,13 +113,7 @@
             border-radius: 50%;
             transform: translate(-50%, -50%);
         }
-        .loading-text {
-            font-size: 24px;
-            margin-top: 20px;
-            opacity: 0;
-        }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"></script>
 </head>
 <body>
 <div class="container">
@@ -118,7 +134,6 @@
     </div>
     <div class="digital-clock" id="digital-clock">06:00</div>
 </div>
-<div class="loading-text" id="loading-text">加载中...</div>
 
 <script>
     let endTime;
@@ -156,10 +171,15 @@
         const now = new Date().getTime();
         const distance = endTime.getTime() - now;
 
+        if (endTime.getTime() === -1) {
+            digitalClock.innerHTML = "公共冷却已在服务端禁用";
+            clearInterval(countdownInterval);
+            return;
+        }
+
         if (distance < 0) {
             digitalClock.innerHTML = "倒计时结束，你现在可以注入";
             clearInterval(countdownInterval);
-            gsap.to(".container", { opacity: 0, duration: 1 });
             return;
         }
 
@@ -169,17 +189,15 @@
         const secondsDegrees = ((seconds / 60) * 360) + 90;
         const minutesDegrees = ((minutes / 6) * 360) + ((seconds / 60) * 6) + 90;
 
-        gsap.to(secondHand, { rotation: secondsDegrees, duration: 0.5, ease: "power2.out" });
-        gsap.to(minuteHand, { rotation: minutesDegrees, duration: 0.5, ease: "power2.out" });
+        secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
+        minuteHand.style.transform = `rotate(${minutesDegrees}deg)`;
 
         digitalClock.innerHTML = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     }
 
     async function init() {
         await updateEndTime();
-        gsap.to(".container", { opacity: 1, duration: 1 });
-        gsap.to("#loading-text", { opacity: 0, duration: 1 });
-
+        
         // 每秒更新倒计时
         countdownInterval = setInterval(updateCountdown, 1000);
         
