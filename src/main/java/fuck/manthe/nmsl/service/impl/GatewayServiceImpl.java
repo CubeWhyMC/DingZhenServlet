@@ -178,6 +178,7 @@ public class GatewayServiceImpl implements GatewayService {
         } catch (Exception e) {
             log.error("Failed to verify gateway secret, have you configured correctly?");
             log.error("Encrypted secret: {}", providedSecret);
+            log.error(e.getMessage(), e);
             return false;
         }
     }
