@@ -111,8 +111,9 @@ public class AuthController {
                 if (authorize != null) {
                     log.info("Successfully authed with the gateway {} ({})", gateway.getName(), gateway.getId());
                     token = authorize.getToken();
+                } else {
+                    log.error("Gateway {} ({}) is not available. Authorizing with this server...", gateway.getName(), gateway.getId());
                 }
-                log.error("Gateway {} ({}) is not available. Authorizing with this server...", gateway.getName(), gateway.getId());
             }
         }
         // 没有配置gateway或者所有的gateway都在冷却
