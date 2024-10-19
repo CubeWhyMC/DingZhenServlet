@@ -3,8 +3,10 @@ package fuck.manthe.nmsl.service.impl;
 import cn.hutool.core.util.RandomUtil;
 import fuck.manthe.nmsl.entity.VapeAccount;
 import fuck.manthe.nmsl.entity.dto.VapeAuthorizeDTO;
+import fuck.manthe.nmsl.entity.webhook.InvalidTokenMessage;
 import fuck.manthe.nmsl.repository.VapeAccountRepository;
 import fuck.manthe.nmsl.service.VapeAccountService;
+import fuck.manthe.nmsl.service.WebhookService;
 import fuck.manthe.nmsl.util.Const;
 import jakarta.annotation.Resource;
 import lombok.extern.log4j.Log4j2;
@@ -43,6 +45,9 @@ public class VapeAccountServiceImpl implements VapeAccountService {
 
     @Resource
     VapeAccountRepository vapeAccountRepository;
+
+    @Resource
+    WebhookService webhookService;
 
     @Resource
     OkHttpClient httpClient;
@@ -158,27 +163,36 @@ public class VapeAccountServiceImpl implements VapeAccountService {
                         redisTemplate.opsForValue().set(Const.COLD_DOWN, System.currentTimeMillis() + (long) RandomUtil.randomInt(globalMinColdDown, globalMaxColdDown, true, true) * 60 * 1000);
                     }
                     if (responseString.length() != 33) {
+                        InvalidTokenMessage message = new InvalidTokenMessage();
+                        message.setErrorCode(responseString);
+                        message.setTimestamp(System.currentTimeMillis() / 1000L);
+                        VapeAuthorizeDTO dto;
                         // not a valid token
                         if (responseString.equals("1006")) {
                             // Cloudflare captcha
+                            message.setContent("共享账户无法进行登录,是IP被封禁了吗");
                             log.error("Your IP address was banned by Manthe. Please switch your VPN endpoint or use a Gateway. ({})", responseString);
-                            return VapeAuthorizeDTO.builder()
+                            dto = VapeAuthorizeDTO.builder()
                                     .token("Cloudflare")
                                     .status(VapeAuthorizeDTO.Status.CLOUDFLARE)
                                     .build();
-                        }
-                        if (responseString.equals("102")) {
+                        } else if (responseString.equals("102")) {
+                            message.setContent(String.format("共享账户账户似乎被封禁了 (内部ID: %s)", vapeAccount.getId()));
                             log.error("Vape account {} was banned. ({})", vapeAccount.getUsername(), responseString);
-                            return VapeAuthorizeDTO.builder()
+                            dto = VapeAuthorizeDTO.builder()
                                     .token("Disabled")
                                     .status(VapeAuthorizeDTO.Status.BANNED)
                                     .build();
+                        } else {
+                            message.setContent(String.format("共享账户在验证的时候产生了未知错误 (错误码: %s, 内部ID: %s)", responseString, vapeAccount.getId()));
+                            log.error("Auth server responded an error: {} (Account: {})", responseString, vapeAccount.getUsername());
+                            dto = VapeAuthorizeDTO.builder()
+                                    .token(responseString)
+                                    .status(VapeAuthorizeDTO.Status.INCORRECT)
+                                    .build();
                         }
-                        log.error("Auth server responded an error: {} (Account: {})", responseString, vapeAccount.getUsername());
-                        return VapeAuthorizeDTO.builder()
-                                .token(responseString)
-                                .status(VapeAuthorizeDTO.Status.INCORRECT)
-                                .build();
+                        webhookService.pushAll("invalid-token", message);
+                        return dto;
                     }
                 }
                 log.debug("Fetch token for {} ({})", vapeAccount.getUsername(), responseString);
