@@ -37,7 +37,7 @@ public class CryptoUtil {
 
     public String encrypt(@NotNull String plaintext, SecretKey key) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
         Cipher cipher = Cipher.getInstance(TRANSFORMATION);
-        IvParameterSpec ivParams = new IvParameterSpec(getInitializationVector());
+        IvParameterSpec ivParams = new IvParameterSpec(getInitializationVector(key));
         cipher.init(Cipher.ENCRYPT_MODE, key, ivParams);
         byte[] encrypted = cipher.doFinal(plaintext.getBytes());
         return Base64.getEncoder().encodeToString(encrypted);
@@ -45,14 +45,13 @@ public class CryptoUtil {
 
     public String decrypt(String ciphertext, SecretKey key) throws NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, InvalidKeyException {
         Cipher cipher = Cipher.getInstance(TRANSFORMATION);
-        IvParameterSpec ivParams = new IvParameterSpec(getInitializationVector());
+        IvParameterSpec ivParams = new IvParameterSpec(getInitializationVector(key));
         cipher.init(Cipher.DECRYPT_MODE, key, ivParams);
         byte[] decrypted = cipher.doFinal(Base64.getDecoder().decode(ciphertext));
         return new String(decrypted);
     }
 
-    public byte[] getInitializationVector() {
-        SecretKey secretKey = gatewayKey;
+    public byte[] getInitializationVector(SecretKey secretKey) {
         byte[] iv = new byte[16]; // 128-bit IV
         System.arraycopy(secretKey.getEncoded(), 0, iv, 0, iv.length); // Simple IV for demonstration, should be random in production
         return iv;
