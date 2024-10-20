@@ -229,7 +229,7 @@ public class GatewayServiceImpl implements GatewayService {
 
     @Scheduled(cron = "0 */30 * * * *")
     private void sendHeartbeat() throws Exception {
-        if (!heartbeatState) {
+        if (!heartbeatState || isGatewayEnabled()) {
             return;
         }
         log.info("Sending Gateway heartbeat...");
