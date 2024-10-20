@@ -37,6 +37,9 @@
 
 ## 参与到我们的开发中
 
+想自己实现密钥刷新服务吗?
+请查看我们的[Wiki](https://github.com/CubeWhyMC/DingZhenServlet/wiki/%E4%BD%BF%E7%94%A8%E5%85%B6%E4%BB%96%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0%E5%AF%86%E9%92%A5%E5%88%B7%E6%96%B0%E6%9C%8D%E5%8A%A1)
+
 - 抓包工具 httpdebugger, wireshark
 - IDE Intellij IDEA
 
