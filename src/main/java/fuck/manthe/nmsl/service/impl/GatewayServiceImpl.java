@@ -232,7 +232,7 @@ public class GatewayServiceImpl implements GatewayService {
         if (!heartbeatState || isGatewayEnabled()) {
             return;
         }
-        log.info("Sending Gateway heartbeat...");
+        log.info("Sending Gateway heartbeats...");
         for (Gateway gateway : list()) {
             log.info("Sending gateway heartbeat to {}", gateway.getName());
             if (!heartbeat(gateway)) {
