@@ -221,7 +221,7 @@ public class GatewayServiceImpl implements GatewayService {
             }
         } catch (Exception e) {
             log.error("Failed to send heartbeat to {}", gateway.getName());
-            log.error(e.getMessage(), e);
+//            log.error(e.getMessage(), e);
             return false;
         }
         return true;
