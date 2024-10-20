@@ -24,17 +24,35 @@ public class RedeemAdminController {
 
     @GetMapping("list")
     public ResponseEntity<RestBean<List<RedeemCodeVO>>> redeemCodeList() {
-        return ResponseEntity.ok(RestBean.success(redeemService.list().stream().map(code -> code.asViewObject(RedeemCodeVO.class)).toList()));
+        return ResponseEntity.ok(RestBean.success(redeemService.list().stream().map(code -> code.asViewObject(RedeemCodeVO.class, (vo) -> {
+            if (code.getRedeemer() != null) {
+                vo.setRedeemer(code.getRedeemer().getUsername());
+            } else {
+                vo.setRedeemer("Unrecorded");
+            }
+        })).toList()));
     }
 
     @GetMapping("available")
     public ResponseEntity<RestBean<List<RedeemCodeVO>>> availableRedeemCode() {
-        return ResponseEntity.ok(RestBean.success(redeemService.listAvailable().stream().map(code -> code.asViewObject(RedeemCodeVO.class)).toList()));
+        return ResponseEntity.ok(RestBean.success(redeemService.listAvailable().stream().map(code -> code.asViewObject(RedeemCodeVO.class, (vo) -> {
+            if (code.getRedeemer() != null) {
+                vo.setRedeemer(code.getRedeemer().getUsername());
+            } else {
+                vo.setRedeemer("Unrecorded");
+            }
+        })).toList()));
     }
 
     @GetMapping("sold")
     public ResponseEntity<RestBean<List<RedeemCodeVO>>> listSold() {
-        return ResponseEntity.ok(RestBean.success(redeemService.listSold().stream().map(code -> code.asViewObject(RedeemCodeVO.class)).toList()));
+        return ResponseEntity.ok(RestBean.success(redeemService.listSold().stream().map(code -> code.asViewObject(RedeemCodeVO.class, (vo) -> {
+            if (code.getRedeemer() != null) {
+                vo.setRedeemer(code.getRedeemer().getUsername());
+            } else {
+                vo.setRedeemer("Unrecorded");
+            }
+        })).toList()));
     }
 
     @DeleteMapping("destroy")
