@@ -8,6 +8,7 @@ import lombok.Data;
 public class UserVO {
     private String id;
     private String username;
+    private String email;
     private String role;
     private long expire;
     private long registerTime;
