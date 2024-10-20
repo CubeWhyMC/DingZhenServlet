@@ -137,7 +137,7 @@ public class AuthController {
 
         // Push to webhook
         UserInjectMessage message = new UserInjectMessage();
-        message.setContent("User %s inject".formatted(username));
+        message.setContent("用户 %s 进行了注入".formatted(username));
         message.setUsername(username);
         message.setTimestamp(System.currentTimeMillis() / 1000L);
         webhookService.pushAll("inject", message);
