@@ -68,3 +68,7 @@ service:
     # 如果你要部署密钥刷新服务, 请务必修改这个值,否则token会被盗刷
     # openssl rand -base64 32
     key: tg8DRuZZc9rAxrQgqDx/IuTa0ZgDogZ1cIxAO1udGPg=
+    # 心跳包设置 (主控)
+    heartbeat:
+      # 是否发送心跳包 (主控)
+      state: true

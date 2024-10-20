@@ -64,4 +64,11 @@ public interface GatewayService {
      * @return is valid
      */
     boolean assertSecret(String providedSecret);
+
+    /**
+     * Send a heartbeat packet to gateway server
+     *
+     * @param gateway gateway
+     */
+    boolean heartbeat(Gateway gateway);
 }
