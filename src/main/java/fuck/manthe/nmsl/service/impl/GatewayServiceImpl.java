@@ -1,10 +1,12 @@
 package fuck.manthe.nmsl.service.impl;
 
 import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import fuck.manthe.nmsl.entity.Gateway;
 import fuck.manthe.nmsl.entity.dto.VapeAuthorizeDTO;
 import fuck.manthe.nmsl.entity.vo.ColdDownVO;
 import fuck.manthe.nmsl.entity.vo.GatewayAuthorizeVO;
+import fuck.manthe.nmsl.entity.vo.GatewayHeartbeatVO;
 import fuck.manthe.nmsl.entity.webhook.GatewayHeartbeatFailedMessage;
 import fuck.manthe.nmsl.repository.GatewayRepository;
 import fuck.manthe.nmsl.service.GatewayService;
@@ -208,7 +210,12 @@ public class GatewayServiceImpl implements GatewayService {
                 .build()).execute()) {
             if (response.isSuccessful()) {
                 log.info("Gateway {} is alive", gateway.getName());
-                // todo sync colddown
+                assert response.body() != null;
+                String responseString = response.body().string();
+                GatewayHeartbeatVO heartbeat = JSONObject.parseObject(responseString, GatewayHeartbeatVO.class);
+                // sync colddown
+                log.debug("Sync cold down for gateway {} ({})", gateway.getName(), heartbeat.getColdDown().getTime());
+                markColdDown(gateway, heartbeat.getColdDown().getTime());
             } else if (response.code() == 403) {
                 log.error("Failed to send heartbeat to Gateway {} (incorrect key)", gateway.getName());
                 return false;
