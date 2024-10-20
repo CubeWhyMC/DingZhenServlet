@@ -3,11 +3,13 @@ package fuck.manthe.nmsl.service.impl;
 import fuck.manthe.nmsl.service.AnalysisService;
 import fuck.manthe.nmsl.util.Const;
 import jakarta.annotation.Resource;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
+@Log4j2
 @Service
 public class AnalysisServiceImpl implements AnalysisService {
     @Resource
@@ -65,5 +67,18 @@ public class AnalysisServiceImpl implements AnalysisService {
     @Override
     public long getLastLaunch(String username) {
         return Objects.requireNonNullElse(longRedisTemplate.opsForValue().get(Const.LAST_INJECT_TIME + username), -1L);
+    }
+
+    @Override
+    public long getGatewayHeartbeat() {
+        return Objects.requireNonNullElse(longRedisTemplate.opsForValue().get(Const.GATEWAY_HEARTBEAT), -1L);
+    }
+
+    @Override
+    public long gatewayHeartbeat() {
+        long l = System.currentTimeMillis();
+        log.info("Gateway heartbeat ({})", l);
+        longRedisTemplate.opsForValue().set(Const.GATEWAY_HEARTBEAT, l);
+        return l;
     }
 }

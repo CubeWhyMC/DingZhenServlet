@@ -80,6 +80,11 @@ public class GatewayServiceImpl implements GatewayService {
     }
 
     @Override
+    public boolean isGatewayEnabled() {
+        return this.isPureGateway() || alwaysEnableGateway;
+    }
+
+    @Override
     public boolean canUseGateway() {
         return mode.equals("full");
     }
