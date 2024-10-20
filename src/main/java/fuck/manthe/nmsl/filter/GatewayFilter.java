@@ -6,7 +6,6 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -16,9 +15,6 @@ import java.io.IOException;
 @Log4j2
 @Order(2)
 public class GatewayFilter implements Filter {
-    @Value("${service.gateway.always}")
-    boolean alwaysEnableGateway;
-
     @Resource
     GatewayService gatewayService;
 
@@ -30,7 +26,7 @@ public class GatewayFilter implements Filter {
         String requestURI = httpRequest.getRequestURI();
 
         if (requestURI.startsWith("/gateway/")) {
-            if (!gatewayService.isPureGateway() && !alwaysEnableGateway) {
+            if (!gatewayService.isGatewayEnabled()) {
                 httpResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, "Gateway is not enabled in config");
                 return;
             }

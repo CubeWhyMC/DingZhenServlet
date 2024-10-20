@@ -13,6 +13,7 @@ public interface Const {
     String LAST_INJECT_TIME = "vape:user:last-inject-time:";
     // gateway
     String GATEWAY_COLD_DOWN = "vape:cold-down:gateway:";
+    String GATEWAY_HEARTBEAT = "vape:gateway:heartbeat";
     // Maintain mode
     String IS_MAINTAINING = "vape:maintain:state";
     String MAINTAIN_START_AT = "vape:maintain:start";

@@ -18,6 +18,8 @@ public interface GatewayService {
      */
     boolean isPureGateway();
 
+    boolean isGatewayEnabled();
+
     boolean canUseGateway();
 
     Gateway addGateway(Gateway gateway);

@@ -1,8 +1,12 @@
 package fuck.manthe.nmsl.controller;
 
+import fuck.manthe.nmsl.entity.RestBean;
 import fuck.manthe.nmsl.entity.VapeAccount;
 import fuck.manthe.nmsl.entity.dto.VapeAuthorizeDTO;
+import fuck.manthe.nmsl.entity.vo.ColdDownVO;
 import fuck.manthe.nmsl.entity.vo.GatewayAuthorizeVO;
+import fuck.manthe.nmsl.entity.vo.GatewayHeartbeatVO;
+import fuck.manthe.nmsl.service.AnalysisService;
 import fuck.manthe.nmsl.service.GatewayService;
 import fuck.manthe.nmsl.service.VapeAccountService;
 import jakarta.annotation.Resource;
@@ -21,6 +25,9 @@ public class GatewayController {
     @Resource
     GatewayService gatewayService;
 
+    @Resource
+    AnalysisService analysisService;
+
     @GetMapping("token")
     public ResponseEntity<GatewayAuthorizeVO> token() throws Exception {
         VapeAccount account = vapeAccountService.getOne();
@@ -38,5 +45,16 @@ public class GatewayController {
 
         GatewayAuthorizeVO data = gatewayService.processEncrypt(dto);
         return ResponseEntity.status((hasError) ? HttpStatus.INTERNAL_SERVER_ERROR : HttpStatus.OK).body(data);
+    }
+
+    @GetMapping("heartbeat")
+    public ResponseEntity<RestBean<GatewayHeartbeatVO>> heartbeat() {
+        long timestamp = analysisService.gatewayHeartbeat();
+        return ResponseEntity.ok(RestBean.success(GatewayHeartbeatVO.builder()
+                .time(timestamp) // current timestamp
+                .coldDown(ColdDownVO.builder()
+                        .time(vapeAccountService.calculateColdDown())
+                        .build()) // sync colddown to parent servlet
+                .build()));
     }
 }

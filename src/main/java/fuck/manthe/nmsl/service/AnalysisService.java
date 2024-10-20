@@ -18,4 +18,8 @@ public interface AnalysisService {
     void reset();
 
     long getLastLaunch(String username);
+
+    long getGatewayHeartbeat();
+
+    long gatewayHeartbeat();
 }

@@ -2,8 +2,9 @@ package fuck.manthe.nmsl.controller.admin;
 
 import cn.hutool.core.util.RandomUtil;
 import fuck.manthe.nmsl.entity.User;
-import fuck.manthe.nmsl.entity.dto.AnalysisDTO;
+import fuck.manthe.nmsl.entity.vo.AnalysisVO;
 import fuck.manthe.nmsl.service.AnalysisService;
+import fuck.manthe.nmsl.service.GatewayService;
 import fuck.manthe.nmsl.service.UserService;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
@@ -25,6 +26,9 @@ public class AdminController {
 
     @Resource
     AnalysisService analysisService;
+
+    @Resource
+    GatewayService gatewayService;
 
     @Value("${share.user.auto-delete-expired}")
     boolean autoDeleteExpired;
@@ -56,12 +60,14 @@ public class AdminController {
     }
 
     @GetMapping("analysis")
-    public AnalysisDTO analysis() {
-        return AnalysisDTO.builder()
+    public AnalysisVO analysis() {
+        return AnalysisVO.builder()
                 .todayLaunch(analysisService.getTodayLaunch())
                 .totalLaunch(analysisService.getTotalLaunch())
                 .todayRegister(analysisService.getTodayRegister())
                 .currentUsers(userService.count())
+                .gateway(gatewayService.isGatewayEnabled())
+                .gatewayHeartbeat(analysisService.getGatewayHeartbeat())
                 .build();
     }
 
