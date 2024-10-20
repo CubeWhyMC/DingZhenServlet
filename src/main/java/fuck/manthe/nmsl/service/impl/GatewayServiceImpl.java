@@ -5,9 +5,11 @@ import fuck.manthe.nmsl.entity.Gateway;
 import fuck.manthe.nmsl.entity.dto.VapeAuthorizeDTO;
 import fuck.manthe.nmsl.entity.vo.ColdDownVO;
 import fuck.manthe.nmsl.entity.vo.GatewayAuthorizeVO;
+import fuck.manthe.nmsl.entity.webhook.GatewayHeartbeatFailedMessage;
 import fuck.manthe.nmsl.repository.GatewayRepository;
 import fuck.manthe.nmsl.service.GatewayService;
 import fuck.manthe.nmsl.service.VapeAccountService;
+import fuck.manthe.nmsl.service.WebhookService;
 import fuck.manthe.nmsl.util.Const;
 import fuck.manthe.nmsl.util.CryptoUtil;
 import jakarta.annotation.PostConstruct;
@@ -18,6 +20,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.BadPaddingException;
@@ -33,6 +36,8 @@ import java.util.Objects;
 @Service
 @Log4j2
 public class GatewayServiceImpl implements GatewayService {
+    private final String secretText = "Hello World";
+
     @Resource
     RedisTemplate<String, Long> redisTemplate;
 
@@ -44,6 +49,9 @@ public class GatewayServiceImpl implements GatewayService {
 
     @Value("${service.gateway.always}")
     boolean alwaysEnableGateway;
+
+    @Value("${service.gateway.heartbeat.state}")
+    boolean heartbeatState;
 
     @Resource
     GatewayRepository gatewayRepository;
@@ -57,11 +65,12 @@ public class GatewayServiceImpl implements GatewayService {
     @Resource
     CryptoUtil cryptoUtil;
 
-    private final String secretText = "Hello World";
+    @Resource
+    WebhookService webhookService;
 
     @PostConstruct
     public void init() {
-        if (isPureGateway() || alwaysEnableGateway) {
+        if (isGatewayEnabled()) {
             log.info("Servlet is running in gateway mode.");
             if (alwaysEnableGateway) {
                 log.info("Current servlet mode is {}, but service.gateway.always is true.", mode);
@@ -70,6 +79,8 @@ public class GatewayServiceImpl implements GatewayService {
             log.warn("DO NOT share your gateway key with anybody, otherwise your account will be hacked");
         } else if (!canUseGateway()) {
             log.info("Gateways are disabled via application.yml, no gateways will be used for fetching tokens");
+        } else if (heartbeatState) {
+            log.info("Heartbeat packets will be send in every 30 minutes.");
         }
     }
 
@@ -185,6 +196,52 @@ public class GatewayServiceImpl implements GatewayService {
             log.error("Encrypted secret: {}", providedSecret);
             log.error(e.getMessage(), e);
             return false;
+        }
+    }
+
+    @Override
+    public boolean heartbeat(Gateway gateway) {
+        try (Response response = httpClient.newCall(new Request.Builder()
+                .get()
+                .url(new URL(gateway.getAddress() + "/gateway/heartbeat"))
+                .header("X-Gateway-Secret", cryptoUtil.encrypt(secretText, cryptoUtil.toKey(gateway.getKey())))
+                .build()).execute()) {
+            if (response.isSuccessful()) {
+                log.info("Gateway {} is alive", gateway.getName());
+                // todo sync colddown
+            } else if (response.code() == 403) {
+                log.error("Failed to send heartbeat to Gateway {} (incorrect key)", gateway.getName());
+                return false;
+            } else if (response.code() == 400) {
+                log.error("Gateway {} is unavailable (400)", gateway.getName());
+                return false;
+            } else {
+                log.warn("Gateway {} has not implemented the heartbeat API", gateway.getName());
+                return true;
+            }
+        } catch (Exception e) {
+            log.error("Failed to send heartbeat to {}", gateway.getName());
+            log.error(e.getMessage(), e);
+            return false;
+        }
+        return true;
+    }
+
+    @Scheduled(cron = "0 */30 * * * *")
+    private void sendHeartbeat() throws Exception {
+        if (!heartbeatState) {
+            return;
+        }
+        log.info("Sending Gateway heartbeat...");
+        for (Gateway gateway : list()) {
+            log.info("Sending gateway heartbeat to {}", gateway.getName());
+            if (!heartbeat(gateway)) {
+                GatewayHeartbeatFailedMessage message = new GatewayHeartbeatFailedMessage();
+                message.setGateway(gateway.getId());
+                message.setTimestamp(System.currentTimeMillis() / 1000L);
+                message.setContent(String.format("密钥刷新服务 %s 无法访问或者加密密钥配置错误", gateway.getName()));
+                webhookService.pushAll("gateway-heartbeat", message);
+            }
         }
     }
 
