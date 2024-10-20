@@ -1,6 +1,5 @@
 package fuck.manthe.nmsl.controller;
 
-import fuck.manthe.nmsl.entity.RestBean;
 import fuck.manthe.nmsl.entity.VapeAccount;
 import fuck.manthe.nmsl.entity.dto.VapeAuthorizeDTO;
 import fuck.manthe.nmsl.entity.vo.ColdDownVO;
@@ -48,13 +47,13 @@ public class GatewayController {
     }
 
     @GetMapping("heartbeat")
-    public ResponseEntity<RestBean<GatewayHeartbeatVO>> heartbeat() {
+    public ResponseEntity<GatewayHeartbeatVO> heartbeat() {
         long timestamp = analysisService.gatewayHeartbeat();
-        return ResponseEntity.ok(RestBean.success(GatewayHeartbeatVO.builder()
+        return ResponseEntity.ok(GatewayHeartbeatVO.builder()
                 .time(timestamp) // current timestamp
                 .coldDown(ColdDownVO.builder()
                         .time(vapeAccountService.calculateColdDown())
                         .build()) // sync colddown to parent servlet
-                .build()));
+                .build());
     }
 }
