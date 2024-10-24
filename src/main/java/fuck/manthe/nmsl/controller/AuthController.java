@@ -112,7 +112,7 @@ public class AuthController {
                     log.info("Successfully authed with the gateway {} ({})", gateway.getName(), gateway.getId());
                     token = authorize.getToken();
                 } else {
-                    log.error("Gateway {} ({}) is not available. Authorizing with this server...", gateway.getName(), gateway.getId());
+                    log.error("子节点 {} ({}) 当前不可用. 正在尝试认证服务器中...", gateway.getName(), gateway.getId());
                 }
             }
         }
