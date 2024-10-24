@@ -55,7 +55,7 @@ public class UserController {
         User user = userService.addUser(User.builder().password(passwordEncoder.encode(password)).username(username).role("USER").expire(expire).build());
         if (user != null) {
             if (redeemService.useCode(redeemCode.getCode(), user)) {
-                log.info("User {} registered it's account with the code {} ({}d).", username, redeemCode.getCode(), redeemCode.getDate());
+                log.info("User {} 使用兑换码 {} ({}d) 注册了账户.", username, redeemCode.getCode(), redeemCode.getDate());
             }
             // push to webhooks
             UserRegisterMessage message = new UserRegisterMessage();
@@ -70,7 +70,7 @@ public class UserController {
         } else if (userService.isValid(username, password) && userService.renew(username, redeemCode.getDate())) {
             User existUser = userService.findByUsername(username);
             if (redeemService.useCode(redeemCode.getCode(), existUser)) {
-                log.info("User {} renewed it's account with the code {} ({}d).", username, redeemCode.getCode(), redeemCode.getDate());
+                log.info("User {} 使用兑换码 {} ({}d) 续费了他的账户.", username, redeemCode.getCode(), redeemCode.getDate());
             }
             // Push to webhooks
             UserRenewMessage message = new UserRenewMessage();
@@ -80,9 +80,9 @@ public class UserController {
             message.setExpireAt(userService.findByUsername(username).getExpire());
             message.setContent("用户 %s 使用%s 兑换了%s 天订阅".formatted(username, redeemCode.getCode(), redeemCode.getDate()));
             webhookService.pushAll("renew", message);
-            return ResponseEntity.ok(RestBean.success("Renewed."));
+            return ResponseEntity.ok(RestBean.success("续费成功!"));
         }
-        return new ResponseEntity<>(RestBean.failure(409, "User exists or wrong password"), HttpStatus.CONFLICT);
+        return new ResponseEntity<>(RestBean.failure(409, "用户名已被占用或密码错误!"), HttpStatus.CONFLICT);
     }
 
     @PostMapping("forgetPassword")
@@ -96,10 +96,10 @@ public class UserController {
         if (redeemCode == null || redeemCode.isAvailable() || redeemCode.getRedeemer() == null || !redeemCode.getRedeemer().getId().equals(user.getId())) {
             // 邀请码找不到或者根本没被人用过
             // 写到一起是为了防止被刷API
-            return new ResponseEntity<>(RestBean.failure(404, "Code not found."), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(RestBean.failure(404, "兑换码不存在"), HttpStatus.NOT_FOUND);
         }
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         userService.save(user);
-        return ResponseEntity.ok(RestBean.success("Password reset successfully"));
+        return ResponseEntity.ok(RestBean.success("密码重置成功!"));
     }
 }
