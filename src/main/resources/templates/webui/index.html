@@ -1,14 +1,217 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>丁真面板</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background-color: white; /* Ensure the iframe has a white background */
+        }
+
+        
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap');
+
+body, html {
+margin: 0;
+padding: 0;
+height: 100%;
+font-family: 'Noto Sans SC', sans-serif;
+background-color: #000;
+color: #fff;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+.container {
+text-align: center;
+padding: 40px;
+background-color: rgba(255, 255, 255, 0.05);
+border-radius: 10px;
+box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
+max-width: 600px;
+width: 100%;
+opacity: 0;
+transform: translateY(20px);
+animation: fadeInUp 0.8s ease-out forwards;
+}
+h1 {
+font-size: 2.2em;
+margin-bottom: 20px;
+color: #fff;
+}
+p {
+font-size: 1em;
+margin-bottom: 20px;
+color: #e0e0e0;
+}
+.status {
+font-size: 1.1em;
+color: #fff;
+margin-bottom: 30px;
+font-weight: bold;
+}
+.feature-list {
+text-align: left;
+margin-bottom: 30px;
+}
+.feature-list ul {
+padding-left: 20px;
+}
+.feature-list li {
+margin-bottom: 10px;
+color: #d0d0d0;
+opacity: 0;
+transform: translateX(-20px);
+animation: fadeInLeft 0.5s ease-out forwards;
+}
+.logout-btn {
+padding: 10px 20px;
+background-color: #fff;
+color: #000;
+border: none;
+border-radius: 5px;
+text-decoration: none;
+font-size: 0.9em;
+transition: all 0.3s;
+display: inline-block;
+}
+.logout-btn:hover {
+background-color: #e0e0e0;
+transform: translateY(-2px);
+}
+@keyframes fadeInUp {
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+@keyframes fadeInLeft {
+to {
+opacity: 1;
+transform: translateX(0);
+}
+}
+
+
+    </style>
 </head>
 <body>
-<h1>欢迎来到丁真面板</h1>
-<p>WIP</p>
-<div>
-    <a href="/user/logout">登出</a>
+    <!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>丁真控制面板</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap');
+
+body, html {
+margin: 0;
+padding: 0;
+height: 100%;
+font-family: 'Noto Sans SC', sans-serif;
+background-color: #000;
+color: #fff;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+.container {
+text-align: center;
+padding: 40px;
+background-color: rgba(255, 255, 255, 0.05);
+border-radius: 10px;
+box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
+max-width: 600px;
+width: 100%;
+opacity: 0;
+transform: translateY(20px);
+animation: fadeInUp 0.8s ease-out forwards;
+}
+h1 {
+font-size: 2.2em;
+margin-bottom: 20px;
+color: #fff;
+}
+p {
+font-size: 1em;
+margin-bottom: 20px;
+color: #e0e0e0;
+}
+.status {
+font-size: 1.1em;
+color: #fff;
+margin-bottom: 30px;
+font-weight: bold;
+}
+.feature-list {
+text-align: left;
+margin-bottom: 30px;
+}
+.feature-list ul {
+padding-left: 20px;
+}
+.feature-list li {
+margin-bottom: 10px;
+color: #d0d0d0;
+opacity: 0;
+transform: translateX(-20px);
+animation: fadeInLeft 0.5s ease-out forwards;
+}
+.logout-btn {
+padding: 10px 20px;
+background-color: #fff;
+color: #000;
+border: none;
+border-radius: 5px;
+text-decoration: none;
+font-size: 0.9em;
+transition: all 0.3s;
+display: inline-block;
+}
+.logout-btn:hover {
+background-color: #e0e0e0;
+transform: translateY(-2px);
+}
+@keyframes fadeInUp {
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+@keyframes fadeInLeft {
+to {
+opacity: 1;
+transform: translateX(0);
+}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>丁真控制面板</h1>
+<p>欢迎来到丁真专属控制面板。我们正在努力为您构建最佳的管理体验。</p>
+<div class="status">控制面板建设中 - 敬请期待</div>
+<div class="feature-list">
+<p>即将推出的功能：</p>
+<ul>
+<li style="animation-delay: 0.2s;">个人资料管理</li>
+<li style="animation-delay: 0.4s;">数据统计与分析</li>
+<li style="animation-delay: 0.6s;">配置管理</li>
+<li style="animation-delay: 0.8s;">工单系统</li>
+<li style="animation-delay: 1s;">多平台账号整合</li>
+</ul>
 </div>
+<a href="/user/logout" class="logout-btn">退出登录</a>
+</div>
+</body>
+</html>
+
+
+
+    <script>
+        
+    </script>
 </body>
 </html>
