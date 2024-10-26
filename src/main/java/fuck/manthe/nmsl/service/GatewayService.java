@@ -1,6 +1,7 @@
 package fuck.manthe.nmsl.service;
 
 import fuck.manthe.nmsl.entity.Gateway;
+import fuck.manthe.nmsl.entity.GatewayHeartbeatInfo;
 import fuck.manthe.nmsl.entity.dto.VapeAuthorizeDTO;
 import fuck.manthe.nmsl.entity.vo.GatewayAuthorizeVO;
 
@@ -82,4 +83,6 @@ public interface GatewayService {
      * @return modified Gateway entity
      */
     Gateway toggle(Gateway gateway, boolean state);
+
+    List<GatewayHeartbeatInfo> status(Gateway gateway);
 }

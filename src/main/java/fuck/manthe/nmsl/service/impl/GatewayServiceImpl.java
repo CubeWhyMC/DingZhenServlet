@@ -3,13 +3,13 @@ package fuck.manthe.nmsl.service.impl;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import fuck.manthe.nmsl.entity.Gateway;
-import fuck.manthe.nmsl.entity.GatewayHeartbeat;
+import fuck.manthe.nmsl.entity.GatewayHeartbeatInfo;
 import fuck.manthe.nmsl.entity.dto.VapeAuthorizeDTO;
 import fuck.manthe.nmsl.entity.vo.ColdDownVO;
 import fuck.manthe.nmsl.entity.vo.GatewayAuthorizeVO;
 import fuck.manthe.nmsl.entity.vo.GatewayHeartbeatVO;
 import fuck.manthe.nmsl.entity.webhook.GatewayHeartbeatFailedMessage;
-import fuck.manthe.nmsl.repository.GatewayHeartbeatRepository;
+import fuck.manthe.nmsl.repository.GatewayHeartbeatInfoRepository;
 import fuck.manthe.nmsl.repository.GatewayRepository;
 import fuck.manthe.nmsl.service.GatewayService;
 import fuck.manthe.nmsl.service.VapeAccountService;
@@ -63,7 +63,7 @@ public class GatewayServiceImpl implements GatewayService {
     GatewayRepository gatewayRepository;
 
     @Resource
-    GatewayHeartbeatRepository gatewayHeartbeatRepository;
+    GatewayHeartbeatInfoRepository gatewayHeartbeatInfoRepository;
 
     @Resource
     VapeAccountService vapeAccountService;
@@ -212,7 +212,7 @@ public class GatewayServiceImpl implements GatewayService {
     @Override
     @SneakyThrows
     public boolean heartbeat(Gateway gateway) {
-        GatewayHeartbeat heartbeatInfo = new GatewayHeartbeat();
+        GatewayHeartbeatInfo heartbeatInfo = new GatewayHeartbeatInfo();
         heartbeatInfo.setGateway(gateway);
         boolean result = false;
         try (Response response = httpClient.newCall(new Request.Builder()
@@ -234,21 +234,21 @@ public class GatewayServiceImpl implements GatewayService {
 //                log.debug("Sync cold down for gateway {} ({})", gateway.getName(), heartbeat.getColdDown().getTime());
                 markColdDown(gateway, heartbeat.getColdDown().getTime());
                 result = true;
-                heartbeatInfo.setStatus(GatewayHeartbeat.Status.OK);
+                heartbeatInfo.setStatus(GatewayHeartbeatInfo.Status.OK);
             } else if (response.code() == 403) {
                 log.error("Failed to send heartbeat to Gateway {} (incorrect key)", gateway.getName());
-                heartbeatInfo.setStatus(GatewayHeartbeat.Status.BAD_KEY);
+                heartbeatInfo.setStatus(GatewayHeartbeatInfo.Status.BAD_KEY);
             } else if (response.code() == 400) {
                 log.error("Gateway {} is unavailable (400)", gateway.getName());
-                heartbeatInfo.setStatus(GatewayHeartbeat.Status.BAD_REQUEST);
+                heartbeatInfo.setStatus(GatewayHeartbeatInfo.Status.BAD_REQUEST);
             } else {
                 log.warn("Gateway {} has not implemented the heartbeat API", gateway.getName());
-                heartbeatInfo.setStatus(GatewayHeartbeat.Status.UNIMPLEMENTED_API);
+                heartbeatInfo.setStatus(GatewayHeartbeatInfo.Status.UNIMPLEMENTED_API);
             }
         } catch (Exception e) {
             log.error("Failed to send heartbeat to {}", gateway.getName());
         }
-        gatewayHeartbeatRepository.save(heartbeatInfo);
+        gatewayHeartbeatInfoRepository.save(heartbeatInfo);
 
         if (result != isAvailableNoPing(gateway)) {
             GatewayHeartbeatFailedMessage message = new GatewayHeartbeatFailedMessage();
@@ -268,8 +268,8 @@ public class GatewayServiceImpl implements GatewayService {
 
     @Override
     public boolean isAvailable(Gateway gateway) {
-        Optional<GatewayHeartbeat> heartbeatInfo = gatewayHeartbeatRepository.findByGateway(gateway);
-        return heartbeatInfo.map(GatewayHeartbeat::isAvailable).orElseGet(() -> heartbeat(gateway));
+        Optional<GatewayHeartbeatInfo> heartbeatInfo = gatewayHeartbeatInfoRepository.findByGateway(gateway);
+        return heartbeatInfo.map(GatewayHeartbeatInfo::isAvailable).orElseGet(() -> heartbeat(gateway));
     }
 
     @Override
@@ -280,7 +280,7 @@ public class GatewayServiceImpl implements GatewayService {
     }
 
     private boolean isAvailableNoPing(Gateway gateway) {
-        return gatewayHeartbeatRepository.findByGateway(gateway).map(GatewayHeartbeat::isAvailable).orElse(false);
+        return gatewayHeartbeatInfoRepository.findByGateway(gateway).map(GatewayHeartbeatInfo::isAvailable).orElse(false);
     }
 
     @Scheduled(cron = "0 */30 * * * *")
@@ -312,5 +312,10 @@ public class GatewayServiceImpl implements GatewayService {
         Long l = redisTemplate.opsForValue().get(Const.GATEWAY_COLD_DOWN + gateway.getId());
         if (l == null) return 0L;
         return l;
+    }
+
+    @Override
+    public List<GatewayHeartbeatInfo> status(Gateway gateway) {
+        return gatewayHeartbeatInfoRepository.findAllByGateway(gateway);
     }
 }

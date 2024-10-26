@@ -225,7 +225,6 @@ public class OnlineConfigServiceImpl implements OnlineConfigService {
     public List<String> deleteCheatProfiles(String token, List<String> queue) {
         User user = this.findByToken(token);
         List<String> deletedProfileList = new ArrayList<>();
-        // todo is this internal id?
         for (String deleteProfile : queue) {
             CheatProfile profile = findProfileById(deleteProfile);
             if (Objects.equals(profile.getOwner().getId(), user.getId())) {
