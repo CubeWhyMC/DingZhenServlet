@@ -61,12 +61,6 @@ public class AdminController {
                 .build();
     }
 
-    @GetMapping("logSuper")
-    public String logSuper() {
-        // code is in Filter
-        return "Logged super-admin password in console.";
-    }
-
     @Scheduled(cron = "0 0 0 * * *")
     public void autoJob() {
         if (autoDeleteExpired) {
