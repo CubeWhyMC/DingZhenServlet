@@ -14,4 +14,6 @@ public interface GatewayHeartbeatInfoRepository extends MongoRepository<GatewayH
     List<GatewayHeartbeatInfo> findAllByGateway(String gateway);
 
     void deleteAllByGateway(String gateway);
+
+    Optional<GatewayHeartbeatInfo> findFirstByGatewayOrderByCreateAtDesc(String id);
 }

@@ -1,14 +1,23 @@
 package fuck.manthe.nmsl.controller.admin;
 
+import fuck.manthe.nmsl.entity.Gateway;
+import fuck.manthe.nmsl.entity.vo.GatewayVO;
+import fuck.manthe.nmsl.service.GatewayService;
+import jakarta.annotation.Resource;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Log4j2
 @Controller
 @RequestMapping("admin/dashboard")
 public class DashboardController {
+    @Resource
+    GatewayService gatewayService;
+
     @GetMapping("add-user")
     public String addUser() {
         return "dashboard/add-user";
@@ -62,5 +71,15 @@ public class DashboardController {
     @GetMapping("migrate")
     public String migrate() {
         return "dashboard/migrate";
+    }
+
+    @GetMapping("gateway/status/{id}")
+    public String gatewayStatus(@PathVariable String id, Model model) {
+        Gateway gateway = gatewayService.findGatewayById(id);
+        model.addAttribute("gateway", gateway.asViewObject(GatewayVO.class, (vo) -> {
+            vo.setAvailable(gatewayService.isAvailable(gateway));
+        }));
+        model.addAttribute("status", gatewayService.status(gateway));
+        return "dashboard/gateway-status";
     }
 }
