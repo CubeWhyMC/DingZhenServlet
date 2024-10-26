@@ -3,6 +3,7 @@ package fuck.manthe.nmsl.controller.admin;
 import fuck.manthe.nmsl.entity.Gateway;
 import fuck.manthe.nmsl.entity.RestBean;
 import fuck.manthe.nmsl.entity.dto.*;
+import fuck.manthe.nmsl.entity.vo.GatewayHeartbeatInfoVO;
 import fuck.manthe.nmsl.entity.vo.GatewayVO;
 import fuck.manthe.nmsl.service.GatewayService;
 import jakarta.annotation.Resource;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.ZoneOffset;
 import java.util.List;
 
 @RestController
@@ -90,5 +92,19 @@ public class GatewayAdminController {
         }
         gatewayService.toggle(gateway, dto.isEnabled());
         return ResponseEntity.ok(RestBean.success("OK"));
+    }
+
+    @GetMapping("{id}/status")
+    public ResponseEntity<RestBean<List<GatewayHeartbeatInfoVO>>> status(@PathVariable String id) {
+        Gateway gateway = gatewayService.findGatewayById(id);
+        if (gateway == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(RestBean.failure(404, "Gateway not found"));
+        }
+        return ResponseEntity.ok(RestBean.success(gatewayService.status(gateway)
+                .stream()
+                .map((info) -> GatewayHeartbeatInfoVO.builder()
+                        .status(info.getStatus())
+                        .timestamp(info.getTimestamp().toInstant(ZoneOffset.UTC).toEpochMilli())
+                        .build()).toList()));
     }
 }
