@@ -43,7 +43,7 @@ public class OnlineConfigController {
                             .build()
             ); // return fake data
         }
-        log.info("User {} 连接了在线服务 (token={})", user.getUsername(), token);
+        log.info("User {} login to the fake online service (token={})", user.getUsername(), token);
         return VapeRestBean.success(AuthorizationDTO.builder()
                 .accountCreation(formatUtil.formatVapeTime(user.getRegisterTime()))
                 .userId(114514)
