@@ -87,7 +87,7 @@
     function createGatewayElement(gateway) {
         const element = document.createElement('div');
         element.className = 'mdui-card mdui-m-y-1';
-        let status = (gateway.status) ? "存活" : "无法访问";
+        let status = (gateway.available) ? "存活" : "无法访问";
         element.innerHTML = `
         <div class="mdui-card-content">
             <h3 class="mdui-card-primary-title">${gateway.name}</h3>
