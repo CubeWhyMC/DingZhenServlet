@@ -12,7 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document
-public class GatewayHeartbeatInfo {
+public class GatewayHeartbeatInfo implements BaseData {
     private String gateway; // gatewayId
     private Status status;
 

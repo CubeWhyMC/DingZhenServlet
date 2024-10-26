@@ -271,8 +271,12 @@ public class GatewayServiceImpl implements GatewayService {
 
     @Override
     public boolean isAvailable(Gateway gateway) {
-        Optional<GatewayHeartbeatInfo> heartbeatInfo = gatewayHeartbeatInfoRepository.findByGateway(gateway.getId());
+        Optional<GatewayHeartbeatInfo> heartbeatInfo = gatewayHeartbeatInfoRepository.findFirstByGatewayOrderByCreateAtDesc(gateway.getId());
         return heartbeatInfo.map(GatewayHeartbeatInfo::isAvailable).orElseGet(() -> heartbeat(gateway));
+    }
+
+    private boolean isAvailableNoPing(Gateway gateway) {
+        return gatewayHeartbeatInfoRepository.findFirstByGatewayOrderByCreateAtDesc(gateway.getId()).map(GatewayHeartbeatInfo::isAvailable).orElse(false);
     }
 
     @Override
@@ -280,10 +284,6 @@ public class GatewayServiceImpl implements GatewayService {
         gateway.setEnabled(state);
         log.info("Gateway {} is now {}", gateway.getName(), (state) ? "enabled" : "disabled");
         return gatewayRepository.save(gateway);
-    }
-
-    private boolean isAvailableNoPing(Gateway gateway) {
-        return gatewayHeartbeatInfoRepository.findByGateway(gateway.getId()).map(GatewayHeartbeatInfo::isAvailable).orElse(false);
     }
 
     @Scheduled(cron = "0 */30 * * * *")
