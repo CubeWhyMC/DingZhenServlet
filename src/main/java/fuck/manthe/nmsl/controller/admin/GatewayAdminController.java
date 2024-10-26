@@ -42,7 +42,10 @@ public class GatewayAdminController {
                 gateway -> GatewayVO.builder()
                         .address(gateway.getAddress())
                         .id(gateway.getId())
-                        .name(gateway.getName()).build()
+                        .name(gateway.getName())
+                        .available(gatewayService.isAvailable(gateway))
+                        .implementation(gateway.getImplementation())
+                        .build()
         ).toList());
     }
 
@@ -79,4 +82,13 @@ public class GatewayAdminController {
         return ResponseEntity.ok(RestBean.success("Success"));
     }
 
+    @PostMapping("{id}/toggle")
+    public ResponseEntity<RestBean<String>> toggleGateway(@PathVariable String id, @RequestBody ToggleGatewayStateDTO dto) {
+        Gateway gateway = gatewayService.findGatewayById(id);
+        if (gateway == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(RestBean.failure(404, "Gateway not found"));
+        }
+        gatewayService.toggle(gateway, dto.isEnabled());
+        return ResponseEntity.ok(RestBean.success("OK"));
+    }
 }

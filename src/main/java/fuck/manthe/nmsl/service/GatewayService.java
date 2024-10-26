@@ -71,4 +71,15 @@ public interface GatewayService {
      * @param gateway gateway
      */
     boolean heartbeat(Gateway gateway);
+
+    boolean isAvailable(Gateway gateway);
+
+    /**
+     * Toggle gateway state
+     *
+     * @param gateway Origin gateway entity
+     * @param state   new state
+     * @return modified Gateway entity
+     */
+    Gateway toggle(Gateway gateway, boolean state);
 }
