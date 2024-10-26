@@ -82,7 +82,7 @@ public class UserController {
             webhookService.pushAll("renew", message);
             return ResponseEntity.ok(RestBean.success("Renewed."));
         }
-        return new ResponseEntity<>(RestBean.failure(409, "User exists or wrong password"), HttpStatus.CONFLICT);
+        return new ResponseEntity<>(RestBean.failure(409, "用户存在或者密码输入错误"), HttpStatus.CONFLICT);
     }
 
     @PostMapping("forgetPassword")
