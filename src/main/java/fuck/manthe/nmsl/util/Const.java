@@ -7,7 +7,7 @@ public interface Const {
     // Analysis
     String TOTAL_LAUNCH = "vape:total-launch";
     String TODAY_LAUNCH = "vape:today-launch";
-    String TODAY_REGISTER_USER = "vape:today-register-user";
+    String TODAY_REDEEM = "vape:today-redeem";
     String TOTAL_LAUNCH_PRE_USER = "vape:today-launch-user:";
     String TOTAL_REQUEST_AUTH_PRE_USER = "vape:today-request-auth-user:";
     String LAST_INJECT_TIME = "vape:user:last-inject-time:";

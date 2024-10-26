@@ -5,7 +5,7 @@ public interface AnalysisService {
 
     void authRequested(String username);
 
-    void userRegistered();
+    void userRedeemed();
 
     int getTodayLaunch();
 
@@ -13,7 +13,7 @@ public interface AnalysisService {
 
     int getTotalLaunch(String username);
 
-    int getTodayRegister();
+    int getTodayRedeem();
 
     void reset();
 

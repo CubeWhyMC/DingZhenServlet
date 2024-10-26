@@ -54,7 +54,7 @@ public class AdminController {
         return AnalysisVO.builder()
                 .todayLaunch(analysisService.getTodayLaunch())
                 .totalLaunch(analysisService.getTotalLaunch())
-                .todayRegister(analysisService.getTodayRegister())
+                .todayRegister(analysisService.getTodayRedeem())
                 .currentUsers(userService.count())
                 .gateway(gatewayService.isGatewayEnabled())
                 .gatewayHeartbeat(analysisService.getGatewayHeartbeat())
