@@ -3,6 +3,7 @@ package fuck.manthe.nmsl.service.impl;
 import fuck.manthe.nmsl.entity.RedeemCode;
 import fuck.manthe.nmsl.entity.User;
 import fuck.manthe.nmsl.repository.RedeemRepository;
+import fuck.manthe.nmsl.service.AnalysisService;
 import fuck.manthe.nmsl.service.RedeemService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,9 @@ import java.util.Optional;
 public class RedeemServiceImpl implements RedeemService {
     @Resource
     RedeemRepository redeemRepository;
+
+    @Resource
+    AnalysisService analysisService;
 
     @Override
     public RedeemCode infoOrNull(String codeString) {
@@ -33,6 +37,7 @@ public class RedeemServiceImpl implements RedeemService {
         RedeemCode redeemCode = redeemCode1.get();
         redeemCode.setAvailable(false);
         redeemCode.setRedeemer(user);
+        analysisService.userRedeemed();
         redeemRepository.save(redeemCode);
         return true;
     }

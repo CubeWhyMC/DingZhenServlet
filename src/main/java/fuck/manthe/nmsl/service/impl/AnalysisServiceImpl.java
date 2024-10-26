@@ -34,8 +34,8 @@ public class AnalysisServiceImpl implements AnalysisService {
     }
 
     @Override
-    public void userRegistered() {
-        redisTemplate.opsForValue().increment(Const.TODAY_REGISTER_USER);
+    public void userRedeemed() {
+        redisTemplate.opsForValue().increment(Const.TODAY_REDEEM);
     }
 
     @Override
@@ -54,14 +54,14 @@ public class AnalysisServiceImpl implements AnalysisService {
     }
 
     @Override
-    public int getTodayRegister() {
-        return Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.TODAY_REGISTER_USER), 0);
+    public int getTodayRedeem() {
+        return Objects.requireNonNullElse(redisTemplate.opsForValue().get(Const.TODAY_REDEEM), 0);
     }
 
     @Override
     public void reset() {
         redisTemplate.opsForValue().set(Const.TODAY_LAUNCH, 0);
-        redisTemplate.opsForValue().set(Const.TODAY_REGISTER_USER, 0);
+        redisTemplate.opsForValue().set(Const.TODAY_REDEEM, 0);
     }
 
     @Override
