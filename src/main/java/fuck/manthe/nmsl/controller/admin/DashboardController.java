@@ -1,6 +1,7 @@
 package fuck.manthe.nmsl.controller.admin;
 
 import fuck.manthe.nmsl.entity.Gateway;
+import fuck.manthe.nmsl.entity.vo.GatewayHeartbeatInfoVO;
 import fuck.manthe.nmsl.entity.vo.GatewayVO;
 import fuck.manthe.nmsl.service.GatewayService;
 import jakarta.annotation.Resource;
@@ -79,7 +80,9 @@ public class DashboardController {
         model.addAttribute("gateway", gateway.asViewObject(GatewayVO.class, (vo) -> {
             vo.setAvailable(gatewayService.isAvailable(gateway));
         }));
-        model.addAttribute("status", gatewayService.status(gateway));
+        model.addAttribute("status", gatewayService.status(gateway).stream().map((it) -> it.asViewObject(GatewayHeartbeatInfoVO.class, (vo) -> {
+            vo.setTimestamp(it.getCreateAt().getTime());
+        })));
         return "dashboard/gateway-status";
     }
 }
