@@ -87,10 +87,12 @@
     function createGatewayElement(gateway) {
         const element = document.createElement('div');
         element.className = 'mdui-card mdui-m-y-1';
+        let status = (gateway.status) ? "存活" : "无法访问";
         element.innerHTML = `
         <div class="mdui-card-content">
             <h3 class="mdui-card-primary-title">${gateway.name}</h3>
             <p>地址: ${gateway.address}</p>
+            <p>状态: ${status}</p>
             <button class="mdui-btn mdui-btn-raised mdui-ripple" onclick="renameGateway('${gateway.id}')">重命名</button>
             <button class="mdui-btn mdui-btn-raised mdui-ripple" onclick="updateSecret('${gateway.id}')">更新 Secret</button>
             <button class="mdui-btn mdui-btn-raised mdui-ripple" onclick="updateUrl('${gateway.id}')">更新 URL</button>
