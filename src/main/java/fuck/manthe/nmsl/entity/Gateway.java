@@ -16,9 +16,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Gateway implements BaseData {
     @Id
     private String id;
+    @Builder.Default
+    private boolean enabled = true;
 
     private String name;
     private String address;
     @Encrypted
     private String key;
+
+    private String implementation = "Unknown";
 }

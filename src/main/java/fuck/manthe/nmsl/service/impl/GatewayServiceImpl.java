@@ -3,11 +3,13 @@ package fuck.manthe.nmsl.service.impl;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import fuck.manthe.nmsl.entity.Gateway;
+import fuck.manthe.nmsl.entity.GatewayHeartbeat;
 import fuck.manthe.nmsl.entity.dto.VapeAuthorizeDTO;
 import fuck.manthe.nmsl.entity.vo.ColdDownVO;
 import fuck.manthe.nmsl.entity.vo.GatewayAuthorizeVO;
 import fuck.manthe.nmsl.entity.vo.GatewayHeartbeatVO;
 import fuck.manthe.nmsl.entity.webhook.GatewayHeartbeatFailedMessage;
+import fuck.manthe.nmsl.repository.GatewayHeartbeatRepository;
 import fuck.manthe.nmsl.repository.GatewayRepository;
 import fuck.manthe.nmsl.service.GatewayService;
 import fuck.manthe.nmsl.service.VapeAccountService;
@@ -16,6 +18,7 @@ import fuck.manthe.nmsl.util.Const;
 import fuck.manthe.nmsl.util.CryptoUtil;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -34,6 +37,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @Log4j2
@@ -57,6 +61,9 @@ public class GatewayServiceImpl implements GatewayService {
 
     @Resource
     GatewayRepository gatewayRepository;
+
+    @Resource
+    GatewayHeartbeatRepository gatewayHeartbeatRepository;
 
     @Resource
     VapeAccountService vapeAccountService;
@@ -107,6 +114,7 @@ public class GatewayServiceImpl implements GatewayService {
         // 由于考虑到可能用户会自己编写服务端来实现刷新账号的逻辑,所以此处不判断重复gateway
         Gateway saved = gatewayRepository.save(gateway);
         log.info("Gateway {} was added (name=\"{}\", address=\"{}\")", saved.getId(), saved.getName(), gateway.getAddress());
+        heartbeat(saved); // update status
         return saved;
     }
 
@@ -120,9 +128,9 @@ public class GatewayServiceImpl implements GatewayService {
 
     @Override
     public Gateway getOne() {
-        List<Gateway> all = gatewayRepository.findAll();
+        List<Gateway> all = gatewayRepository.findAll().stream().filter(Gateway::isEnabled).toList();
         for (Gateway gateway : all) {
-            if (!isColdDown(gateway)) {
+            if (!isColdDown(gateway) && !isAvailableNoPing(gateway)) {
                 log.info("Gateway \"{}\" will be used to fetch token.", gateway.getName());
                 // 在请求完成后再进行冷却
                 return gateway;
@@ -202,53 +210,88 @@ public class GatewayServiceImpl implements GatewayService {
     }
 
     @Override
+    @SneakyThrows
     public boolean heartbeat(Gateway gateway) {
+        GatewayHeartbeat heartbeatInfo = new GatewayHeartbeat();
+        heartbeatInfo.setGateway(gateway);
+        boolean result = false;
         try (Response response = httpClient.newCall(new Request.Builder()
                 .get()
                 .url(new URL(gateway.getAddress() + "/gateway/heartbeat"))
                 .header("X-Gateway-Secret", cryptoUtil.encrypt(secretText, cryptoUtil.toKey(gateway.getKey())))
                 .build()).execute()) {
             if (response.isSuccessful()) {
-                log.info("Gateway {} is alive", gateway.getName());
+//                log.info("Gateway {} is alive", gateway.getName());
                 assert response.body() != null;
                 String responseString = response.body().string();
                 GatewayHeartbeatVO heartbeat = JSONObject.parseObject(responseString, GatewayHeartbeatVO.class);
+                // sync implementation
+                if (!gateway.getImplementation().equals(heartbeat.getImplementation())) {
+                    gateway.setImplementation(heartbeat.getImplementation());
+                    gatewayRepository.save(gateway);
+                }
                 // sync colddown
-                log.debug("Sync cold down for gateway {} ({})", gateway.getName(), heartbeat.getColdDown().getTime());
+//                log.debug("Sync cold down for gateway {} ({})", gateway.getName(), heartbeat.getColdDown().getTime());
                 markColdDown(gateway, heartbeat.getColdDown().getTime());
+                result = true;
+                heartbeatInfo.setStatus(GatewayHeartbeat.Status.OK);
             } else if (response.code() == 403) {
                 log.error("Failed to send heartbeat to Gateway {} (incorrect key)", gateway.getName());
-                return false;
+                heartbeatInfo.setStatus(GatewayHeartbeat.Status.BAD_KEY);
             } else if (response.code() == 400) {
                 log.error("Gateway {} is unavailable (400)", gateway.getName());
-                return false;
+                heartbeatInfo.setStatus(GatewayHeartbeat.Status.BAD_REQUEST);
             } else {
                 log.warn("Gateway {} has not implemented the heartbeat API", gateway.getName());
-                return true;
+                heartbeatInfo.setStatus(GatewayHeartbeat.Status.UNIMPLEMENTED_API);
             }
         } catch (Exception e) {
             log.error("Failed to send heartbeat to {}", gateway.getName());
-//            log.error(e.getMessage(), e);
-            return false;
         }
-        return true;
+        gatewayHeartbeatRepository.save(heartbeatInfo);
+
+        if (result != isAvailableNoPing(gateway)) {
+            GatewayHeartbeatFailedMessage message = new GatewayHeartbeatFailedMessage();
+            message.setGateway(gateway.getId());
+            message.setTimestamp(System.currentTimeMillis() / 1000L);
+            if (result) {
+                log.info("Gateway {} is now available.", gateway.getName());
+                message.setContent(String.format("密钥刷新服务 %s 已上线", gateway.getName()));
+            } else {
+                log.info("Gateway {} went offline.", gateway.getName());
+                message.setContent(String.format("密钥刷新服务 %s 已离线,请查看Log获取更多信息", gateway.getName()));
+            }
+            webhookService.pushAll("gateway-heartbeat", message);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean isAvailable(Gateway gateway) {
+        Optional<GatewayHeartbeat> heartbeatInfo = gatewayHeartbeatRepository.findByGateway(gateway);
+        return heartbeatInfo.map(GatewayHeartbeat::isAvailable).orElseGet(() -> heartbeat(gateway));
+    }
+
+    @Override
+    public Gateway toggle(Gateway gateway, boolean state) {
+        gateway.setEnabled(state);
+        log.info("Gateway {} is now {}", gateway.getName(), (state) ? "enabled" : "disabled");
+        return gatewayRepository.save(gateway);
+    }
+
+    private boolean isAvailableNoPing(Gateway gateway) {
+        return gatewayHeartbeatRepository.findByGateway(gateway).map(GatewayHeartbeat::isAvailable).orElse(false);
     }
 
     @Scheduled(cron = "0 */30 * * * *")
-    private void sendHeartbeat() throws Exception {
+    private void sendHeartbeat() {
         if (!heartbeatState || isGatewayEnabled()) {
             return;
         }
-        log.info("Sending Gateway heartbeats...");
-        for (Gateway gateway : list()) {
+        log.info("Sending heartbeat to Gateways...");
+        for (Gateway gateway : list().stream().filter(Gateway::isEnabled).toList()) {
             log.info("Sending gateway heartbeat to {}", gateway.getName());
-            if (!heartbeat(gateway)) {
-                GatewayHeartbeatFailedMessage message = new GatewayHeartbeatFailedMessage();
-                message.setGateway(gateway.getId());
-                message.setTimestamp(System.currentTimeMillis() / 1000L);
-                message.setContent(String.format("密钥刷新服务 %s 无法访问或者加密密钥配置错误", gateway.getName()));
-                webhookService.pushAll("gateway-heartbeat", message);
-            }
+            heartbeat(gateway);
         }
     }
 
