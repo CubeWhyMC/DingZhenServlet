@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document("gateway_heartbeat")
+@Document
 public class GatewayHeartbeatInfo {
     @DBRef
     private Gateway gateway;
