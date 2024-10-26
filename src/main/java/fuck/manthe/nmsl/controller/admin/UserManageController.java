@@ -13,7 +13,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.ZoneOffset;
@@ -28,9 +27,6 @@ public class UserManageController {
 
     @Resource
     AnalysisService analysisService;
-
-    @Resource
-    PasswordEncoder passwordEncoder;
 
     @GetMapping("list")
     public List<UserVO> listUsers() {
@@ -52,13 +48,7 @@ public class UserManageController {
         if (dto.getDays() != -1) {
             expire = System.currentTimeMillis() + (long) dto.getDays() * 24 * 60 * 60 * 1000;
         }
-        User user = userService.addUser(User.builder()
-                .password(passwordEncoder.encode(dto.getPassword()))
-                .username(dto.getUsername())
-                .role((dto.isAdmin()) ? "ADMIN" : "USER")
-                .expire(expire)
-                .build()
-        );
+        User user = userService.register(dto.getUsername(), dto.getPassword(), expire, dto.isAdmin());
         if (user != null) {
             return ResponseEntity.ok(RestBean.success("OK"));
         }

@@ -52,7 +52,7 @@ public class UserController {
 
         String username = dto.getUsername();
         String password = dto.getPassword();
-        User user = userService.addUser(User.builder().password(passwordEncoder.encode(password)).username(username).role("USER").expire(expire).build());
+        User user = userService.register(username, password, expire);
         if (user != null) {
             if (redeemService.useCode(redeemCode.getCode(), user)) {
                 log.info("User {} registered it's account with the code {} ({}d).", username, redeemCode.getCode(), redeemCode.getDate());

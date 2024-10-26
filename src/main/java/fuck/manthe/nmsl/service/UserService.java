@@ -7,7 +7,11 @@ import java.util.List;
 public interface UserService {
     boolean isValid(String username, String password);
 
-    User addUser(User user);
+    User register(String username, String password, long expireAt);
+
+    User register(String username, String password, long expireAt, boolean isAdmin);
+
+    User createDefaultAdmin(String password);
 
     void removeUser(String username);
 
