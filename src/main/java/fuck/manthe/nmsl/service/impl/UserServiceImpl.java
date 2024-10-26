@@ -2,7 +2,6 @@ package fuck.manthe.nmsl.service.impl;
 
 import fuck.manthe.nmsl.entity.User;
 import fuck.manthe.nmsl.repository.UserRepository;
-import fuck.manthe.nmsl.service.AnalysisService;
 import fuck.manthe.nmsl.service.OnlineConfigService;
 import fuck.manthe.nmsl.service.RedeemService;
 import fuck.manthe.nmsl.service.UserService;
@@ -19,9 +18,6 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     @Resource
     UserRepository userRepository;
-
-    @Resource
-    AnalysisService analysisService;
 
     @Resource
     RedeemService redeemService;
@@ -43,12 +39,36 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User addUser(User user) {
-        if (userRepository.existsByUsername(user.getUsername())) {
+    public User register(String username, String password, long expireAt) {
+        if (userRepository.existsByUsername(username)) {
             return null;
         }
-        analysisService.userRegistered();
-        return userRepository.save(user);
+        return userRepository.save(User.builder().password(passwordEncoder.encode(password)).username(username).role("USER").expire(expireAt).build());
+    }
+
+    @Override
+    public User register(String username, String password, long expireAt, boolean isAdmin) {
+        if (userRepository.existsByUsername(username)) {
+            return null;
+        }
+        return userRepository.save(
+                User.builder()
+                        .password(passwordEncoder.encode(password))
+                        .username(username)
+                        .role((isAdmin) ? "ADMIN" : "USER")
+                        .expire(expireAt)
+                        .build()
+        );
+    }
+
+    @Override
+    public User createDefaultAdmin(String password) {
+        return userRepository.save(User.builder()
+                .username("admin")
+                .password(passwordEncoder.encode(password))
+                .role("ADMIN")
+                .expire(-1L)
+                .build());
     }
 
     @Override
