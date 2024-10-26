@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.ZoneOffset;
 import java.util.List;
 
 @RestController
@@ -104,7 +103,7 @@ public class GatewayAdminController {
                 .stream()
                 .map((info) -> GatewayHeartbeatInfoVO.builder()
                         .status(info.getStatus())
-                        .timestamp(info.getTimestamp().toInstant(ZoneOffset.UTC).toEpochMilli())
+                        .timestamp(info.getCreateAt().toInstant().toEpochMilli())
                         .build()).toList()));
     }
 }

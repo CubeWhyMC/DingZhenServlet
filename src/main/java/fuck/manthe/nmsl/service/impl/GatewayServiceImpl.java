@@ -121,6 +121,7 @@ public class GatewayServiceImpl implements GatewayService {
     @Override
     public boolean removeGateway(String id) {
         if (!gatewayRepository.existsById(id)) return false;
+        gatewayHeartbeatInfoRepository.deleteAllByGateway(id);
         gatewayRepository.deleteById(id);
         log.info("Gateway {} was deleted", id);
         return true;
@@ -213,7 +214,7 @@ public class GatewayServiceImpl implements GatewayService {
     @SneakyThrows
     public boolean heartbeat(Gateway gateway) {
         GatewayHeartbeatInfo heartbeatInfo = new GatewayHeartbeatInfo();
-        heartbeatInfo.setGateway(gateway);
+        heartbeatInfo.setGateway(gateway.getId());
         boolean result = false;
         try (Response response = httpClient.newCall(new Request.Builder()
                 .get()
@@ -247,8 +248,10 @@ public class GatewayServiceImpl implements GatewayService {
             }
         } catch (Exception e) {
             log.error("Failed to send heartbeat to {}", gateway.getName());
+            heartbeatInfo.setStatus(GatewayHeartbeatInfo.Status.INTERNAL_ERROR);
+        } finally {
+            gatewayHeartbeatInfoRepository.save(heartbeatInfo);
         }
-        gatewayHeartbeatInfoRepository.save(heartbeatInfo);
 
         if (result != isAvailableNoPing(gateway)) {
             GatewayHeartbeatFailedMessage message = new GatewayHeartbeatFailedMessage();
@@ -268,7 +271,7 @@ public class GatewayServiceImpl implements GatewayService {
 
     @Override
     public boolean isAvailable(Gateway gateway) {
-        Optional<GatewayHeartbeatInfo> heartbeatInfo = gatewayHeartbeatInfoRepository.findByGateway(gateway);
+        Optional<GatewayHeartbeatInfo> heartbeatInfo = gatewayHeartbeatInfoRepository.findByGateway(gateway.getId());
         return heartbeatInfo.map(GatewayHeartbeatInfo::isAvailable).orElseGet(() -> heartbeat(gateway));
     }
 
@@ -280,7 +283,7 @@ public class GatewayServiceImpl implements GatewayService {
     }
 
     private boolean isAvailableNoPing(Gateway gateway) {
-        return gatewayHeartbeatInfoRepository.findByGateway(gateway).map(GatewayHeartbeatInfo::isAvailable).orElse(false);
+        return gatewayHeartbeatInfoRepository.findByGateway(gateway.getId()).map(GatewayHeartbeatInfo::isAvailable).orElse(false);
     }
 
     @Scheduled(cron = "0 */30 * * * *")
@@ -316,6 +319,6 @@ public class GatewayServiceImpl implements GatewayService {
 
     @Override
     public List<GatewayHeartbeatInfo> status(Gateway gateway) {
-        return gatewayHeartbeatInfoRepository.findAllByGateway(gateway);
+        return gatewayHeartbeatInfoRepository.findAllByGateway(gateway.getId());
     }
 }
