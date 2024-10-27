@@ -167,6 +167,7 @@
 
             if (response.ok) {
                 alert('兑换成功！');
+                window.location.href = "/user/login"; // redirect to login
             } else {
                 const errorData = await response.json();
                 errorMessage.textContent = errorData.message || '兑换失败，请重试。';
