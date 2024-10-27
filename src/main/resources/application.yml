@@ -5,6 +5,12 @@ spring:
     mongodb:
       # 数据库地址,如果gateway和主控搭建在同一个服务器上建议修改
       uri: mongodb://localhost:27017/vape-share
+  mail:
+    # 发件邮箱设置
+    host: example.com
+    port: 8888
+    username: example@example.com
+    password: password
 # 数据库加密
 # 实际部署的时候请务必修改这个,否则他人可能可以解密你的数据库
 # openssl rand -base64 32
