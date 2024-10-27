@@ -24,5 +24,6 @@ public class Gateway implements BaseData {
     @Encrypted
     private String key;
 
+    @Builder.Default
     private String implementation = "Unknown";
 }

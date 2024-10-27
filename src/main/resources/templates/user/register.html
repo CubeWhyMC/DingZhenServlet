@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -81,7 +81,8 @@
 
 <div class="flex-grow flex items-center justify-center p-4">
     <div class="w-full max-w-md bg-white rounded-lg shadow-2xl p-8 fade-in-up">
-        <h2 class="text-3xl font-extrabold text-center text-gray-800 mb-8">注册/兑换</h2>
+        <h2 class="text-3xl font-extrabold text-center text-gray-800 mb-8">注册</h2>
+        <p>现在续期已移到用户面板,请<a class="text-2xl text-blue-800 underline underline-offset-auto" th:href="@{/user/login}" href="javascript:">登录</a>后操作</p>
         <div class="text-red-500 mb-4 hidden text-center" id="error-message"></div>
         <form id="registerForm" class="space-y-6">
             <div class="input-container">
@@ -89,6 +90,13 @@
                        class="block w-full px-4 py-3 border-2 border-gray-300 rounded-md shadow-sm input-focus pl-10">
                 <label for="username" class="text-sm text-gray-500">用户名</label>
                 <i class="fas fa-user input-icon"></i>
+            </div>
+
+            <div class="input-container">
+                <input type="text" id="email" name="email" required placeholder=" "
+                       class="block w-full px-4 py-3 border-2 border-gray-300 rounded-md shadow-sm input-focus pl-10">
+                <label for="email" class="text-sm text-gray-500">邮箱 (可选)</label>
+                <i class="fas fa-mail-bulk input-icon"></i>
             </div>
 
             <div class="input-container">
@@ -123,6 +131,7 @@
 
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
+        const email = document.getElementById('email').value;
         const code = document.getElementById('code').value;
         const errorMessage = document.getElementById('error-message');
         
@@ -143,7 +152,7 @@
         errorMessage.classList.add('hidden');
 
         try {
-            const response = await fetch(`/user/redeem`, {
+            const response = await fetch(`/user/register`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"
@@ -151,6 +160,7 @@
                 body: JSON.stringify({
                     username: username,
                     password: password,
+                    email: email,
                     code: code
                 })
             });
