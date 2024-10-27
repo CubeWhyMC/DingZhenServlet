@@ -15,7 +15,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(conf -> conf
-                        .requestMatchers("/user/redeem").permitAll()
+                        .requestMatchers("/user/register").anonymous()
                         .requestMatchers("/user/forgetPassword").anonymous()
                         .requestMatchers("/user/**").authenticated()
                         .requestMatchers("/dashboard").authenticated()

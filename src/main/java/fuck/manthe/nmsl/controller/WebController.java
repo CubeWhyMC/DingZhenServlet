@@ -33,20 +33,9 @@ public class WebController {
         return "user/colddown";
     }
 
-//    @GetMapping("queue")
-//    public String queue() {
-//        return "queue";
-//    }
-
-    @Deprecated
-    @GetMapping("redeem")
-    public String redeemRedirect() {
-        return "redirect:/user/redeem";
-    }
-
-    @GetMapping("user/redeem")
-    public String redeem() {
-        return "user/redeem";
+    @GetMapping("user/register")
+    public String register() {
+        return "user/register";
     }
 
     @GetMapping("user/login")
