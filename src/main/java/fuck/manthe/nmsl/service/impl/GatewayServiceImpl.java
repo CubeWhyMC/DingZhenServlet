@@ -89,7 +89,7 @@ public class GatewayServiceImpl implements GatewayService {
         } else if (!canUseGateway()) {
             log.info("Gateways are disabled via application.yml, no gateways will be used for fetching tokens");
         } else if (heartbeatState) {
-            log.info("Heartbeat packets will be send in every 30 minutes.");
+            log.info("Heartbeat packets will be send in every 5 minutes.");
         }
     }
 
@@ -286,7 +286,7 @@ public class GatewayServiceImpl implements GatewayService {
         return gatewayRepository.save(gateway);
     }
 
-    @Scheduled(cron = "0 */30 * * * *")
+    @Scheduled(cron = "0 */5 * * * *")
     private void sendHeartbeat() {
         if (!heartbeatState || isGatewayEnabled()) {
             return;
