@@ -11,6 +11,12 @@ spring:
     port: 8888
     username: example@example.com
     password: password
+    properties:
+      mail:
+        smtp:
+          auth: true
+        ssl:
+          enable: true
 # 数据库加密
 # 实际部署的时候请务必修改这个,否则他人可能可以解密你的数据库
 # openssl rand -base64 32

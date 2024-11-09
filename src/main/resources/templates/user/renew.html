@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>丁真租号玩续期</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 20px, 0);
+            }
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .custom-bg {
+            background-color: #f0f4f8;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23a3bffa' fill-opacity='0.2'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3Cpath d='M6 5V0H5v5H0v1h5v94h1V6h94V5H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .input-container {
+            position: relative;
+            margin-top: 1.5rem;
+        }
+
+        .input-container label {
+            position: absolute;
+            top: 0.75rem;
+            left: 1rem;
+            padding: 0 0.25rem;
+            background-color: white;
+            transition: all 0.2s ease;
+            pointer-events: none;
+        }
+
+        .input-container input:not(:placeholder-shown) + label,
+        .input-container input:focus + label {
+            top: -0.5rem;
+            left: 0.8rem;
+            font-size: 0.875rem;
+            color: #4c51bf;
+        }
+
+        .input-focus {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .input-focus:focus {
+            border-color: #4c51bf;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+        }
+
+        .input-icon {
+            position: absolute;
+            top: 50%;
+            right: 1rem;
+            transform: translateY(-50%);
+            color: #a0aec0;
+        }
+
+        .button-hover {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .button-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+    </style>
+</head>
+<body class="custom-bg min-h-screen flex flex-col justify-between">
+
+<div class="flex-grow flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-white rounded-lg shadow-2xl p-8 fade-in-up">
+        <h2 class="text-3xl font-extrabold text-center text-gray-800 mb-8">续期</h2>
+        <p>如果在这里使用激活码, 时长将被兑换到<label th:text="${user.getUsername()}" style="color: red;">User</label></p>
+        <p>不是你的账户? <a style="color: #007bff" href="/user/logout">点击这里</a>登出</p>
+        <div class="text-red-500 mb-4 hidden text-center" id="error-message"></div>
+        <form id="registerForm" class="space-y-6">
+            <div class="input-container">
+                <input type="text" id="code" name="code" required placeholder=" "
+                       class="block w-full px-4 py-3 border-2 border-gray-300 rounded-md shadow-sm input-focus pl-10">
+                <label for="code" class="text-sm text-gray-500">邀请码</label>
+                <i class="fas fa-ticket-alt input-icon"></i>
+            </div>
+
+            <button type="submit"
+                    class="w-full bg-indigo-600 text-white py-3 px-4 rounded-md button-hover hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 text-lg font-semibold">
+                兑换
+            </button>
+        </form>
+    </div>
+</div>
+
+<footer class="bg-gray-800 text-white text-center py-4">
+    <p>&copy; 2024 丁真租号玩. All rights reserved.</p>
+</footer>
+
+<script>
+    document.getElementById('registerForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const code = document.getElementById('code').value;
+        const errorMessage = document.getElementById('error-message');
+
+        errorMessage.classList.add('hidden');
+
+        try {
+            const response = await fetch(`/user/renew`, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    code: code
+                })
+            });
+
+            if (response.ok) {
+                alert('兑换成功！');
+                window.location.href = "/user/login"; // redirect to log in
+            } else {
+                const errorData = await response.json();
+                errorMessage.textContent = errorData.message || '兑换失败，请重试。';
+                errorMessage.classList.remove('hidden');
+            }
+        } catch (error) {
+            errorMessage.textContent = '网络错误，请重试。';
+            errorMessage.classList.remove('hidden');
+        }
+    });
+</script>
+
+</body>
+</html>

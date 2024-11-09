@@ -15,12 +15,26 @@ public class MailServiceImpl implements MailService {
     @Value("${spring.application.name}")
     String appName;
 
+    @Value("${spring.mail.username}")
+    String from;
+
     @Override
     public void send(String to, String subject, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(from);
         message.setTo(to);
         message.setSubject(subject);
         message.setText(text);
+        mailSender.send(message);
+    }
+
+    @Override
+    public void sendTestEmail(String to) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(from);
+        message.setTo(to);
+        message.setSubject("Test - " + appName);
+        message.setText("Hello World!");
         mailSender.send(message);
     }
 

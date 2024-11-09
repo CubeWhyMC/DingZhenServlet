@@ -20,6 +20,8 @@ public class User {
 
     private String username;
     private String email;
+    private boolean emailVerified = false;
+
     private String password;
 
     private String role;
