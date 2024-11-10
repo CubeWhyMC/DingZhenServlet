@@ -8,6 +8,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @Document
@@ -24,6 +26,8 @@ public class RedeemCode implements BaseData {
     private String reseller = "Manthe";
     @DBRef
     private User redeemer;
+
+    private LocalDateTime createAt = LocalDateTime.now();
 
     private boolean available;
 }
