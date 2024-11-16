@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>丁真租号玩账户注册</title>
+    <title>丁真租号玩续期</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <style>
@@ -81,31 +81,11 @@
 
 <div class="flex-grow flex items-center justify-center p-4">
     <div class="w-full max-w-md bg-white rounded-lg shadow-2xl p-8 fade-in-up">
-        <h2 class="text-3xl font-extrabold text-center text-gray-800 mb-8">注册</h2>
-        <p>现在续期已移到用户面板,请<a class="text-2xl text-blue-800 underline underline-offset-auto" th:href="@{/user/login}" href="javascript:">登录</a>后操作</p>
+        <h2 class="text-3xl font-extrabold text-center text-gray-800 mb-8">续期</h2>
+        <p>如果在这里使用激活码, 时长将被兑换到<label th:text="${user.getUsername()}" style="color: red;">User</label></p>
+        <p>不是你的账户? <a style="color: #007bff" href="/user/logout">点击这里</a>登出</p>
         <div class="text-red-500 mb-4 hidden text-center" id="error-message"></div>
         <form id="registerForm" class="space-y-6">
-            <div class="input-container">
-                <input type="text" id="username" name="username" required placeholder=" "
-                       class="block w-full px-4 py-3 border-2 border-gray-300 rounded-md shadow-sm input-focus pl-10">
-                <label for="username" class="text-sm text-gray-500">用户名</label>
-                <i class="fas fa-user input-icon"></i>
-            </div>
-
-            <div class="input-container">
-                <input type="text" id="email" name="email" required placeholder=" "
-                       class="block w-full px-4 py-3 border-2 border-gray-300 rounded-md shadow-sm input-focus pl-10">
-                <label for="email" class="text-sm text-gray-500">邮箱 (可选)</label>
-                <i class="fas fa-mail-bulk input-icon"></i>
-            </div>
-
-            <div class="input-container">
-                <input type="password" id="password" name="password" required placeholder=" "
-                       class="block w-full px-4 py-3 border-2 border-gray-300 rounded-md shadow-sm input-focus pl-10">
-                <label for="password" class="text-sm text-gray-500">密码</label>
-                <i class="fas fa-lock input-icon"></i>
-            </div>
-
             <div class="input-container">
                 <input type="text" id="code" name="code" required placeholder=" "
                        class="block w-full px-4 py-3 border-2 border-gray-300 rounded-md shadow-sm input-focus pl-10">
@@ -129,45 +109,25 @@
     document.getElementById('registerForm').addEventListener('submit', async function(event) {
         event.preventDefault();
 
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-        const email = document.getElementById('email').value;
         const code = document.getElementById('code').value;
         const errorMessage = document.getElementById('error-message');
-        
-        const specialCharPattern = /[^a-zA-Z0-9]/;
-
-        if (specialCharPattern.test(username) || specialCharPattern.test(password)) {
-            errorMessage.textContent = '请不要在账户名或密码中填写特殊字符，例如中文，$%;等';
-            errorMessage.classList.remove('hidden');
-            return;
-        }
-
-        if (username === '' || password === '' || code === '') {
-            errorMessage.textContent = '请填写所有字段';
-            errorMessage.classList.remove('hidden');
-            return;
-        }
 
         errorMessage.classList.add('hidden');
 
         try {
-            const response = await fetch(`/user/register`, {
+            const response = await fetch(`/user/renew`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    username: username,
-                    password: password,
-                    email: email,
                     code: code
                 })
             });
 
             if (response.ok) {
                 alert('兑换成功！');
-                window.location.href = "/user/login"; // redirect to login
+                window.location.href = "/user/login"; // redirect to log in
             } else {
                 const errorData = await response.json();
                 errorMessage.textContent = errorData.message || '兑换失败，请重试。';

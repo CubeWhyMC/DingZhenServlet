@@ -4,7 +4,9 @@ import fuck.manthe.nmsl.entity.User;
 import fuck.manthe.nmsl.service.MaintenanceService;
 import fuck.manthe.nmsl.service.UserService;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -18,14 +20,9 @@ public class WebController {
     @Resource
     UserService userService;
 
-    @GetMapping("/")
+    @GetMapping
     public String index() {
         return "index";
-    }
-
-    @GetMapping("colddown")
-    public String coldDownRedirect() {
-        return "redirect:/user/colddown";
     }
 
     @GetMapping("user/colddown")
@@ -34,8 +31,17 @@ public class WebController {
     }
 
     @GetMapping("user/register")
-    public String register() {
+    public String register(HttpServletRequest request) {
+        if (request.getUserPrincipal() != null) {
+            return "redirect:/user/renew";
+        }
         return "user/register";
+    }
+
+    @GetMapping("user/renew")
+    public String renew(Model model, Principal principal) {
+        model.addAttribute("user", userService.findByUsername(principal.getName()));
+        return "user/renew";
     }
 
     @GetMapping("user/login")
