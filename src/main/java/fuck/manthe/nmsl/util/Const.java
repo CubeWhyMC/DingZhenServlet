@@ -2,6 +2,7 @@ package fuck.manthe.nmsl.util;
 
 public interface Const {
     String COLD_DOWN = "vape:cold-down";
+    String LAST_AUTH_STATUS = "vape:account:last-auth-status";
     String ACCOUNT_COLD_DOWN = "vape:cold-down:account:";
     String QUEUE = "vape:cold-down:queue";
     // Analysis

@@ -51,6 +51,7 @@ public class GatewayController {
         long timestamp = analysisService.gatewayHeartbeat();
         return ResponseEntity.ok(GatewayHeartbeatVO.builder()
                 .time(timestamp) // current timestamp
+                .authOk(vapeAccountService.checkAuth())
                 .coldDown(ColdDownVO.builder()
                         .time(vapeAccountService.calculateColdDown())
                         .build()) // sync colddown to parent servlet

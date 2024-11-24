@@ -44,6 +44,9 @@ public class VapeAccountServiceImpl implements VapeAccountService {
     RedisTemplate<String, Long> redisTemplate;
 
     @Resource
+    RedisTemplate<String, Boolean> booleanRedisTemplate;
+
+    @Resource
     VapeAccountRepository vapeAccountRepository;
 
     @Resource
@@ -155,6 +158,10 @@ public class VapeAccountServiceImpl implements VapeAccountService {
 
     @Override
     public VapeAuthorizeDTO doAuth(VapeAccount vapeAccount) {
+        return doAuth(vapeAccount, false);
+    }
+
+    private VapeAuthorizeDTO doAuth(VapeAccount vapeAccount, boolean internal) {
         try (Response response = httpClient.newCall(new Request.Builder().post(okhttp3.RequestBody.create("email=" + vapeAccount.getUsername() + "&password=" + vapeAccount.getPassword() + "&hwid=" + vapeAccount.getHwid() + "&v=v3&t=true", MediaType.parse("application/x-www-form-urlencoded"))).url("http://www.vape.gg/auth.php").header("User-Agent", "Agent_" + vapeAccount.getHwid()).build()).execute()) {
             if (response.body() != null) {
                 String responseString = response.body().string();
@@ -163,50 +170,70 @@ public class VapeAccountServiceImpl implements VapeAccountService {
                         redisTemplate.opsForValue().set(Const.COLD_DOWN, System.currentTimeMillis() + (long) RandomUtil.randomInt(globalMinColdDown, globalMaxColdDown, true, true) * 60 * 1000);
                     }
                     if (responseString.length() != 33) {
+                        booleanRedisTemplate.opsForValue().set(Const.LAST_AUTH_STATUS, false);
                         InvalidTokenMessage message = new InvalidTokenMessage();
                         message.setErrorCode(responseString);
                         message.setTimestamp(System.currentTimeMillis() / 1000L);
                         VapeAuthorizeDTO dto;
                         // not a valid token
-                        if (responseString.equals("1006")) {
-                            // Cloudflare captcha
-                            message.setContent("共享账户无法进行登录,是IP被封禁了吗");
-                            log.error("Your IP address was banned by Manthe. Please switch your VPN endpoint or use a Gateway. ({})", responseString);
-                            dto = VapeAuthorizeDTO.builder()
-                                    .token("Cloudflare")
-                                    .status(VapeAuthorizeDTO.Status.CLOUDFLARE)
-                                    .build();
-                        } else if (responseString.equals("102")) {
-                            message.setContent(String.format("共享账户账户似乎被封禁了 (内部ID: %s)", vapeAccount.getId()));
-                            log.error("Vape account {} was banned. ({})", vapeAccount.getUsername(), responseString);
-                            dto = VapeAuthorizeDTO.builder()
-                                    .token("Disabled")
-                                    .status(VapeAuthorizeDTO.Status.BANNED)
-                                    .build();
-                        } else {
-                            message.setContent(String.format("共享账户在验证的时候产生了未知错误 (错误码: %s, 内部ID: %s)", responseString, vapeAccount.getId()));
-                            log.error("Auth server responded an error: {} (Account: {})", responseString, vapeAccount.getUsername());
-                            dto = VapeAuthorizeDTO.builder()
-                                    .token(responseString)
-                                    .status(VapeAuthorizeDTO.Status.INCORRECT)
-                                    .build();
+                        switch (responseString) {
+                            case "1006" -> {
+                                // Cloudflare captcha
+                                message.setContent("共享账户无法进行登录,是IP被封禁了吗");
+                                log.error("Your IP address was banned by Manthe. Please switch your VPN endpoint or use a Gateway. ({})", responseString);
+                                dto = VapeAuthorizeDTO.builder()
+                                        .token("Cloudflare")
+                                        .status(VapeAuthorizeDTO.Status.CLOUDFLARE)
+                                        .build();
+                            }
+                            case "102" -> {
+                                message.setContent(String.format("共享账户账户似乎被封禁了 (内部ID: %s)", vapeAccount.getId()));
+                                log.error("Vape account {} was banned. ({})", vapeAccount.getUsername(), responseString);
+                                dto = VapeAuthorizeDTO.builder()
+                                        .token("Disabled")
+                                        .status(VapeAuthorizeDTO.Status.BANNED)
+                                        .build();
+                            }
+                            case "1" -> {
+                                if (internal) {
+                                    booleanRedisTemplate.opsForValue().set(Const.LAST_AUTH_STATUS, true);
+                                } else {
+                                    message.setContent(String.format("共享账户凭证错误 (错误码: %s, 内部ID: %s)", responseString, vapeAccount.getId()));
+                                    log.error("Bad certificate provided (Account: {})", vapeAccount.getUsername());
+                                }
+                                dto = VapeAuthorizeDTO.builder()
+                                        .token(responseString)
+                                        .status(VapeAuthorizeDTO.Status.INCORRECT)
+                                        .build();
+                            }
+                            default -> {
+                                message.setContent(String.format("共享账户在验证的时候产生了未知错误 (错误码: %s, 内部ID: %s)", responseString, vapeAccount.getId()));
+                                log.error("Auth server responded an error: {} (Account: {})", responseString, vapeAccount.getUsername());
+                                dto = VapeAuthorizeDTO.builder()
+                                        .token(responseString)
+                                        .status(VapeAuthorizeDTO.Status.INCORRECT)
+                                        .build();
+                            }
                         }
                         webhookService.pushAll("invalid-token", message);
                         return dto;
                     }
                 }
+                booleanRedisTemplate.opsForValue().set(Const.LAST_AUTH_STATUS, true);
                 log.debug("Fetch token for {} ({})", vapeAccount.getUsername(), responseString);
                 return VapeAuthorizeDTO.builder()
                         .token(responseString)
                         .status(VapeAuthorizeDTO.Status.OK)
                         .build();
             } else {
+                booleanRedisTemplate.opsForValue().set(Const.LAST_AUTH_STATUS, false);
                 return VapeAuthorizeDTO.builder()
                         .token("Empty auth data")
                         .status(VapeAuthorizeDTO.Status.SERVLET_ERROR)
                         .build();
             }
         } catch (Exception e) {
+            booleanRedisTemplate.opsForValue().set(Const.LAST_AUTH_STATUS, false);
             return VapeAuthorizeDTO.builder()
                     .token(e.getMessage())
                     .status(VapeAuthorizeDTO.Status.SERVLET_ERROR)
@@ -234,5 +261,19 @@ public class VapeAccountServiceImpl implements VapeAccountService {
             }
         }
         return next;
+    }
+
+    @Override
+    public boolean checkAuth() {
+        if (Boolean.TRUE.equals(booleanRedisTemplate.opsForValue().get(Const.LAST_AUTH_STATUS))) {
+            return true;
+        }
+        log.info("Checking auth.php connectivity");
+        doAuth(VapeAccount.builder()
+                .hwid(RandomUtil.randomString("abcdef12345678", 8))
+                .username(RandomUtil.randomString(5))
+                .password(RandomUtil.randomString(5))
+                .build(), true);
+        return Boolean.TRUE.equals(booleanRedisTemplate.opsForValue().get(Const.LAST_AUTH_STATUS));
     }
 }

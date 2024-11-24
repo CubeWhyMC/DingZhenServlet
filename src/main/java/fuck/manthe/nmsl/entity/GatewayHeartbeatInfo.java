@@ -24,6 +24,6 @@ public class GatewayHeartbeatInfo implements BaseData {
     }
 
     public enum Status {
-        OK, BAD_KEY, BAD_REQUEST, INTERNAL_ERROR, UNIMPLEMENTED_API
+        OK, BAD_KEY, BAD_REQUEST, INTERNAL_ERROR, REMOTE_AUTH_ERROR, UNIMPLEMENTED_API
     }
 }

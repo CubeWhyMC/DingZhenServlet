@@ -47,4 +47,6 @@ public interface VapeAccountService {
     boolean hasConfigured();
 
     long calculateColdDown();
+
+    boolean checkAuth();
 }

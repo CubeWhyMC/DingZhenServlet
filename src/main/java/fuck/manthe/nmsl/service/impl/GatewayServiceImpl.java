@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import java.net.URL;
+import java.net.URI;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -144,7 +144,7 @@ public class GatewayServiceImpl implements GatewayService {
     public VapeAuthorizeDTO use(Gateway gateway) throws Exception {
         try (Response response = httpClient.newCall(new Request.Builder()
                 .get()
-                .url(new URL(gateway.getAddress() + "/gateway/token"))
+                .url(URI.create(gateway.getAddress() + "/gateway/token").toURL())
                 .header("X-Gateway-Secret", cryptoUtil.encrypt(secretText, cryptoUtil.toKey(gateway.getKey())))
                 .build()).execute()) {
             if (response.isSuccessful() && response.body() != null) {
@@ -218,7 +218,7 @@ public class GatewayServiceImpl implements GatewayService {
         boolean result = false;
         try (Response response = httpClient.newCall(new Request.Builder()
                 .get()
-                .url(new URL(gateway.getAddress() + "/gateway/heartbeat"))
+                .url(URI.create(gateway.getAddress() + "/gateway/heartbeat").toURL())
                 .header("X-Gateway-Secret", cryptoUtil.encrypt(secretText, cryptoUtil.toKey(gateway.getKey())))
                 .build()).execute()) {
             if (response.isSuccessful()) {
@@ -234,8 +234,13 @@ public class GatewayServiceImpl implements GatewayService {
                 // sync colddown
 //                log.debug("Sync cold down for gateway {} ({})", gateway.getName(), heartbeat.getColdDown().getTime());
                 markColdDown(gateway, heartbeat.getColdDown().getTime());
-                result = true;
-                heartbeatInfo.setStatus(GatewayHeartbeatInfo.Status.OK);
+                if (heartbeat.isAuthOk()) {
+                    result = true;
+                    heartbeatInfo.setStatus(GatewayHeartbeatInfo.Status.OK);
+                } else {
+                    log.error("Gateway is accessible but the gateway cannot connect to auth.php (Gateway: {})", gateway.getName());
+                    heartbeatInfo.setStatus(GatewayHeartbeatInfo.Status.REMOTE_AUTH_ERROR);
+                }
             } else if (response.code() == 403) {
                 log.error("Failed to send heartbeat to Gateway {} (incorrect key)", gateway.getName());
                 heartbeatInfo.setStatus(GatewayHeartbeatInfo.Status.BAD_KEY);
