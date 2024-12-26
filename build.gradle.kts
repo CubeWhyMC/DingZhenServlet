@@ -19,7 +19,7 @@ repositories {
 }
 
 dependencies {
-    implementation("cn.hutool:hutool-core:5.8.34")
+    implementation("cn.hutool:hutool-core:5.8.35")
     implementation("org.jboss.aerogear:aerogear-otp-java:1.0.0")
     implementation("com.bol:spring-data-mongodb-encrypt:2.9.1")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
